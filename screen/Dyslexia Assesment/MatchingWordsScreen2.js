@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, BackHandler } from 'react-native';
-import { Audio } from 'expo-av'; 
 import { useFocusEffect } from '@react-navigation/native';
 
-const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext }) => {
-  const [clickedWord, setClickedWord] = useState(null);
-
+const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, clickedWord, correctWord, validateAnswer }) => {
   const handleWordClick = (word) => {
-    if (!timerExpired) {
-      setClickedWord(word);
+    if (!timerExpired && !validateAnswer) {
       onClickWord(word);
     }
   };
@@ -35,8 +31,8 @@ const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext
               <Text style={[
                 styles.whiteWord,
                 clickedWord === word && styles.clickedWord,
-                (timerExpired && clickedWord === word && word !== wordPair.yellow && styles.wrongWord),
-                (timerExpired && word === wordPair.yellow && clickedWord === word && styles.correctWord)
+                validateAnswer && word === wordPair.yellow && styles.correctWord,
+                validateAnswer && clickedWord === word && word !== wordPair.yellow && styles.wrongWord
               ]}>{word}</Text>
             </TouchableOpacity>
           ))}
@@ -49,19 +45,16 @@ const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext
   );
 };
 
-const TamilScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext }) => {
-  const [clickedWord, setClickedWord] = useState(null);
-
+const TamilScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, clickedWord, correctWord, validateAnswer }) => {
   const handleWordClick = (word) => {
-    if (!timerExpired) {
-      setClickedWord(word);
+    if (!timerExpired && !validateAnswer) {
       onClickWord(word);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textTopicT}>பொருள் பொருளைக் கண்டுபிடிக்கலாம்!</Text>
+      <Text style={styles.textTopicT}>பொருந்தக்கூடிய சொற்களைக் கண்டுபிடிப்போம்!</Text>
       <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
       <View style={styles.overlay} />
       <View style={styles.blackBox}>
@@ -81,8 +74,8 @@ const TamilScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext }
               <Text style={[
                 styles.whiteWord,
                 clickedWord === word && styles.clickedWord,
-                (timerExpired && clickedWord === word && word !== wordPair.yellow && styles.wrongWord),
-                (timerExpired && word === wordPair.yellow && clickedWord === word && styles.correctWord)
+                validateAnswer && word === wordPair.yellow && styles.correctWord,
+                validateAnswer && clickedWord === word && word !== wordPair.yellow && styles.wrongWord
               ]}>{word}</Text>
             </TouchableOpacity>
           ))}
@@ -95,14 +88,14 @@ const TamilScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext }
   );
 };
 
-
-
 const DA_MatchingWordsScreen2 = ({ navigation, route }) => {
-  const { language } = route.params;
+  const { language, matchingMark } = route.params; // Ensure matchingMark is received from route.params
+
   const [timer, setTimer] = useState('00:30');
   const [wordPair, setWordPair] = useState({ yellow: '', words: [] });
-  const [soundObject, setSoundObject] = useState(null);
   const [timerExpired, setTimerExpired] = useState(false);
+  const [clickedWord, setClickedWord] = useState(null);
+  const [validateAnswer, setValidateAnswer] = useState(false);
 
   // Disable back button when activity starts
   useFocusEffect(
@@ -111,7 +104,7 @@ const DA_MatchingWordsScreen2 = ({ navigation, route }) => {
         // Return true to prevent going back
         return true;
       };
-      
+
       // Add event listener for back button press
       BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
@@ -129,7 +122,7 @@ const DA_MatchingWordsScreen2 = ({ navigation, route }) => {
       { yellow: 'FUNNY', words: ['FUNNY', 'SUNNY', 'BUNNY'] },
       { yellow: 'GAME', words: ['GAME', 'SAME', 'CAME'] },
     ];
-  
+
     const tamilWordPairs = [
       { yellow: 'காடு', words: ['காடு', 'பாடு', 'மாடு'] },
       { yellow: 'புல்', words: ['புல்', 'பல்', 'கல்'] },
@@ -137,40 +130,21 @@ const DA_MatchingWordsScreen2 = ({ navigation, route }) => {
       { yellow: 'பட்டு', words: ['பட்டு', 'எட்டு', 'லட்டு'] },
       { yellow: 'கடை', words: ['கடை', 'நடை', 'வடை'] },
     ];
-  
+
     const wordPairs = language === 'ENGLISH' ? englishWordPairs : tamilWordPairs;
-  
+
     // Randomly select a word pair
     const randomIndex = Math.floor(Math.random() * wordPairs.length);
     const selectedWordPair = wordPairs[randomIndex];
     setWordPair(selectedWordPair);
-  
-    const loadAudio = async () => {
-      const recording = language === 'ENGLISH' ? require('../../assets/VoiceRecordings/MatchingWords2English.mp3') : require('../../assets/VoiceRecordings/tamil.m4a');
-      const soundObj = new Audio.Sound();
-      try {
-        await soundObj.loadAsync(recording);
-        await soundObj.playAsync();
-        soundObj.setOnPlaybackStatusUpdate((status) => {
-          if (status.isLoaded && status.didJustFinish) {
-            startTimer();
-          }
-        });
-        setSoundObject(soundObj);
-      } catch (error) {
-        console.error('Error loading audio:', error);
-      }
-    };
-  
-    loadAudio();
-  
+
+    startTimer();
+
     return () => {
-      if (soundObject) {
-        soundObject.unloadAsync();
-      }
+      // Clean up resources when component unmounts
+      clearTimer();
     };
   }, [language]);
-  
 
   const startTimer = () => {
     let seconds = 30;
@@ -180,6 +154,7 @@ const DA_MatchingWordsScreen2 = ({ navigation, route }) => {
         clearInterval(intervalId);
         setTimer('00:00');
         setTimerExpired(true); // Timer expired
+        validateAnswerAndSetMark();
       } else {
         const formattedTime = `${Math.floor(seconds / 60)
           .toString()
@@ -189,31 +164,59 @@ const DA_MatchingWordsScreen2 = ({ navigation, route }) => {
     }, 1000);
   };
 
-  const handleClickWord = (word) => {
-    console.log('Clicked word:', word);
+  const clearTimer = () => {
+    clearInterval(intervalId);
   };
 
-  const onClickNext = () => {
-    // Stop audio playback
-    if (soundObject) {
-      soundObject.stopAsync();
+  const handleClickWord = (word) => {
+    if (!timerExpired && !validateAnswer) {
+      setClickedWord(word);
     }
-  
-    // Clear any existing timeout
-    clearTimeout(timer);
+  };
 
-    console.log("Language value:", language); // Log the language value
-  
-    // Navigate to GoodJobScreen after 2 seconds
-    const timer = setTimeout(() => {
-      // Navigate to GoodJobScreen
-      navigation.navigate('DA_GoodJobScreen', { language });
+  const validateAnswerAndSetMark = () => {
+    setValidateAnswer(true);
+    // You can use matchingMark here if needed
+  };
+
+  useEffect(() => {
+    // This effect runs whenever matchingMark changes
+    console.log("Matching Mark updated:", matchingMark);
+  }, [matchingMark]);
+
+  const onClickNext = () => {
+    // Validate answer and set matchingMark
+    validateAnswerAndSetMark();
+
+    // Navigate to the next screen after 1 second
+    setTimeout(() => {
+      navigation.navigate('DA_MatchingWordsScreen3', { language, matchingMark });
     }, 1000);
+  };
+
+  return language === 'ENGLISH' ? (
+    <EnglishScreen
+      timer={timer}
+      wordPair={wordPair}
+      onClickWord={handleClickWord}
+      timerExpired={timerExpired}
+      onClickNext={onClickNext}
+      clickedWord={clickedWord}
+      validateAnswer={validateAnswer}
+    />
+  ) : (
+    <TamilScreen
+      timer={timer}
+      wordPair={wordPair}
+      onClickWord={handleClickWord}
+      timerExpired={timerExpired}
+      onClickNext={onClickNext}
+      clickedWord={clickedWord}
+      validateAnswer={validateAnswer}
+    />
+  );
 };
 
-
-  return language === 'ENGLISH' ? <EnglishScreen timer={timer} wordPair={wordPair} onClickWord={handleClickWord} timerExpired={timerExpired} onClickNext={onClickNext} /> : <TamilScreen timer={timer} wordPair={wordPair} onClickWord={handleClickWord} timerExpired={timerExpired} onClickNext={onClickNext} />;
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -258,7 +261,7 @@ const styles = StyleSheet.create({
     borderRadius: 85,
   },
   blackBox: {
-    backgroundColor: 'black',
+    backgroundColor: '#6ecb63',
     width: '80%',
     height: '12%',
     paddingVertical: 10,
@@ -266,6 +269,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: '10%',
     marginBottom: '5%',
+    borderWidth: 2,
+    borderColor: '#4D86F7',
   },
   timerContainer: {
     flexDirection: 'row',
@@ -300,7 +305,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   yellowWord: {
-    color: 'yellow',
+    color: 'white',
     fontSize: 40,
     fontWeight: 'bold',
     paddingTop: 5,

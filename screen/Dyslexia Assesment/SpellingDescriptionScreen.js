@@ -22,12 +22,12 @@ const EnglishScreen = ({ handleNext }) => (
 // Tamil screen component
 const TamilScreen = ({ handleNext }) => (
     <View style={styles.container}>
-        <Text style={styles.textTopicT}>அருமையான வேலை, வார்த்தை வழிகாட்டி!!</Text>
+        <Text style={styles.textTopicT}>வார்த்தையை உச்சரிக்கவும்!</Text>
         <Image style={styles.bgImg} source={require('../../assets/bg.jpg')}></Image>
         <View style={styles.overlay}></View>
         <Image style={styles.dashImg} source={require('../../assets/Celebrate.png')}></Image>
         <Text style={styles.contentT}>
-        ஏய், வருங்கால பிரபலமே! 🧙‍♂️ வேடிக்கையான சவாலுக்கு நீங்கள் தயாரா? பலகையில் உள்ள வார்த்தைகளைப் பார்த்து, மேலே நீங்கள் பார்ப்பது போன்ற ஒரு வார்த்தையை கண்டறியவும்! உங்கள் அற்புதமான திறன்களைக் காட்டுங்கள்! தொடங்குவோம்!
+        ஏய், வார்த்தை வழிகாட்டி! 🧙‍♂️ உங்கள் எழுத்துத் திறமையைக் காட்ட வேண்டிய நேரம் இது! பலகையில் உள்ள வார்த்தையைப் பார்த்து, அதை உச்சரிக்க கீழே உள்ள சரியான எழுத்துக்களைக் கண்டறியவும். தொடங்குவோம்!
         </Text>
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
             <Text style={styles.nextButtonText}>அடுத்தது</Text>
@@ -36,7 +36,7 @@ const TamilScreen = ({ handleNext }) => (
 );
 
 const DA_SpellingDescriptionScreen = ({ navigation, route }) => {
-    const { language } = route.params;
+    const { language, results, setResults } = route.params;  // Receiving the results and setResults
     const [sound, setSound] = useState(null);
     const [hasNavigated, setHasNavigated] = useState(false);
 
@@ -69,6 +69,10 @@ const DA_SpellingDescriptionScreen = ({ navigation, route }) => {
         };
     }, [language]);
 
+    useEffect(() => {
+        console.log('Results state:', results);
+    }, [results]);  // Log the results state every time it changes
+
     const handleNext = async () => {
         if (!hasNavigated) {
             setHasNavigated(true);
@@ -76,7 +80,7 @@ const DA_SpellingDescriptionScreen = ({ navigation, route }) => {
                 await sound.stopAsync();
                 await sound.unloadAsync();
             }
-            navigation.navigate('DA_SpellingScreen', { language });
+            navigation.navigate('DA_SpellingScreen', { language, results, setResults });
         }
     };
 
@@ -137,11 +141,11 @@ const styles = StyleSheet.create({
 
     contentT: {
         textAlign: 'center',
-        fontSize: 15,
+        fontSize: 14,
         // fontWeight: 'bold',
         color: '#16397F',
         marginHorizontal: '7%',
-        marginTop: '5%',
+        marginTop: '1%',
         marginBottom: '5%',
     },
 

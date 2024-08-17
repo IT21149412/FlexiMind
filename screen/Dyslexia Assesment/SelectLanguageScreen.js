@@ -9,10 +9,10 @@ const DA_SelectLanguage = ({ navigation }) => {
     }
 
     const handleNext = () => {
-        if (selectedLanguage === 'ENGLISH') {
-            navigation.navigate('DA_ParentConsentScreen', { language: 'ENGLISH' });
-        } else if (selectedLanguage === 'TAMIL') {
-            navigation.navigate('DA_ParentConsentScreen', { language: 'TAMIL' });
+        if (selectedLanguage) {
+            navigation.navigate('DA_ParentConsentScreen', {
+                language: selectedLanguage,
+            });
         }
     }
 
@@ -46,6 +46,7 @@ const DA_SelectLanguage = ({ navigation }) => {
         </View>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
         position: 'relative',

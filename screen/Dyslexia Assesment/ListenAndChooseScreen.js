@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, BackHandler } from 'react-native';
-import { Audio } from 'expo-av'; 
-import { useFocusEffect } from '@react-navigation/native';
+import { View, StyleSheet, Image, Text, TouchableOpacity, Modal } from 'react-native';
+import { Audio } from 'expo-av';
 
 const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, playYellowWordAudio }) => {
   const [clickedWord, setClickedWord] = useState(null);
@@ -29,24 +28,21 @@ const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext
           <Text style={styles.timerText}>{timer}</Text>
         </View>
       </View>
-      <Image style={styles.boardImage} source={require('../../assets/GreenBoard2.png')} />
-      <View style={styles.board}>
-        
-        <View style={styles.whiteWordsContainer}>
-          {wordPair.words.map((word, index) => (
-            <TouchableOpacity key={index} onPress={() => handleWordClick(word)}>
-              <Text style={[
-                styles.whiteWord,
-                clickedWord === word && styles.clickedWord,
-                (timerExpired && clickedWord === word && word !== wordPair.yellow && styles.wrongWord),
-                (timerExpired && word === wordPair.yellow && clickedWord === word && styles.correctWord)
-              ]}>{word}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+      <View style={styles.answerContainer}>
+        {wordPair.words.map((word, index) => (
+          <TouchableOpacity key={index} onPress={() => handleWordClick(word)}>
+            <View style={[
+              styles.answerBox,
+              clickedWord === word && styles.clickedWord,
+              timerExpired && clickedWord === word && word !== wordPair.yellow && styles.wrongWord,
+              timerExpired && word === wordPair.yellow && clickedWord === word && styles.correctWord,
+            ]}>
+              <Text style={styles.answerText}>{word}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
-      {/* Next button positioned absolutely */}
-      <TouchableOpacity style={styles.nextButton} onPress={() => onClickNext()}>
+      <TouchableOpacity style={styles.nextButton} onPress={onClickNext}>
         <Text style={styles.nextButtonText}>Next</Text>
       </TouchableOpacity>
     </View>
@@ -69,10 +65,9 @@ const TamilScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, 
       <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
       <View style={styles.overlay} />
       <View style={styles.descriptionContainer}>
-        <Image style={styles.speakerIcon} source={require('../../assets/speaker.png')} />
-        <Text style={styles.contentT}>
-          ஹாய், வேர்ட் எக்ஸ்ப்ளோரர்! 🌟 புதிய சவாலுக்கு தயாராகுங்கள்! ஒரு வார்த்தை சத்தமாக பேசப்படுவதை கவனமாகக் கேளுங்கள். பிறகு, கீழே உள்ள பட்டியலிலிருந்து அதே வார்த்தையைத் தேர்ந்தெடுக்கவும். மீண்டும் கேட்க வேண்டுமா? மற்றொரு கேட்க, எழுத்துப் பலகையிலிருந்து உங்கள் பேச்சாளர் நண்பரைத் தட்டவும். உங்கள் அற்புதமான கேட்கும் திறனை வெளிப்படுத்துவோம்!
-        </Text>
+        <TouchableOpacity onPress={playYellowWordAudio}>
+          <Image style={styles.speakerImage} source={require('../../assets/ListenSpeak.png')} />
+        </TouchableOpacity>
       </View>
       <View style={styles.timerContainer}>
         <Image style={styles.timerIcon} source={require('../../assets/timer.webp')} />
@@ -80,152 +75,228 @@ const TamilScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, 
           <Text style={styles.timerText}>{timer}</Text>
         </View>
       </View>
-      <Image style={styles.boardImage} source={require('../../assets/GreenBoard2.png')} />
-      <View style={styles.board}>
-        <TouchableOpacity onPress={playYellowWordAudio}>
-          <Image style={styles.speakerImage} source={require('../../assets/ListenSpeak.png')} />
-        </TouchableOpacity>
-        <View style={styles.whiteWordsContainer}>
-          {wordPair.words.map((word, index) => (
-            <TouchableOpacity key={index} onPress={() => handleWordClick(word)}>
-              <Text style={[
-                styles.whiteWord,
-                clickedWord === word && styles.clickedWord,
-                (timerExpired && clickedWord === word && word !== wordPair.yellow && styles.wrongWord),
-                (timerExpired && word === wordPair.yellow && clickedWord === word && styles.correctWord)
-              ]}>{word}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+      <View style={styles.answerContainer}>
+        {wordPair.words.map((word, index) => (
+          <TouchableOpacity key={index} onPress={() => handleWordClick(word)}>
+            <View style={[
+              styles.answerBox,
+              clickedWord === word && styles.clickedWord,
+              timerExpired && clickedWord === word && word !== wordPair.yellow && styles.wrongWord,
+              timerExpired && word === wordPair.yellow && clickedWord === word && styles.correctWord,
+            ]}>
+              <Text style={styles.answerText}>{word}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
-      {/* Next button positioned absolutely */}
-      <TouchableOpacity style={styles.nextButton} onPress={() => onClickNext()}>
+      <TouchableOpacity style={styles.nextButton} onPress={onClickNext}>
         <Text style={styles.nextButtonText}>அடுத்தது</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-
 const DA_ListenAndChooseScreen = ({ navigation, route }) => {
-    const { language } = route.params;
-    const [timer, setTimer] = useState('00:30');
-    const [wordPair, setWordPair] = useState({ yellow: '', words: [] });
-    const [soundObject, setSoundObject] = useState(null);
-    const [timerExpired, setTimerExpired] = useState(false);
-  
-    const audioMap = {
-      'TOOK': require('../../assets/VoiceRecordings/Took.mp3'),
-      'WAY': require('../../assets/VoiceRecordings/Way.mp3'),
-      'PAN': require('../../assets/VoiceRecordings/Pan.mp3'),
-      'WEST': require('../../assets/VoiceRecordings/West.mp3'),
-      'FALL': require('../../assets/VoiceRecordings/Fall.mp3'),
-      'SLEEP': require('../../assets/VoiceRecordings/Sleep.mp3'),
-      'காடு': require('../../assets/VoiceRecordings/Kaadu.m4a'),
-      'புல்': require('../../assets/VoiceRecordings/Pul.m4a'),
-      'குயில்': require('../../assets/VoiceRecordings/Kuyil.m4a'),
-      'தட்டு': require('../../assets/VoiceRecordings/Tattu.m4a'),
-      'கடை': require('../../assets/VoiceRecordings/Kadai.m4a'),
-    };
-  
-    useEffect(() => {
-      const englishWordPairs = [
-        { yellow: 'TOOK', audio: require('../../assets/VoiceRecordings/Took.mp3'), words: ['LOOK', 'TOOK'] },
-        { yellow: 'WAY', audio: require('../../assets/VoiceRecordings/Way.mp3'), words: ['WAY', 'MAY'] },
-        { yellow: 'PAN', audio: require('../../assets/VoiceRecordings/Pan.mp3'), words: ['PAN', 'NAP'] },
-        { yellow: 'WEST', audio: require('../../assets/VoiceRecordings/West.mp3'), words: ['WEST', 'NEST'] },
-        { yellow: 'FALL', audio: require('../../assets/VoiceRecordings/Fall.mp3'), words: ['FALL', 'TALL'] },
-        { yellow: 'SLEEP', audio: require('../../assets/VoiceRecordings/Sleep.mp3'), words: ['SLEEP', 'SHEEP'] },
-      ];
-    
-      const tamilWordPairs = [
-        { yellow: 'காடு', audio: require('../../assets/VoiceRecordings/Kaadu.m4a'), words: ['காடு', 'நாடு'] },
-        { yellow: 'புல்', audio: require('../../assets/VoiceRecordings/Pul.m4a'), words: ['புல்', 'பல்'] },
-        { yellow: 'குயில்', audio: require('../../assets/VoiceRecordings/Kuyil.m4a'), words: ['குயில்', 'மயில்'] },
-        { yellow: 'தட்டு', audio: require('../../assets/VoiceRecordings/Tattu.m4a'), words: ['தட்டு', 'எட்டு'] },
-        { yellow: 'கடை', audio: require('../../assets/VoiceRecordings/Kadai.m4a'), words: ['கடை', 'நடை'] },
-      ];
-    
-      const wordPairs = language === 'ENGLISH' ? englishWordPairs : tamilWordPairs;
-      console.log('Selected Language:', language);
-      console.log('Word Pairs:', wordPairs);
-    
-      const randomIndex = Math.floor(Math.random() * wordPairs.length);
-      const selectedWordPair = wordPairs[randomIndex];
-      console.log('Selected Word Pair:', selectedWordPair);
-      setWordPair(selectedWordPair);
-    
-      const playYellowWordAudio = async () => {
-        const yellowWordAudio = selectedWordPair.audio;
-        const yellowWordSoundObj = new Audio.Sound();
-        try {
-          await yellowWordSoundObj.loadAsync(yellowWordAudio);
-          await yellowWordSoundObj.playAsync();
-        } catch (error) {
-          console.error('Error loading yellow word audio:', error);
-        }
-      };
-  
-      return () => {
-        if (soundObject) {
-          soundObject.unloadAsync();
-        }
-      };
-    }, [language]);
-    
-    useEffect(() => {
-      // Cleanup function to stop audio when unmounting
-      return () => {
-        if (soundObject) {
-          soundObject.unloadAsync();
-        }
-      };
-    }, []);
-  
-    const startTimer = () => {
-      let seconds = 30;
-      const intervalId = setInterval(() => {
-        seconds -= 1;
-        if (seconds === 0) {
-          clearInterval(intervalId);
-          setTimer('00:00');
-          setTimerExpired(true); // Timer expired
-        } else {
-          const formattedTime = `${Math.floor(seconds / 60)
-            .toString()
-            .padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
-          setTimer(formattedTime);
-        }
-      }, 1000);
-    };
-  
-    const handleClickWord = (word) => {
-      console.log('Clicked word:', word);
-    };
-  
-    const onClickNext = () => {
-      // Clear any existing timeout
-      clearTimeout(timer);
-    
-      // Stop the activity
-      setTimerExpired(true); // Timer expired
-    
-      // Stop the audio playback
-      if (soundObject) {
-        soundObject.stopAsync();
-      }
-    
-      // Navigate to GoodJobScreen
-      const timer = setTimeout(() => {
-        // Navigate to GoodJobScreen
-        navigation.navigate('DA_GoodJobScreenListen', { language });
-      }, 2000);
-    };
-    
-  
-    return language === 'ENGLISH' ? <EnglishScreen timer={timer} wordPair={wordPair} onClickWord={handleClickWord} timerExpired={timerExpired} onClickNext={onClickNext}/> : <TamilScreen timer={timer} wordPair={wordPair} onClickWord={handleClickWord} timerExpired={timerExpired} onClickNext={onClickNext} />;
+  const { language } = route.params;
+  const [timer, setTimer] = useState('00:30');
+  const [wordPair, setWordPair] = useState({ yellow: '', words: [] });
+  const [soundObject, setSoundObject] = useState(null);
+  const [timerExpired, setTimerExpired] = useState(false);
+  const [currentRound, setCurrentRound] = useState(1);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [animationType, setAnimationType] = useState('');
+  const [clickedWord, setClickedWord] = useState(null);
+  const [startTime, setStartTime] = useState(null);
+  const [results, setResults] = useState([]); // Store results in state
+  const maxRounds = 4;
+  const [intervalId, setIntervalId] = useState(null);
+
+  const englishWordPairs = [
+    { yellow: 'TOOK', audio: require('../../assets/VoiceRecordings/Took.mp3'), words: ['LOOK', 'TOOK', 'BOOK'] },
+    { yellow: 'WAY', audio: require('../../assets/VoiceRecordings/Way.mp3'), words: ['WAY', 'MAY', 'DAY'] },
+    { yellow: 'PAN', audio: require('../../assets/VoiceRecordings/Pan.mp3'), words: ['PAN', 'NAP', 'CAN'] },
+    { yellow: 'WEST', audio: require('../../assets/VoiceRecordings/West.mp3'), words: ['WEST', 'NEST', 'BEST'] },
+    { yellow: 'FALL', audio: require('../../assets/VoiceRecordings/Fall.mp3'), words: ['FALL', 'TALL', 'CALL'] },
+    { yellow: 'SLEEP', audio: require('../../assets/VoiceRecordings/Sleep.mp3'), words: ['SLEEP', 'SHEEP', 'CREEP'] },
+  ];
+
+  const tamilWordPairs = [
+    { yellow: 'காடு', audio: require('../../assets/VoiceRecordings/Kaadu.m4a'), words: ['காடு', 'நாடு', 'பாடு'] },
+    { yellow: 'புல்', audio: require('../../assets/VoiceRecordings/Pul.m4a'), words: ['புல்', 'பல்', 'நல்'] },
+    { yellow: 'குயில்', audio: require('../../assets/VoiceRecordings/Kuyil.m4a'), words: ['குயில்', 'மயில்', 'சிலை'] },
+    { yellow: 'தட்டு', audio: require('../../assets/VoiceRecordings/Tattu.m4a'), words: ['தட்டு', 'எட்டு', 'பட்டு'] },
+    { yellow: 'கடை', audio: require('../../assets/VoiceRecordings/Kadai.m4a'), words: ['கடை', 'நடை', 'படை'] },
+  ];
+
+  useEffect(() => {
+    const wordPairs = language === 'ENGLISH' ? englishWordPairs : tamilWordPairs;
+    setNewWordPair(wordPairs);
+  }, [language, currentRound]);
+
+  useEffect(() => {
+    startTimer();
+    return () => clearInterval(intervalId); // Clear the interval on unmount
+  }, [wordPair]);
+
+  const setNewWordPair = (wordPairs) => {
+    const randomIndex = Math.floor(Math.random() * wordPairs.length);
+    const selectedWordPair = wordPairs[randomIndex];
+    setWordPair(selectedWordPair);
+    playYellowWordAudio(selectedWordPair.audio);
+    setClickedWord(null); // Reset clicked word for each round
+    setStartTime(Date.now()); // Start time for the round
   };
-  
+
+  const playYellowWordAudio = async (audio) => {
+    if (soundObject) {
+      await soundObject.unloadAsync();
+    }
+
+    const yellowWordSoundObj = new Audio.Sound();
+    try {
+      await yellowWordSoundObj.loadAsync(audio);
+      await yellowWordSoundObj.playAsync();
+    } catch (error) {
+      console.error('Error loading yellow word audio:', error);
+    }
+    setSoundObject(yellowWordSoundObj);
+  };
+
+  const startTimer = () => {
+    if (intervalId) {
+      clearInterval(intervalId); // Clear any existing interval before starting a new one
+    }
+
+    let seconds = 30;
+    const id = setInterval(() => {
+      seconds -= 1;
+      if (seconds === 0) {
+        clearInterval(id);
+        setTimer('00:00');
+        setTimerExpired(true); // Timer expired
+        handleModal();
+      } else {
+        const formattedTime = `${Math.floor(seconds / 60)
+          .toString()
+          .padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
+        setTimer(formattedTime);
+      }
+    }, 1000);
+    setIntervalId(id);
+  };
+
+  const handleClickWord = (word) => {
+    setClickedWord(word);
+  };
+
+  const handleModal = () => {
+    setModalVisible(true);
+    const timeTaken = (Date.now() - startTime) / 1000; // Time taken in seconds
+
+    const result = {
+      activity: 'listen_and_choose',
+      round: currentRound,
+      correctWord: wordPair.yellow,
+      selectedWord: clickedWord,
+      isCorrect: clickedWord === wordPair.yellow,
+      timeTaken: timeTaken.toFixed(2),
+    };
+
+    setResults([...results, result]);
+
+    if (!clickedWord) {
+      setAnimationType('better');
+      setModalMessage("Cheer up! You can do this!");
+    } else if (clickedWord === wordPair.yellow) {
+      setAnimationType('correct');
+      setModalMessage("Good job! You selected the correct answer.");
+    } else {
+      setAnimationType('wrong');
+      setModalMessage("Let's do better in the next round!");
+    }
+  };
+
+  const handleNext = () => {
+    setModalVisible(false);
+    if (currentRound < maxRounds) {
+      setCurrentRound(currentRound + 1);
+      setTimerExpired(false);
+      setTimer('00:30');
+    } else {
+      // Calculate the total mark
+      const correctAnswers = results.filter(result => result.isCorrect).length;
+      const totalMark = (correctAnswers / maxRounds) * 100;
+
+      // Log the results and the total mark
+      console.log('Results:', results);
+      console.log(`Total mark for listen_activity: ${totalMark}%`);
+
+      // Move to the next screen
+      navigation.navigate('DA_BingoScreen', {
+        language,
+        results, // Pass the results state
+        setResults, // Pass the setResults function
+      });
+    }
+  };
+
+  const renderAnimation = () => {
+    switch (animationType) {
+      case 'correct':
+        return <Image source={require('../../assets/correct_gif.gif')} style={styles.gif} />;
+      case 'better':
+        return <Image source={require('../../assets/better_luck_gif.gif')} style={styles.gif} />;
+      case 'wrong':
+        return <Image source={require('../../assets/wrong_gif.gif')} style={styles.gif} />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <>
+      {language === 'ENGLISH' ? (
+        <EnglishScreen
+          timer={timer}
+          wordPair={wordPair}
+          onClickWord={handleClickWord}
+          timerExpired={timerExpired}
+          onClickNext={handleModal}
+          playYellowWordAudio={() => soundObject && soundObject.replayAsync()}
+        />
+      ) : (
+        <TamilScreen
+          timer={timer}
+          wordPair={wordPair}
+          onClickWord={handleClickWord}
+          timerExpired={timerExpired}
+          onClickNext={handleModal}
+          playYellowWordAudio={() => soundObject && soundObject.replayAsync()}
+        />
+      )}
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {renderAnimation()}
+            <Text style={styles.modalText}>{modalMessage}</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={handleNext}
+            >
+              <Text style={styles.closeButtonText}>Next</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -252,7 +323,6 @@ const styles = StyleSheet.create({
     color: '#FFD166',
     marginTop: '15%',
     marginBottom: '2%',
-    paddingLeft: '2%',
   },
   textTopicT: {
     textAlign: 'center',
@@ -275,38 +345,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 20,
   },
-  speakerIcon: {
-    width: 20,
-    height: 20,
-    marginRight: '1%',
-    marginLeft: '3%',
-    marginTop: '3%',
-  },
-  contentE: {
-    textAlign: 'justify',
-    fontSize: 15,
-    color: '#16397F',
-    marginHorizontal: '3%',
-    marginTop: '6%',
-    marginBottom: '5%',
-  },
-  contentT: {
-    textAlign: 'justify',
-    fontSize: 12,
-    color: '#16397F',
-    marginHorizontal: '6%',
-    marginTop: '6%',
-    marginBottom: '0%',
+  speakerImage: {
+    width: 80,
+    height: 80,
+    marginTop: 20,
   },
   timerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#D9D9D9',
-    paddingHorizontal: '5%',
-    paddingVertical: '2%',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     borderRadius: 10,
-    marginTop: '2%',
-    marginLeft: '60%',
+    marginTop: 20,
   },
   timerIcon: {
     width: 20,
@@ -321,65 +372,97 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
-  boardImage: {
-    width: '100%', 
-    height: '60%', 
+  answerContainer: {
+    backgroundColor: '#FFEBE5',
+    borderRadius: 20,
+    padding: 20,
+    marginVertical: 40,
+    width: '90%',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
   },
-  board: {
-    position: 'absolute',
-    top: '55%',
+  answerBox: {
+    backgroundColor: '#FFFAF0',
+    borderRadius: 10,
+    width: 200,
+    height: 60,
+    marginBottom: 10,
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  yellowWord: {
-    color: 'yellow',
-    fontSize: 40,
+  answerText: {
+    color: '#5A67D8',
+    fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: '10%',
-  },
-  whiteWordsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  whiteWord: {
-    color: 'white',
-    fontSize: 35,
-    paddingLeft: '8%', 
-    paddingRight: '8%',
+    textAlign: 'center',
   },
   clickedWord: {
-    borderWidth: 3,
-    borderColor: 'blue',
-    borderRadius: 90,
-    padding: 5,
+    backgroundColor: '#FFCC80',
+    transform: [{ scale: 1.05 }],
   },
   correctWord: {
-    borderWidth: 4,
-    borderColor: '#6ECB63',
-    borderRadius: 90,
-    padding: 5,
+    backgroundColor: '#9AE6B4',
+    transform: [{ scale: 1.1 }],
+    borderColor: '#38A169',
+    borderWidth: 3,
   },
   wrongWord: {
-    borderWidth: 4,
-    borderColor: 'red',
-    borderRadius: 90,
-    padding: 5,
+    backgroundColor: '#ADD8E6',
+    transform: [{ scale: 1.05 }],
+    borderColor: '#E53E3E',
+    borderWidth: 3,
   },
   nextButton: {
     backgroundColor: '#FFD166',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
-    marginTop: '-30%',
   },
   nextButtonText: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
   },
-  speakerImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 30,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  modalText: {
+    fontSize: 20,
+    marginVertical: 20,
+    textAlign: 'center',
+  },
+  closeButton: {
+    backgroundColor: '#FFD166',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  closeButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  gif: {
+    width: 150,
+    height: 150,
   },
 });
 
