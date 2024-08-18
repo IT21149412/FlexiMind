@@ -233,7 +233,7 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
       console.log(`Total mark for listen_activity: ${totalMark}%`);
 
       // Move to the next screen
-      navigation.navigate('DA_BingoScreen', {
+      navigation.navigate('DA_BingoDescriptionScreen', {
         language,
         results, // Pass the results state
         setResults, // Pass the setResults function

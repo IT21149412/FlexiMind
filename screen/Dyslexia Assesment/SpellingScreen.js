@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const wordList = {
   ENGLISH: ['CLASS', 'GLASS', 'GRASS', 'BURN', 'TURN', 'FURN', 'FRANCE', 'TRANCE', 'CHANCE', 'BEACH', 'REACH', 'TEACH', 'FUNNY', 'SUNNY', 'BUNNY', 'GAME', 'SAME', 'CAME'],
-  TAMIL: ['மரம்', 'வனம்', 'பதம்', 'புல்', 'மண்', 'மழை', 'சீர்', 'பால்', 'நீர்', 'முத்து']
+  TAMIL: ['மரம்', 'வனம்', 'பதம்', 'வனம்', 'மண்', 'நலம்', 'பணம்', 'வனத', 'அரசவ', 'பணவ', 'மகன', 'கலத']
 };
 
 const getCompoundLetters = (word) => {

@@ -9,7 +9,7 @@ const EnglishScreen = ({ handleNext }) => (
         <Image style={styles.bgImg} source={require('../../assets/bg.jpg')}></Image>
         <View style={styles.overlay}></View>
         <Text style={styles.contentE}>
-        Hey, Word Wizard! 🧙‍♂️ It's time to show off your spelling skills! Look at the word on the board and find the correct letters below to spell it out. Let's get started!
+        Hey, There! 🧙‍♂️ It's time to show off your spelling skills! Look at the word on the board and find the correct letters below to spell it out. Let's get started!
         </Text>
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
             <Text style={styles.nextButtonText}>Next</Text>

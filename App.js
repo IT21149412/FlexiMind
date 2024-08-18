@@ -7,9 +7,6 @@ import RegisterScreen from './screen/RegisterScreen';
 import DA_SelectLanguage from './screen/Dyslexia Assesment/SelectLanguageScreen';
 import DA_ParentConsentScreen from './screen/Dyslexia Assesment/ParentConsentScreen';
 import DA_MatchingWordsScreen from './screen/Dyslexia Assesment/MatchingWordsScreen';
-import DA_MatchingWordsScreen2 from './screen/Dyslexia Assesment/MatchingWordsScreen2';
-import DA_MatchingWordsScreen3 from './screen/Dyslexia Assesment/MatchingWordsScreen3';
-import DA_MatchingWordsScreen4 from './screen/Dyslexia Assesment/MatchingWordsScreen4';
 import DA_GoodJobScreen from './screen/Dyslexia Assesment/GoodJobScreen';
 import DA_ListenAndChooseScreen from './screen/Dyslexia Assesment/ListenAndChooseScreen';
 import DA_GoodJobScreenListen from './screen/Dyslexia Assesment/GoodJobScreenListen';
@@ -24,6 +21,7 @@ import DA_ListenAndChooseDescriptionScreen from './screen/Dyslexia Assesment/Lis
 import DA_SpellingDescriptionScreen from './screen/Dyslexia Assesment/SpellingDescriptionScreen';
 import DA_ResultsScreen from './screen/Dyslexia Assesment/ResultsScreen';
 import DA_BingoScreen from './screen/Dyslexia Assesment/BingoScreen';
+import DA_BingoDescriptionScreen from './screen/Dyslexia Assesment/BingoDescriptionScreen';
 
 
 const Stack = createStackNavigator();
@@ -66,21 +64,6 @@ const App = () => {
         <Stack.Screen
           name="DA_MatchingWordsScreen"
           component={DA_MatchingWordsScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_MatchingWordsScreen2"
-          component={DA_MatchingWordsScreen2}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_MatchingWordsScreen3"
-          component={DA_MatchingWordsScreen3}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_MatchingWordsScreen4"
-          component={DA_MatchingWordsScreen4}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -151,6 +134,11 @@ const App = () => {
         <Stack.Screen
           name="DA_BingoScreen"
           component={DA_BingoScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DA_BingoDescriptionScreen"
+          component={DA_BingoDescriptionScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
