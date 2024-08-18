@@ -12,8 +12,9 @@ const DashboardHome = ({navigation}) => {
     }
 
     const handleMaths = () => {
-        //Navigate your screens
-    }
+        navigation.navigate('MathHands', {
+            screen: 'MathHandsMainScreen',
+          });    }
 
     const handleRemedial = () => {
         navigation.navigate('Language');
