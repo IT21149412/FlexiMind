@@ -16,7 +16,7 @@ const DashboardHome = ({navigation}) => {
     }
 
     const handleRemedial = () => {
-        //Navigate your screens
+        navigation.navigate('Language');
     }
 
     return (
@@ -50,7 +50,7 @@ const DashboardHome = ({navigation}) => {
                 <View style={styles.orangeCircle4}>
                     <View style={styles.whiteCircle4}></View>
                 </View>
-                <Text style={styles.remedial} onPress={handleRemedial}>Remedial Teaching{'\n'} through Games</Text>
+                <Text style={styles.remedial} onPress={handleRemedial}>Words and Sentence{'\n'} construction</Text>
             </View>
         </View>
     );
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     remedial: {
-        left: 30,
+        left: 18,
         fontWeight: '900',
         fontSize: 25,
         color: '#FFD166',

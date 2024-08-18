@@ -4,6 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from './screen/HomeScreen';
 import LoginScreen from './screen/LoginScreen';
 import RegisterScreen from './screen/RegisterScreen';
+
+//assessment
 import DA_SelectLanguage from './screen/Dyslexia Assesment/SelectLanguageScreen';
 import DA_ParentConsentScreen from './screen/Dyslexia Assesment/ParentConsentScreen';
 import DA_MatchingWordsScreen from './screen/Dyslexia Assesment/MatchingWordsScreen';
@@ -22,6 +24,36 @@ import DA_SpellingDescriptionScreen from './screen/Dyslexia Assesment/SpellingDe
 import DA_ResultsScreen from './screen/Dyslexia Assesment/ResultsScreen';
 import DA_BingoScreen from './screen/Dyslexia Assesment/BingoScreen';
 import DA_BingoDescriptionScreen from './screen/Dyslexia Assesment/BingoDescriptionScreen';
+
+// Remidial
+import HomeScreenRemidial from './screen/remidial/HomeScreen';
+import HomeScreenRemidialTamil from './screen/remidial/HomeScreenTam';
+import LanguageScreen from './screen/remidial/LanguageScreen';
+import EnglishQuizScreen from './screen/remidial/english/EnglishQuizScreen';
+import TamilQuizScreen from './screen/remidial/tamil/TamilQuizScreen';
+import AgeEnglish from './screen/remidial/english/AgeEnglish';
+import AgeTamil from './screen/remidial/tamil/AgeTamil';
+import IQEnglishScreen from './screen/remidial/english/IQEnglishScreen';
+import StartEngQuiz from './screen/remidial/english/StartEngQuiz';
+import IQTamilScreen from './screen/remidial/tamil/IQTamilScreen';
+import StartTamQuiz from './screen/remidial/tamil/StartTamQuiz';
+import QuizSummary from './screen/remidial/english/QuizResultSum';
+import QuizSummaryTam from './screen/remidial/tamil/QuizResultSumTam';
+
+import ActivityEng from './screen/remidial/english/ActivityEng';
+import UnitsScreenEng from './screen/remidial/english/UnitsScreenEng';
+import Unit1EngNew from './screen/remidial/english/Unit1EngNew';
+import MatchEngHome from './screen/remidial/english/matchEngHome';
+import MatchEng from './screen/remidial/english/MatchEng';
+import WordSoundHome from './screen/remidial/english/WordSoundHome';
+import EngWordSounds from './screen/remidial/english/WordEng';
+import ActivityTam from './screen/remidial/tamil/ActivityTamil';
+import UnitsScreenTam from './screen/remidial/tamil/UnitsScreenTam';
+import Unit1Tamil from './screen/remidial/tamil/Unit1Tam';
+import MatchTamHome from './screen/remidial/tamil/matchTamHome';
+import MatchTam from './screen/remidial/tamil/MatchTam';
+import WordSoundHomeTam from './screen/remidial/tamil/WordSoundHome';
+import TamWordSounds from './screen/remidial/tamil/WordTam';
 
 
 const Stack = createStackNavigator();
@@ -46,7 +78,7 @@ const App = () => {
           options={{ headerShown: false }}
         />
 
-        {/* Dyslexia Assesment */}
+        {/* Assesment */}
 
         <Stack.Screen
           name="DA_SelectLanguage"
@@ -139,6 +171,144 @@ const App = () => {
         <Stack.Screen
           name="DA_BingoDescriptionScreen"
           component={DA_BingoDescriptionScreen}
+          options={{ headerShown: false }}
+        />
+
+        {/* Remidial */}
+
+        <Stack.Screen
+          name="HomeRemidial"
+          component={HomeScreenRemidial}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="HomeRemidialTamil"
+          component={HomeScreenRemidialTamil}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Language"
+          component={LanguageScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ageEng"
+          component={AgeEnglish}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ageTamil"
+          component={AgeTamil}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="iqEng"
+          component={IQEnglishScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="iqTam"
+          component={IQTamilScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="startEng"
+          component={StartEngQuiz}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="startTam"
+          component={StartTamQuiz}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="EnglishQuiz"
+          component={EnglishQuizScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TamilQuiz"
+          component={TamilQuizScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="activityEng"
+          component={ActivityEng}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="unitsScreenEng"
+          component={UnitsScreenEng}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="unit1Eng"
+          component={Unit1EngNew}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="matchEng"
+          component={MatchEng}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="matchEngHome"
+          component={MatchEngHome}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="wordSoundHome"
+          component={WordSoundHome}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="engWordSounds"
+          component={EngWordSounds}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="activityTam"
+          component={ActivityTam}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="unitsScreenTam"
+          component={UnitsScreenTam}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="unit1Tam"
+          component={Unit1Tamil}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="matchTam"
+          component={MatchTam}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="matchTamHome"
+          component={MatchTamHome}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="wordSoundHomeTam"
+          component={WordSoundHomeTam}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="tamWordSounds"
+          component={TamWordSounds}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="quizSummary"
+          component={QuizSummary}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="quizSummarytam"
+          component={QuizSummaryTam}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
