@@ -374,6 +374,25 @@ const Unit1EngNew = ({ navigation }) => {
         backgroundColor: 'white',
       }}
     >
+      {/* Background Image */}
+      {/* <Image
+        style={{
+          alignSelf: 'center',
+          top: '0%',
+          width: '100%',
+          height: '100%',
+          borderWidth: 1,
+        }}
+        source={require('../../../assets/bg.jpg')}
+      />
+      <View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+          top: '0%',
+          height: '100%',
+        }}
+      ></View> */}
       <SafeAreaView
         style={{
           flex: 1,

@@ -11,7 +11,7 @@ const AgeEnglish = ({ navigation }) => {
 
   const handleEnglish = () => {
     if (selectedAge) {
-      navigation.navigate('iqEng');
+      navigation.navigate('iqEng', {selectedAge});
     } else {
       alert('Please select your age!');
     }
