@@ -17,8 +17,8 @@ import { COLORS, SIZES } from '../../../constants/Theme';
 import data from '../../../data/QuizEnglish';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function EnglishQuizScreen({route}) {
-  const { selectedAge,iqscore } = route.params;
+export default function EnglishQuizScreen({ route }) {
+  const { selectedAge, iqscore } = route.params;
 
   const allQuestions = data;
   const navigation = useNavigation();
@@ -47,7 +47,7 @@ export default function EnglishQuizScreen({route}) {
     return () => clearInterval(interval);
   }, [showScoreModal]);
 
- const validateAnswer = (selectedOption) => {
+  const validateAnswer = (selectedOption) => {
     let correct_option = allQuestions[currentQuestionIndex]['correct_option'];
     setCurrentOptionSelected(selectedOption);
     setCorrectOption(correct_option);
@@ -61,7 +61,10 @@ export default function EnglishQuizScreen({route}) {
       setResults([...results, 0]); // Add 0 for incorrect answer
     }
 
-    console.log("Results array: ", [...results, selectedOption == correct_option ? 1 : 0]); // Log results array
+    console.log('Results array: ', [
+      ...results,
+      selectedOption == correct_option ? 1 : 0,
+    ]); // Log results array
 
     // Show Next Button
     setShowNextButton(true);
@@ -94,7 +97,7 @@ export default function EnglishQuizScreen({route}) {
       score: score,
       totalQuestions: allQuestions.length,
       timeTaken: timeTaken,
-      results, // Pass the results array to the QuizSummary screen
+      questionResults: results, // Pass the results array to the QuizSummary screen
     });
   };
 
@@ -351,7 +354,7 @@ export default function EnglishQuizScreen({route}) {
             transparent={true}
             visible={showScoreModal}
           >
-                          {/* <ImageBackground
+            {/* <ImageBackground
     source={require('../../../assets/images/DottedBG.png')} // Replace with your background image path
     style={{ flex: 1, top: '50%', position: 'absolute', justifyContent: 'center', alignItems: 'center'
     }}
@@ -364,7 +367,6 @@ export default function EnglishQuizScreen({route}) {
                 justifyContent: 'center',
               }}
             >
-
               <View
                 style={{
                   backgroundColor: COLORS.white,
@@ -374,21 +376,29 @@ export default function EnglishQuizScreen({route}) {
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ fontSize: 30, fontWeight: 'bold' ,color: COLORS.accent}}>
+                <Text
+                  style={{
+                    fontSize: 30,
+                    fontWeight: 'bold',
+                    color: COLORS.accent,
+                  }}
+                >
                   {score > allQuestions.length / 2
                     ? 'Good Job!'
                     : 'Dont give up!'}
                 </Text>
-                 {/* GIF Animation */}
-  {score <= allQuestions.length / 2 ? (
-    <Image
-      source={require('../../../assets/better_luck_gif.gif')}
-      style={{ width: 100, height: 100, marginTop: 5 }}
-    />
-  ) : ( <Image
-    source={require('../../../assets/correct_gif.gif')}
-    style={{ width: 100, height: 100, marginTop: 5 }}
-  />)}
+                {/* GIF Animation */}
+                {score <= allQuestions.length / 2 ? (
+                  <Image
+                    source={require('../../../assets/better_luck_gif.gif')}
+                    style={{ width: 100, height: 100, marginTop: 5 }}
+                  />
+                ) : (
+                  <Image
+                    source={require('../../../assets/correct_gif.gif')}
+                    style={{ width: 100, height: 100, marginTop: 5 }}
+                  />
+                )}
                 <View
                   style={{
                     flexDirection: 'row',

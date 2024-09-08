@@ -1,23 +1,43 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 
+const wordsUnit1 = [
+  { left: 'cake', right: 'time' },
+  { left: 'bake', right: 'lime' },
+  { left: 'time', right: 'hat' },
+  { left: 'lime', right: 'bake' },
+  { left: 'hat', right: 'cake' },
+];
+
+const wordsUnit2 = [
+  { left: 'dog', right: 'log' },
+  { left: 'fog', right: 'hog' },
+  { left: 'cot', right: 'dot' },
+  { left: 'lot', right: 'pot' },
+  { left: 'hot', right: 'got' },
+];
+
 const MatchEngHome = ({ navigation }) => {
   const handle1 = () => {
-    navigation.navigate('matchEng');
+    navigation.navigate('matchEng', { words: wordsUnit1 });
   };
 
-  const handleLearn = () => {
+  const handle2 = () => {
+    navigation.navigate('matchEng', { words: wordsUnit2 });
+  };
+
+  const handle3 = () => {
     //Navigate your screens
   };
-
-  const handleMaths = () => {
+  const handle4 = () => {
     //Navigate your screens
   };
-
-  const handleRemedial = () => {
-    navigation.navigate('HomeRemidial');
+  const handle5 = () => {
+    //Navigate your screens
   };
-
+  const handle6 = () => {
+    //Navigate your screens
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.textTopic}>Let's Match Simillar{'\n'}Words!</Text>
@@ -44,7 +64,7 @@ const MatchEngHome = ({ navigation }) => {
         <View style={styles.orangeCircle2}>
           <View style={styles.whiteCircle2}></View>
         </View>
-        <Text style={styles.learn} onPress={handleLearn}>
+        <Text style={styles.learn} onPress={handle2}>
           Mirror Writing
         </Text>
         <Text style={styles.unitDescription2}>Unit 2</Text>
@@ -54,7 +74,7 @@ const MatchEngHome = ({ navigation }) => {
         <View style={styles.orangeCircle1}>
           <View style={styles.whiteCircle1}></View>
         </View>
-        <Text style={styles.dyslexia} onPress={handleMaths}>
+        <Text style={styles.dyslexia} onPress={handle3}>
           Reversing Letters
         </Text>
         <Text style={styles.unitDescription1}>Unit 3</Text>
@@ -64,7 +84,7 @@ const MatchEngHome = ({ navigation }) => {
         <View style={styles.orangeCircle2}>
           <View style={styles.whiteCircle2}></View>
         </View>
-        <Text style={styles.learn} onPress={handleRemedial}>
+        <Text style={styles.learn} onPress={handle4}>
           Spell Homophones
         </Text>
         <Text style={styles.unitDescription2}>Unit 4</Text>
@@ -74,7 +94,7 @@ const MatchEngHome = ({ navigation }) => {
         <View style={styles.orangeCircle1}>
           <View style={styles.whiteCircle1}></View>
         </View>
-        <Text style={styles.dyslexia} onPress={handle1}>
+        <Text style={styles.dyslexia} onPress={handle5}>
           Similar Looking Words
         </Text>
         <Text style={styles.unitDescription1}>Unit 5</Text>
@@ -84,7 +104,7 @@ const MatchEngHome = ({ navigation }) => {
         <View style={styles.orangeCircle2}>
           <View style={styles.whiteCircle2}></View>
         </View>
-        <Text style={styles.learn} onPress={handleRemedial}>
+        <Text style={styles.learn} onPress={handle6}>
           Mixed Up Letters
         </Text>
         <Text style={styles.unitDescription2}>Unit 6</Text>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,15 +7,15 @@ import {
   Image,
   Modal,
   Button,
-} from "react-native";
-import { CameraView, useCameraPermissions } from "expo-camera";
-import axios from "axios";
-import * as ImageManipulator from "expo-image-manipulator";
-import Svg, { Circle, Text as SvgText } from "react-native-svg";
-import LottieView from "lottie-react-native";
+} from 'react-native';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import axios from 'axios';
+import * as ImageManipulator from 'expo-image-manipulator';
+import Svg, { Circle, Text as SvgText } from 'react-native-svg';
+import LottieView from 'lottie-react-native';
 
 const SixTimesScreen = ({ route, navigation }) => {
-  const [facing, setFacing] = useState("front");
+  const [facing, setFacing] = useState('front');
   const [isCapturing, setIsCapturing] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
@@ -55,7 +55,7 @@ const SixTimesScreen = ({ route, navigation }) => {
   if (!permission.granted) {
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: "center" }}>
+        <Text style={{ textAlign: 'center' }}>
           We need your permission to show the camera
         </Text>
         <Button onPress={requestPermission} title="Grant Permission" />
@@ -64,7 +64,7 @@ const SixTimesScreen = ({ route, navigation }) => {
   }
 
   const toggleCameraFacing = () => {
-    setFacing((current) => (current === "back" ? "front" : "back"));
+    setFacing((current) => (current === 'back' ? 'front' : 'back'));
   };
 
   const captureAndProcessImage = async () => {
@@ -78,24 +78,24 @@ const SixTimesScreen = ({ route, navigation }) => {
         );
 
         let formData = new FormData();
-        formData.append("image", {
+        formData.append('image', {
           uri: resizedPhoto.uri,
-          type: "image/jpeg",
-          name: "photo.jpg",
+          type: 'image/jpeg',
+          name: 'photo.jpg',
         });
 
         const response = await axios.post(
-          "http://192.168.8.103:5000/process-six-times-table",
+          'http://192.168.8.101:5000/process-six-times-table',
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              'Content-Type': 'multipart/form-data',
             },
           }
         );
         setResult(response.data);
       } catch (error) {
-        console.error("Error processing image:", error);
+        console.error('Error processing image:', error);
       }
     }
   };
@@ -139,25 +139,25 @@ const SixTimesScreen = ({ route, navigation }) => {
   const getHandImage = (fingerCount) => {
     switch (fingerCount) {
       case 1:
-        return require("../../assets/1.gif");
+        return require('../../assets/1.gif');
       case 2:
-        return require("../../assets/22.gif");
+        return require('../../assets/22.gif');
       case 3:
-        return require("../../assets/3.gif");
+        return require('../../assets/3.gif');
       case 4:
-        return require("../../assets/4.gif");
+        return require('../../assets/4.gif');
       case 5:
-        return require("../../assets/5.gif");
+        return require('../../assets/5.gif');
       case 6:
-        return require("../../assets/6.gif");
+        return require('../../assets/6.gif');
       case 7:
-        return require("../../assets/7.gif");
+        return require('../../assets/7.gif');
       case 8:
-        return require("../../assets/8.gif");
+        return require('../../assets/8.gif');
       case 9:
-        return require("../../assets/9.gif");
+        return require('../../assets/9.gif');
       case 10:
-        return require("../../assets/10.gif");
+        return require('../../assets/10.gif');
       default:
         return null;
     }
@@ -188,7 +188,7 @@ const SixTimesScreen = ({ route, navigation }) => {
               {[...Array(result.finger_count)].map((_, i) => (
                 <Image
                   key={i}
-                  source={require("../../assets/5.png")}
+                  source={require('../../assets/5.png')}
                   style={[
                     styles.icon,
                     result.finger_count > 6 && styles.smallIcon,
@@ -207,12 +207,12 @@ const SixTimesScreen = ({ route, navigation }) => {
             <Text style={styles.stepText}>Step 3: Add Fingers</Text>
             <View style={styles.additionContainer}>
               <Image
-                source={require("../../assets/5.png")}
+                source={require('../../assets/5.png')}
                 style={styles.additionImage}
               />
               <Text style={styles.additionText}>+</Text>
               <Image
-                source={require("../../assets/2.png")}
+                source={require('../../assets/2.png')}
                 style={styles.additionImage}
               />
             </View>
@@ -257,9 +257,9 @@ const SixTimesScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.bgImg} source={require("../../assets/bg.jpg")} />
+      <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
       <View style={styles.overlay}>
-        <Text style={{ textAlign: "center", fontSize: 24, fontWeight: "bold" }}>
+        <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: 'bold' }}>
           6 Times Table
         </Text>
         <View style={styles.cameraContainer}>
@@ -269,7 +269,7 @@ const SixTimesScreen = ({ route, navigation }) => {
           {isCapturing && renderCircularTimer()}
           <TouchableOpacity style={styles.button1} onPress={toggleCameraFacing}>
             <Image
-              source={require("../../assets/flip.png")}
+              source={require('../../assets/flip.png')}
               style={styles.refreshIcon}
             />
           </TouchableOpacity>
@@ -277,7 +277,7 @@ const SixTimesScreen = ({ route, navigation }) => {
             style={styles.button}
             onPress={handleCaptureButtonPress}
           >
-            <Text style={styles.text}>{isCapturing ? "Stop " : "Start"}</Text>
+            <Text style={styles.text}>{isCapturing ? 'Stop ' : 'Start'}</Text>
           </TouchableOpacity>
           {result && (
             <View style={styles.resultContainer}>
@@ -289,7 +289,7 @@ const SixTimesScreen = ({ route, navigation }) => {
                 <Text style={styles.modalButtonText}>Check Calculation</Text>
               </TouchableOpacity>
               <Image
-                source={require("../../assets/icons8-tap-gesture.gif")}
+                source={require('../../assets/icons8-tap-gesture.gif')}
                 style={styles.icon2}
               />
             </View>
@@ -303,57 +303,57 @@ const SixTimesScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: "relative",
-    width: "auto",
-    height: "100%",
-    backgroundColor: "#4D86F7",
+    position: 'relative',
+    width: 'auto',
+    height: '100%',
+    backgroundColor: '#4D86F7',
   },
   bgImg: {
-    alignSelf: "center",
-    top: "10%",
-    width: "100%",
-    height: "80%",
+    alignSelf: 'center',
+    top: '10%',
+    width: '100%',
+    height: '80%',
     borderWidth: 1,
     borderRadius: 90,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    top: "15%",
-    height: "80%",
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    top: '15%',
+    height: '80%',
     borderRadius: 85,
   },
   cameraContainer: {
-    width: "80%",
+    width: '80%',
     height: 300,
-    overflow: "hidden",
+    overflow: 'hidden',
     borderRadius: 10,
     marginTop: 20,
-    left: "10%",
+    left: '10%',
   },
   camera: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   uiContainer: {
     marginTop: 5,
-    alignItems: "center",
+    alignItems: 'center',
   },
   button: {
     padding: 10,
-    backgroundColor: "#14274e",
+    backgroundColor: '#14274e',
     borderRadius: 4,
   },
   button1: {
-    left: "35%",
+    left: '35%',
     marginTop: 10,
     padding: 10,
     borderRadius: 4,
   },
   text: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   refreshIcon: {
     width: 30,
@@ -361,31 +361,31 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     marginTop: 20,
-    alignItems: "center",
+    alignItems: 'center',
   },
   resultText: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   modalButton: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: "#14274e",
+    backgroundColor: '#14274e',
     borderRadius: 4,
   },
   modalButtonText: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   stepContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     marginVertical: 10,
   },
   stepText: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "red",
+    fontWeight: 'bold',
+    color: 'red',
     margin: 5,
   },
   stepImage: {
@@ -393,10 +393,10 @@ const styles = StyleSheet.create({
     height: 250,
   },
   iconsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   icon: {
     width: 50,
@@ -409,9 +409,9 @@ const styles = StyleSheet.create({
     margin: 3,
   },
   additionContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     margin: 5,
   },
   additionImage: {
@@ -420,29 +420,29 @@ const styles = StyleSheet.create({
   },
   additionText: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "black",
+    fontWeight: 'bold',
+    color: 'black',
     marginHorizontal: 5,
   },
   explanationText: {
     fontSize: 16,
-    color: "black",
+    color: 'black',
     margin: 5,
-    textAlign: "center",
+    textAlign: 'center',
   },
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -453,14 +453,14 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
-    fontWeight: "bold",
+    textAlign: 'center',
+    fontWeight: 'bold',
     fontSize: 24,
   },
   additionContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     margin: 5,
   },
   additionImage: {
@@ -469,8 +469,8 @@ const styles = StyleSheet.create({
   },
   additionText: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "black",
+    fontWeight: 'bold',
+    color: 'black',
     marginHorizontal: 5,
   },
 });

@@ -8,47 +8,44 @@ import {
   Image,
 } from 'react-native';
 import { COLORS, SIZES } from '../../../constants/Theme';
-
-const words = [
-  { left: 'cake', right: 'time' },
-  { left: 'bake', right: 'lime' },
-  { left: 'time', right: 'hat' },
-  { left: 'lime', right: 'bake' },
-  { left: 'hat', right: 'cake' },
-];
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 const CustomAlert = ({ visible, message, type, onClose }) => {
   return (
-    <Modal visible={visible} animationType="slide" transparent={true}>
+    <Modal visible={visible} animationType="fade" transparent={true}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <View
           style={{
             backgroundColor: type === 'success' ? 'white' : 'white',
+            backgroundColor: COLORS.white,
+            width: '100%',
+            borderRadius: 20,
             padding: 20,
-            borderRadius: 10,
-            height: '15%',
-            width: '80%',
-            borderColor: '#FFC5C5',
-            borderWidth: 4,
+            alignItems: 'center',
           }}
         >
           <Text
             style={{
-              fontSize: 18,
+              fontSize: 26,
+              fontWeight: 'bold',
               color: type === 'success' ? '#2E865F' : '#FF0000',
             }}
           >
             {message}
           </Text>
+          <Image
+            source={require('../../../assets/wrong_gif.gif')}
+            style={{ width: 100, height: 100, marginTop: 5 }}
+          />
           <TouchableOpacity onPress={onClose}>
             <Text
               style={{
                 fontSize: 18,
-                color: '#007AFF',
+                color: '#f55656',
                 // justifyContent: 'right',
               }}
             >
-              OK!
+              OKAY!
             </Text>
           </TouchableOpacity>
         </View>
@@ -57,7 +54,8 @@ const CustomAlert = ({ visible, message, type, onClose }) => {
   );
 };
 
-const WordMatchingActivity = ({ navigation }) => {
+const WordMatchingActivity = ({ navigation, route }) => {
+  const { words } = route.params;
   const [selectedWord, setSelectedWord] = useState(null);
   const [disabledWords, setDisabledWords] = useState({});
   const [alertVisible, setAlertVisible] = useState(false);
@@ -65,6 +63,7 @@ const WordMatchingActivity = ({ navigation }) => {
   const [alertType, setAlertType] = useState('');
   const [isFinishButtonEnabled, setIsFinishButtonEnabled] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [shootConfetti, setShootConfetti] = useState(false);
 
   const handleContinue = () => {
     navigation.navigate('matchEngHome');
@@ -82,7 +81,7 @@ const WordMatchingActivity = ({ navigation }) => {
       }));
       setSelectedWord(null);
     } else {
-      setAlertMessage('The words do not match. Try again.');
+      setAlertMessage('The words do not match. Try again!');
       setAlertType('error');
       setAlertVisible(true);
     }
@@ -100,6 +99,7 @@ const WordMatchingActivity = ({ navigation }) => {
     const allWordsMatched = Object.keys(disabledWords).length === words.length;
     if (allWordsMatched) {
       setIsFinishButtonEnabled(true);
+      setShootConfetti(true);
     } else {
       setIsFinishButtonEnabled(false);
     }
@@ -252,11 +252,31 @@ const WordMatchingActivity = ({ navigation }) => {
               }}
             >
               <Text
-                style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 50 }}
+                style={{
+                  fontSize: 24,
+                  fontWeight: 'bold',
+                  marginBottom: 50,
+                  color: COLORS.accent,
+                }}
               >
                 Wow You Are A Pro!
               </Text>
+              <Image
+                source={require('../../../assets/correct_gif.gif')}
+                style={{ width: 100, height: 100, marginTop: 5 }}
+              />
 
+              {/* Confetti Cannon */}
+              {shootConfetti && (
+                <ConfettiCannon
+                  count={400}
+                  origin={{ x: 0, y: 0 }}
+                  fallSpeed={5000}
+                  fadeOut={true}
+                  explosionSpeed={350}
+                  autoStart={true}
+                />
+              )}
               {/* Next lesson button */}
               <TouchableOpacity
                 onPress={handleContinue}

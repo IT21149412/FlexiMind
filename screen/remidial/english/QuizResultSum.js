@@ -1,5 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Image, Animated, TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Animated,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import Svg, { Circle, G } from 'react-native-svg';
 import { COLORS } from '../../../constants/Theme';
 
@@ -47,7 +55,9 @@ const SmallPieChart = ({ percentage, activityName }) => {
         </G>
       </Svg>
       <View style={styles.innerSmallCircle}>
-        <Text style={styles.smallPercentageText}>{Math.round(percentage)}%</Text>
+        <Text style={styles.smallPercentageText}>
+          {Math.round(percentage)}%
+        </Text>
       </View>
       <Text style={styles.activityName}>{activityName}</Text>
     </View>
@@ -56,10 +66,51 @@ const SmallPieChart = ({ percentage, activityName }) => {
 
 // Main QuizSummary component
 const QuizSummary = ({ route, navigation }) => {
-  const { selectedAge,iqscore, score, totalQuestions, timeTaken } = route.params;
+  const {
+    selectedAge,
+    iqscore,
+    score,
+    totalQuestions,
+    timeTaken,
+    questionResults,
+  } = route.params;
+  const [prediction, setPrediction] = useState(null);
+  const [loading, setLoading] = useState(true);
   const percentageiq = (iqscore / totalQuestions) * 100;
   const percentage = (score / totalQuestions) * 100;
 
+  useEffect(() => {
+    // Prepare data for API request
+    const requestData = {
+      Age: selectedAge,
+      IQ: iqscore,
+      Question1: questionResults[0] || 0,
+      Question2: questionResults[1] || 0,
+      Question3: questionResults[2] || 0,
+      Question4: questionResults[3] || 0,
+      Question5: questionResults[4] || 0,
+      Time_S: timeTaken,
+    };
+
+    // Fetch prediction from Flask API
+    fetch('http://192.168.36.38:5001/predict', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Prediction:', data.prediction);
+        setPrediction(data.prediction);
+        setLoading(false); // Ensure loading is set to false
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setLoading(false); // Ensure loading is set to false even on error
+      });
+  }, [selectedAge, iqscore, questionResults, timeTaken]);
 
   const formatTime = (seconds) => {
     const getMinutes = `0${Math.floor(seconds / 60)}`.slice(-2);
@@ -67,8 +118,12 @@ const QuizSummary = ({ route, navigation }) => {
     return `${getMinutes}:${getSeconds}`;
   };
 
-  const showResults = () => {
+  const handlePositivePrediction = () => {
     navigation.navigate('activityEng');
+  };
+
+  const handleNegativePrediction = () => {
+    navigation.navigate('Home'); // Replace with your actual home screen
   };
 
   return (
@@ -76,7 +131,7 @@ const QuizSummary = ({ route, navigation }) => {
       <Image style={styles.bgImg} source={require('../../../assets/bg.jpg')} />
       <View style={styles.overlay}></View>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Your Results age: {selectedAge}</Text>
+        <Text style={styles.headerText}>Your Results - Age: {selectedAge}</Text>
       </View>
       <View style={styles.resultsContainer}>
         <View style={styles.resultItem}>
@@ -91,9 +146,46 @@ const QuizSummary = ({ route, navigation }) => {
         />
         <Text style={styles.timeText}>{formatTime(timeTaken)}</Text>
       </View>
-      <TouchableOpacity onPress={showResults} style={styles.nextButton}>
-        <Text style={styles.nextButtonText}>Next</Text>
-      </TouchableOpacity>
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <View style={styles.predictionContainer}>
+          {prediction === 1 ? (
+            <View>
+              <Image
+                source={require('../../../assets/images/activity.gif')}
+                style={styles.Gif}
+              />
+              <Text style={styles.predictionText}>
+                Practice makes perfect! Let's try some more word and sentence
+                building games!
+              </Text>
+              <TouchableOpacity
+                onPress={handlePositivePrediction}
+                style={styles.nextButton}
+              >
+                <Text style={styles.nextButtonText}>Go to Activities</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View>
+              <Image
+                source={require('../../../assets/images/good.gif')}
+                style={styles.Gif}
+              />
+              <Text style={styles.predictionText}>
+                You're on the right track! Let's explore some new adventures!
+              </Text>
+              <TouchableOpacity
+                onPress={handleNegativePrediction}
+                style={styles.nextButton}
+              >
+                <Text style={styles.nextButtonText}>Back to Home</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      )}
     </View>
   );
 };
@@ -101,12 +193,11 @@ const QuizSummary = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
     backgroundColor: '#4D86F7',
   },
   bgImg: {
     position: 'absolute',
-    top: '13%',
+    top: '10%',
     width: '100%',
     height: '100%',
     borderWidth: 1,
@@ -115,7 +206,7 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    top: '13%',
+    top: '10%',
     height: '100%',
     borderRadius: 90,
   },
@@ -124,22 +215,21 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   headerText: {
-    fontSize: 34,
+    fontSize: 30,
     fontWeight: 'bold',
     color: '#FFC107',
   },
   resultsContainer: {
-    top: '-15%',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 20,
   },
   resultItem: {
-    flexDirection: 'row', // Align items in the same row
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '80%',
-    marginBottom: 20,
   },
   smallPieContainer: {
     alignItems: 'center',
@@ -171,40 +261,52 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     color: COLORS.accent,
-
   },
   timeContainer: {
-    top: '-85%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
     justifyContent: 'center',
+    marginBottom: 20,
   },
   timeIcon: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     marginRight: 10,
   },
   timeText: {
     fontSize: 24,
     fontWeight: 'bold',
     color: COLORS.accent,
-
+  },
+  predictionContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  Gif: {
+    width: 250,
+    height: 250,
+    alignSelf: 'center',
+  },
+  predictionText: {
+    fontSize: 20,
+    // fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#2c3333',
+    marginVertical: 20,
   },
   nextButton: {
-    backgroundColor: '#4CAF50',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 30,
-    alignSelf: 'center',
-    width: '50%',
+    backgroundColor: COLORS.accent,
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 50,
+    marginVertical: 20,
+    marginHorizontal: 20,
   },
   nextButtonText: {
-    color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
   },
 });
 

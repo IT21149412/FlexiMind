@@ -1,21 +1,29 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 
+const wordsUnit1 = ['hike', 'bike', 'like', 'mike', 'nike', 'rike', 'dike'];
+const wordsUnit2 = ['was', 'saw', 'was', 'saw', 'was', 'saw', 'was'];
+
 const WordSoundHome = ({ navigation }) => {
   const handle1 = () => {
-    navigation.navigate('engWordSounds');
+    navigation.navigate('engWordSounds', { words: wordsUnit1 });
   };
 
-  const handleLearn = () => {
+  const handle2 = () => {
+    navigation.navigate('engWordSounds', { words: wordsUnit2 });
+  };
+
+  const handle3 = () => {
     //Navigate your screens
   };
-
-  const handleMaths = () => {
+  const handle4 = () => {
     //Navigate your screens
   };
-
-  const handleRemedial = () => {
-    navigation.navigate('HomeRemidial');
+  const handle5 = () => {
+    //Navigate your screens
+  };
+  const handle6 = () => {
+    //Navigate your screens
   };
 
   return (
@@ -44,7 +52,7 @@ const WordSoundHome = ({ navigation }) => {
         <View style={styles.orangeCircle2}>
           <View style={styles.whiteCircle2}></View>
         </View>
-        <Text style={styles.learn} onPress={handleLearn}>
+        <Text style={styles.learn} onPress={handle2}>
           Mirror Writing
         </Text>
         <Text style={styles.unitDescription2}>Unit 2</Text>
@@ -54,7 +62,7 @@ const WordSoundHome = ({ navigation }) => {
         <View style={styles.orangeCircle1}>
           <View style={styles.whiteCircle1}></View>
         </View>
-        <Text style={styles.dyslexia} onPress={handleMaths}>
+        <Text style={styles.dyslexia} onPress={handle3}>
           Reversing Letters
         </Text>
         <Text style={styles.unitDescription1}>Unit 3</Text>
@@ -64,7 +72,7 @@ const WordSoundHome = ({ navigation }) => {
         <View style={styles.orangeCircle4}>
           <View style={styles.whiteCircle4}></View>
         </View>
-        <Text style={styles.learn} onPress={handleRemedial}>
+        <Text style={styles.learn} onPress={handle4}>
           Spell Homophones
         </Text>
         <Text style={styles.unitDescription2}>Unit 4</Text>
@@ -74,7 +82,7 @@ const WordSoundHome = ({ navigation }) => {
         <View style={styles.orangeCircle1}>
           <View style={styles.whiteCircle1}></View>
         </View>
-        <Text style={styles.dyslexia} onPress={handle1}>
+        <Text style={styles.dyslexia} onPress={handle5}>
           Similar Looking Words
         </Text>
         <Text style={styles.unitDescription1}>Unit 5</Text>
@@ -84,7 +92,7 @@ const WordSoundHome = ({ navigation }) => {
         <View style={styles.orangeCircle6}>
           <View style={styles.whiteCircle6}></View>
         </View>
-        <Text style={styles.learn} onPress={handleRemedial}>
+        <Text style={styles.learn} onPress={handle6}>
           Mixed Up Letters
         </Text>
         <Text style={styles.unitDescription2}>Unit 6</Text>

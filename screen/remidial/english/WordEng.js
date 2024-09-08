@@ -7,14 +7,14 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
+import * as Speech from 'expo-speech';
 
-const EngWordSounds = ({ navigation }) => {
-  const playSound = (word) => {
-    // Implement the sound playing logic here
-    console.log('Playing sound for:', word);
+const EngWordSounds = ({ route }) => {
+  const { words } = route.params;
+  // Function to trigger text-to-speech
+  const handleSpeak = (word) => {
+    Speech.speak(word); // This will make the device speak the word
   };
-
-  const words = ['hike', 'bike', 'like', 'mike', 'nike', 'rike', 'dike'];
 
   return (
     <View style={styles.container}>
@@ -32,7 +32,7 @@ const EngWordSounds = ({ navigation }) => {
           <TouchableOpacity
             key={index}
             style={styles.wordButton}
-            onPress={() => playSound(word)}
+            onPress={() => handleSpeak(word)}
           >
             <Text style={styles.wordText}>{word}</Text>
             <Image

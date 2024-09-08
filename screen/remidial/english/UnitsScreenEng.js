@@ -8,16 +8,21 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import data1 from '../../../data/Unit1Eng';
+import data2 from '../../../data/Unit2Eng';
+import data3 from '../../../data/Unit3Eng';
+import data4 from '../../../data/Unit4Eng';
+import data5 from '../../../data/Unit5Eng';
+import data6 from '../../../data/Unit6Eng';
 
-const showAlert = (navigation, screen) => {
+const showAlert = (navigation, screen, data) => {
   Alert.alert(
     'Start Unit',
     'Do You Want To Start?',
     [
       {
         text: 'OK',
-        onPress: () => navigation.navigate(screen), // Navigate to the provided screen
+        onPress: () => navigation.navigate(screen, { data }),
       },
     ],
     {
@@ -39,7 +44,9 @@ const UnitsScreen = ({ navigation }) => {
           <Text style={styles.unitTitle}>Mirror Writing</Text>
           <Text style={styles.unitDescription}>Unit 1</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit1Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponent', data1)}
+        >
           <Image
             source={require('../../../assets/images/star1.png')}
             style={styles.iconsContainer}
@@ -50,7 +57,9 @@ const UnitsScreen = ({ navigation }) => {
           <Text style={styles.unitTitle}>Rhyming Words</Text>
           <Text style={styles.unitDescription}>Unit 2</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit2Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponent', data2)}
+        >
           <Image
             source={require('../../../assets/images/star2.png')}
             style={styles.iconsContainer}
@@ -61,7 +70,9 @@ const UnitsScreen = ({ navigation }) => {
           <Text style={styles.unitTitle}>Reversing Letter Combinations</Text>
           <Text style={styles.unitDescription}>Unit 3</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit3Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponent', data3)}
+        >
           <Image
             source={require('../../../assets/images/star3.png')}
             style={styles.iconsContainer}
@@ -72,7 +83,9 @@ const UnitsScreen = ({ navigation }) => {
           <Text style={styles.unitTitle}>Mixing Up Sequence of Letters</Text>
           <Text style={styles.unitDescription}>Unit 4</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit4Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponent', data4)}
+        >
           <Image
             source={require('../../../assets/images/star2.png')}
             style={styles.iconsContainer}
@@ -83,7 +96,9 @@ const UnitsScreen = ({ navigation }) => {
           <Text style={styles.unitTitle}>Spell Homophones</Text>
           <Text style={styles.unitDescription}>Unit 5</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit5Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponent', data5)}
+        >
           <Image
             source={require('../../../assets/images/star3.png')}
             style={styles.iconsContainer}
@@ -94,7 +109,9 @@ const UnitsScreen = ({ navigation }) => {
           <Text style={styles.unitTitle}>Similar Looking Words</Text>
           <Text style={styles.unitDescription}>Unit 6</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit6Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponent', data6)}
+        >
           <Image
             source={require('../../../assets/images/star6.png')}
             style={styles.iconsContainer}

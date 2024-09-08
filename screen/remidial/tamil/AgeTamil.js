@@ -11,7 +11,7 @@ const AgeTamil = ({ navigation }) => {
 
   const handleTamil = () => {
     if (selectedAge) {
-      navigation.navigate('iqTam');
+      navigation.navigate('iqTam', { selectedAge });
     } else {
       alert('உங்கள் வயதைத் தேர்ந்தெடுக்கவும்!');
     }
