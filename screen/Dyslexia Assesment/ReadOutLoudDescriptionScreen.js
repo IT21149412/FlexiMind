@@ -5,11 +5,11 @@ import { Audio } from 'expo-av';
 // English screen component
 const EnglishScreen = ({ handleNext }) => (
     <View style={styles.container}>
-        <Text style={styles.textTopicE}>Listen and Choose!</Text>
+        <Text style={styles.textTopicE}>Read Out Loud!</Text>
         <Image style={styles.bgImg} source={require('../../assets/bg.jpg')}></Image>
         <View style={styles.overlay}></View>
         <Text style={styles.contentE}>
-        Hey there! 🌟 Get ready for a new challenge! Listen carefully as a word is spoken out loud. Then, pick the same word from the list below. Need to hear it again? Tap your speaker on the writing board for another listen. Let's dive in and show off your amazing listening skills!
+        Hey There! 🧙‍♂️ It's time to show off your reading skills! Look at the words on the screen, and when you are ready, click the START RECORDING button and say the word out loud! You have 5 seconds to say the word.. Let's get started!
         </Text>
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
             <Text style={styles.nextButtonText}>Next</Text>
@@ -22,21 +22,20 @@ const EnglishScreen = ({ handleNext }) => (
 // Tamil screen component
 const TamilScreen = ({ handleNext }) => (
     <View style={styles.container}>
-        <Text style={styles.textTopicT}>கேட்டுவிட்டு தேர்வு செய்!</Text>
+        <Text style={styles.textTopicT}>சத்தமாகப் படியுங்கள்!</Text>
         <Image style={styles.bgImg} source={require('../../assets/bg.jpg')}></Image>
         <View style={styles.overlay}></View>
         <Image style={styles.dashImg} source={require('../../assets/Celebrate.png')}></Image>
         <Text style={styles.contentT}>
-        ஹாய், வேர்ட் எக்ஸ்ப்ளோரர்! 🌟 புதிய சவாலுக்கு தயாராகுங்கள்! ஒரு வார்த்தை சத்தமாக பேசப்படுவதை கவனமாகக் கேளுங்கள். பிறகு, கீழே உள்ள பட்டியலிலிருந்து அதே வார்த்தையைத் தேர்ந்தெடுக்கவும். மீண்டும் கேட்க வேண்டுமா? மற்றொரு கேட்க, எழுத்துப் பலகையில் உங்கள் பேச்சாளர் நண்பரைத் தட்டவும். உங்கள் அற்புதமான கேட்கும் திறனை வெளிப்படுத்துவோம்!
-        </Text>
+        ஏய்! 🧙‍♂️ உங்கள் வாசிப்புத் திறனை வெளிப்படுத்த வேண்டிய நேரம் இது! திரையில் உள்ள வார்த்தைகளைப் பார்த்து, நீங்கள் தயாரானதும், 'பதிவு செய்யத் தொடங்கு' பொத்தானைக் கிளிக் செய்து, அந்த வார்த்தையை உரக்கச் சொல்லுங்கள்! வார்த்தை சொல்ல உங்களுக்கு 5 வினாடிகள் உள்ளன.. தொடங்குவோம்!        </Text>
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
             <Text style={styles.nextButtonText}>அடுத்தது</Text>
         </TouchableOpacity>
     </View>
 );
 
-const DA_ListenAndChooseDescriptionScreen = ({ navigation, route }) => {
-    const { language } = route.params;
+const DA_ReadOutLoudDescriptionScreen = ({ navigation, route }) => {
+    const { language, results, setResults } = route.params;  // Receiving the results and setResults
     const [sound, setSound] = useState(null);
     const [hasNavigated, setHasNavigated] = useState(false);
 
@@ -69,6 +68,10 @@ const DA_ListenAndChooseDescriptionScreen = ({ navigation, route }) => {
         };
     }, [language]);
 
+    useEffect(() => {
+        console.log('Results state:', results);
+    }, [results]);  // Log the results state every time it changes
+
     const handleNext = async () => {
         if (!hasNavigated) {
             setHasNavigated(true);
@@ -76,7 +79,7 @@ const DA_ListenAndChooseDescriptionScreen = ({ navigation, route }) => {
                 await sound.stopAsync();
                 await sound.unloadAsync();
             }
-            navigation.navigate('DA_ListenAndChooseScreen', { language });
+            navigation.navigate('DA_ReadOutLoudScreen', { language, results, setResults });
         }
     };
 
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
 
     contentE: {
         textAlign: 'center',
-        fontSize: 23,
+        fontSize: 25,
         // fontWeight: 'bold',
         color: '#16397F',
         marginHorizontal: '5%',
@@ -179,8 +182,8 @@ const styles = StyleSheet.create({
     
     
     dashImg: {
-        marginTop:'15%',
         alignSelf: 'center',
+        marginTop:'8%',
         width: '100%',
         height: '50%',
     },
@@ -206,4 +209,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DA_ListenAndChooseDescriptionScreen;
+export default DA_ReadOutLoudDescriptionScreen;
