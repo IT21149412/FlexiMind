@@ -76,13 +76,13 @@ import LevelOneScreen from "./screen/MathHands/level1";
 import LetterSoundScreen from './screen/Learn_Tamil_Letter/LetterSoundScreen';
 import LearnTamilScreen from './screen/Learn_Tamil_Letter/LearnTamilScreen';
 import SoundVowelScreen from './screen/Learn_Tamil_Letter/SoundVowelScreen';
-// import GameScreen from './screen/Learn_Tamil_Letter/GameScreen';
+import GameScreen from './screen/Learn_Tamil_Letter/GameScreen';
 import LetterWritingScreen from './screen/Learn_Tamil_Letter/LetterWritingScreen';
 import WriteLetterScreen from './screen/Learn_Tamil_Letter/WriteLetterScreen';
-// import FirstLetterGame from './screen/Learn_Tamil_Letter/FirstLatterGame';
-// import GameSelect from './screen/Learn_Tamil_Letter/GameSelect';
-// import MatchingLettersGameScreen from './screen/Learn_Tamil_Letter/MatchingLettersGameScreen';
-// import SelectWordGameScreen from './screen/Learn_Tamil_Letter/SelectWordGameScreen';
+import FirstLetterGame from './screen/Learn_Tamil_Letter/FirstLatterGame';
+import GameSelect from './screen/Learn_Tamil_Letter/GameSelect';
+import MatchingLettersGameScreen from './screen/Learn_Tamil_Letter/MatchingLettersGameScreen';
+import SelectWordGameScreen from './screen/Learn_Tamil_Letter/SelectWordGameScreen';
 
 const Stack = createStackNavigator();
 const MathHandsStack = createStackNavigator();
@@ -444,11 +444,11 @@ const App = () => {
           component={LearnTamilScreen}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="GameSelect"
           component={GameSelect}
           options={{ headerShown: false }}
-        /> */}
+        />
         <Stack.Screen
           name="Writing"
           component={LetterWritingScreen}
@@ -469,26 +469,26 @@ const App = () => {
           component={SoundVowelScreen}
           options={{ title: 'LISTEN SOUND', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Game"
           component={GameScreen}
           options={{ title: 'PLAY GAME',headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        /> */}
-        {/* <Stack.Screen
+        />
+        <Stack.Screen
           name="FirstLetterGame"
           component={FirstLetterGame}
           options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        /> */}
-        {/* <Stack.Screen
+        />
+        <Stack.Screen
           name="MatchingLettersGameScreen"
           component={MatchingLettersGameScreen}
           options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        /> */}
-        {/* <Stack.Screen
+        />
+        <Stack.Screen
           name="SelectWordGameScreen"
           component={SelectWordGameScreen}
           options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        /> */}
+        />
        
       </Stack.Navigator>
     </NavigationContainer>

@@ -27,20 +27,20 @@ const SoundVowelScreen = ({route}) => {
         <View style={styles.container}>
             <Text style={styles.textTopic}>
                 {/* {renderText('TAMIL LETTER\n SOUNDS', 'தமிழ் எழுத்து \nஒலிகள்')} */}
-                {'தமிழ் எழுத்து \nஒலிகள்'}
+                {'TAMIL LETTER\n SOUNDS'}
             </Text>
             {category === 'vowel' ? (
                 <>
                     <Text style={styles.vowelText}>
                         {/* {renderText('Vowel Letters', 'உயிர் \nஎழுத்துக்கள்')} */}
-                        {'உயிர் \nஎழுத்துக்கள்'}
+                        {'Vowel Letters'}
                     </Text>
                 </>
             ) : category === 'consonant' ? (
                 <>
                     <Text style={styles.vowelText}>
                         {/* {renderText('Consonant Letters', 'மெய் \nஎழுத்துக்கள்')} */}
-                        {'மெய் \nஎழுத்துக்கள்'}
+                        {'Consonant Letters'}
                     </Text>
                 </>
             ) : null}
