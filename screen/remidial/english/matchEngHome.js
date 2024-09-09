@@ -2,41 +2,77 @@ import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 
 const wordsUnit1 = [
-  { left: 'cake', right: 'time' },
-  { left: 'bake', right: 'lime' },
-  { left: 'time', right: 'hat' },
-  { left: 'lime', right: 'bake' },
-  { left: 'hat', right: 'cake' },
+  { left: 'CAKE', right: 'TIME' },
+  { left: 'BAKE', right: 'LIME' },
+  { left: 'TIME', right: 'CAKE' },
+  { left: 'LIME', right: 'BAKE' },
+  { left: 'MASK', right: 'TASK' },
+  { left: 'TASK', right: 'MASK' },
 ];
 
 const wordsUnit2 = [
-  { left: 'dog', right: 'log' },
-  { left: 'fog', right: 'hog' },
-  { left: 'cot', right: 'dot' },
-  { left: 'lot', right: 'pot' },
-  { left: 'hot', right: 'got' },
+  { left: 'MET', right: 'DAD' },
+  { left: 'WET', right: 'BAD' },
+  { left: 'BAD', right: 'MET' },
+  { left: 'DAD', right: 'WET' },
+  { left: 'HAT', right: 'YET' },
+  { left: 'YET', right: 'HAT' },
+];
+
+const wordsUnit3 = [
+  { left: 'TIP', right: 'SAW' },
+  { left: 'PIT', right: 'WAS' },
+  { left: 'SAW', right: 'TIP' },
+  { left: 'WAS', right: 'PIT' },
+  { left: 'NAP', right: 'PAN' },
+  { left: 'PAN', right: 'NAP' },
+];
+
+const wordsUnit4 = [
+  { left: 'THEIR', right: 'PANE' },
+  { left: 'THERE', right: 'PAIN' },
+  { left: 'PANE', right: 'HERE' },
+  { left: 'PAIN', right: 'HEAR' },
+  { left: 'HEAR', right: 'THERE' },
+  { left: 'HERE', right: 'THEIR' },
+];
+
+const wordsUnit5 = [
+  { left: 'PACIFIC', right: 'FIND' },
+  { left: 'SPECIFIC', right: 'FUND' },
+  { left: 'FIND', right: 'HAND' },
+  { left: 'FUND', right: 'HARD' },
+  { left: 'HARD', right: 'PACIFIC' },
+  { left: 'HAND', right: 'SPECIFIC' },
+];
+
+const wordsUnit6 = [
+  { left: 'DOES', right: 'DOSE' },
+  { left: 'DOSE', right: 'DOES' },
+  { left: 'WRAP', right: 'GIVE' },
+  { left: 'WARP', right: 'GIEV' },
+  { left: 'GIVE', right: 'WRAP' },
+  { left: 'GIEV', right: 'WARP' },
 ];
 
 const MatchEngHome = ({ navigation }) => {
   const handle1 = () => {
     navigation.navigate('matchEng', { words: wordsUnit1 });
   };
-
   const handle2 = () => {
     navigation.navigate('matchEng', { words: wordsUnit2 });
   };
-
   const handle3 = () => {
-    //Navigate your screens
+    navigation.navigate('matchEng', { words: wordsUnit3 });
   };
   const handle4 = () => {
-    //Navigate your screens
+    navigation.navigate('matchEng', { words: wordsUnit4 });
   };
   const handle5 = () => {
-    //Navigate your screens
+    navigation.navigate('matchEng', { words: wordsUnit5 });
   };
   const handle6 = () => {
-    //Navigate your screens
+    navigation.navigate('matchEng', { words: wordsUnit6 });
   };
   return (
     <View style={styles.container}>

@@ -19,7 +19,7 @@ const EngWordSounds = ({ route }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Read Aloud The Words</Text>
-      <Text style={styles.level}>Easy Level</Text>
+      {/* <Text style={styles.level}>Easy Level</Text> */}
 
       <Image style={styles.bgImg} source={require('../../../assets/bg.jpg')} />
       <View style={styles.overlay}></View>
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   bgImg: {
     alignSelf: 'center',
-    top: '10%',
+    top: '8%',
     width: '100%',
     height: '90%',
     borderWidth: 1,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     top: '4%',
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 'bold',
     color: 'white',
   },
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   characterImage: {
     position: 'absolute',
     alignSelf: 'center',
-    top: '15%',
+    top: '13%',
     width: 150,
     height: 150,
   },
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 50,
     width: '80%',
-    top: '30%',
+    top: '25%',
     left: '10%', // Center the ScrollView
     height: '70%', // Set the height of the ScrollView
   },
@@ -111,9 +111,9 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    top: '18%',
-    height: '90%',
-    borderRadius: 85,
+    top: '13%',
+    height: '100%',
+    borderRadius: 90,
   },
 });
 

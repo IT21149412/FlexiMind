@@ -1,4 +1,4 @@
-export default data = [
+export default dataT1 = [
   {
     image: require('../assets/images/unit1/6.png'),
     question: '____ரம் பச்சை நிறம்.',

@@ -49,10 +49,10 @@ import WordSoundHome from './screen/remidial/english/WordSoundHome';
 import EngWordSounds from './screen/remidial/english/WordEng';
 import ActivityTam from './screen/remidial/tamil/ActivityTamil';
 import UnitsScreenTam from './screen/remidial/tamil/UnitsScreenTam';
-import Unit1Tamil from './screen/remidial/tamil/Unit1Tam';
+import UnitComponentTam from './screen/remidial/tamil/UnitComponentTam';
 import MatchTamHome from './screen/remidial/tamil/matchTamHome';
 import MatchTam from './screen/remidial/tamil/MatchTam';
-import WordSoundHomeTam from './screen/remidial/tamil/WordSoundHome';
+import WordSoundHomeTam from './screen/remidial/tamil/WordSoundHomeTam';
 import TamWordSounds from './screen/remidial/tamil/WordTam';
 
 //math hands
@@ -383,8 +383,8 @@ const App = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="unit1Tam"
-          component={Unit1Tamil}
+          name="unitComponentTam"
+          component={UnitComponentTam}
           options={{ headerShown: false }}
         />
         <Stack.Screen

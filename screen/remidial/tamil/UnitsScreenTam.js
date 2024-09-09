@@ -8,16 +8,21 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import dataT1 from '../../../data/Unit1Tamil';
+import dataT2 from '../../../data/Unit2Tamil';
+// import dataT2 from '../../../data/Unit3Eng';
+// import dataT2 from '../../../data/Unit4Eng';
+// import dataT2 from '../../../data/Unit5Eng';
+// import dataT2 from '../../../data/Unit6Eng';
 
-const showAlert = (navigation, screen) => {
+const showAlert = (navigation, screen, data) => {
   Alert.alert(
     'அலகு தொடங்கு',
     'நீங்கள் தொடங்க விரும்புகிறீர்களா?',
     [
       {
         text: 'சரி',
-        onPress: () => navigation.navigate(screen), // Navigate to the provided screen
+        onPress: () => navigation.navigate(screen, { data }),
       },
     ],
     {
@@ -26,7 +31,7 @@ const showAlert = (navigation, screen) => {
   );
 };
 
-const UnitsScreenTam = ({ navigation }) => {
+const UnitsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.bgImg} source={require('../../../assets/bg.jpg')} />
@@ -39,7 +44,9 @@ const UnitsScreenTam = ({ navigation }) => {
           <Text style={styles.unitTitle}>ஓசை பொருந்தும் சொற்கள்</Text>
           <Text style={styles.unitDescription}>அலகு 1</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit1Tam')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponentTam', dataT1)}
+        >
           <Image
             source={require('../../../assets/images/star1.png')}
             style={styles.iconsContainer}
@@ -50,7 +57,9 @@ const UnitsScreenTam = ({ navigation }) => {
           <Text style={styles.unitTitle}>கண்ணாடி எழுத்து</Text>
           <Text style={styles.unitDescription}>அலகு 2</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit2Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponentTam', dataT2)}
+        >
           <Image
             source={require('../../../assets/images/star2.png')}
             style={styles.iconsContainer}
@@ -61,7 +70,9 @@ const UnitsScreenTam = ({ navigation }) => {
           <Text style={styles.unitTitle}>எழுத்து சேர்க்கைகளின் மாறுதல்</Text>
           <Text style={styles.unitDescription}>அலகு 3</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit3Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponentTam', dataT1)}
+        >
           <Image
             source={require('../../../assets/images/star3.png')}
             style={styles.iconsContainer}
@@ -74,7 +85,9 @@ const UnitsScreenTam = ({ navigation }) => {
           </Text>
           <Text style={styles.unitDescription}>அலகு 4</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit4Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponentTam', dataT2)}
+        >
           <Image
             source={require('../../../assets/images/star2.png')}
             style={styles.iconsContainer}
@@ -85,7 +98,9 @@ const UnitsScreenTam = ({ navigation }) => {
           <Text style={styles.unitTitle}>ஒலிக்கேற்ப எழுத்து</Text>
           <Text style={styles.unitDescription}>அலகு 5</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit5Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponentTam', dataT1)}
+        >
           <Image
             source={require('../../../assets/images/star3.png')}
             style={styles.iconsContainer}
@@ -96,7 +111,9 @@ const UnitsScreenTam = ({ navigation }) => {
           <Text style={styles.unitTitle}>ஒரே போன்ற சொற்கள்</Text>
           <Text style={styles.unitDescription}>அலகு 6</Text>
         </View>
-        <TouchableOpacity onPress={() => showAlert(navigation, 'unit6Eng')}>
+        <TouchableOpacity
+          onPress={() => showAlert(navigation, 'unitComponentTam', dataT2)}
+        >
           <Image
             source={require('../../../assets/images/star6.png')}
             style={styles.iconsContainer}
@@ -191,4 +208,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UnitsScreenTam;
+export default UnitsScreen;

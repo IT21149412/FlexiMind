@@ -93,7 +93,7 @@ const QuizSummary = ({ route, navigation }) => {
     };
 
     // Fetch prediction from Flask API
-    fetch('http://192.168.36.38:5001/predict', {
+    fetch('http://192.168.1.200:5001/predict', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   headerText: {
-    fontSize: 30,
+    fontSize: 27,
     fontWeight: 'bold',
     color: '#FFC107',
   },

@@ -11,7 +11,7 @@ const AgeEnglish = ({ navigation }) => {
 
   const handleEnglish = () => {
     if (selectedAge) {
-      navigation.navigate('iqEng', {selectedAge});
+      navigation.navigate('iqEng', { selectedAge });
     } else {
       alert('Please select your age!');
     }
@@ -40,6 +40,8 @@ const AgeEnglish = ({ navigation }) => {
             onValueChange={(itemValue) => handleAgeSelect(itemValue)}
           >
             <Picker.Item label="Select Age" value="" color="#888" />
+            <Picker.Item label="6" value="6" />
+            <Picker.Item label="7" value="7" />
             <Picker.Item label="8" value="8" />
             <Picker.Item label="9" value="9" />
             <Picker.Item label="10" value="10" />

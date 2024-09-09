@@ -1,29 +1,38 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 
-const wordsUnit1 = ['hike', 'bike', 'like', 'mike', 'nike', 'rike', 'dike'];
-const wordsUnit2 = ['was', 'saw', 'was', 'saw', 'was', 'saw', 'was'];
+const wordsUnit1 = ['HIKE', 'BIKE', 'LIKE', 'MIKE', 'NIKE', 'RIKE', 'DIKE'];
+const wordsUnit2 = ['BAD', 'DAD', 'HAT', 'YET', 'WATER', 'MOTAR'];
+const wordsUnit3 = ['TIP', 'PIT', 'SAW', 'WAS', 'WON', 'NOW'];
+const wordsUnit4 = ['THEIR', 'THERE', 'PAIN', 'PANE', 'HERE', 'HEAR'];
+const wordsUnit5 = [
+  'SPECIFIC',
+  'PACIFIC',
+  'GLASS',
+  'GRASS',
+  'TRANCE',
+  'CHANCE',
+];
+const wordsUnit6 = ['DOES', 'DOSE', 'WRAP', 'WARP', 'GIVE', 'GAVE'];
 
 const WordSoundHome = ({ navigation }) => {
   const handle1 = () => {
     navigation.navigate('engWordSounds', { words: wordsUnit1 });
   };
-
   const handle2 = () => {
     navigation.navigate('engWordSounds', { words: wordsUnit2 });
   };
-
   const handle3 = () => {
-    //Navigate your screens
+    navigation.navigate('engWordSounds', { words: wordsUnit3 });
   };
   const handle4 = () => {
-    //Navigate your screens
+    navigation.navigate('engWordSounds', { words: wordsUnit4 });
   };
   const handle5 = () => {
-    //Navigate your screens
+    navigation.navigate('engWordSounds', { words: wordsUnit5 });
   };
   const handle6 = () => {
-    //Navigate your screens
+    navigation.navigate('engWordSounds', { words: wordsUnit6 });
   };
 
   return (

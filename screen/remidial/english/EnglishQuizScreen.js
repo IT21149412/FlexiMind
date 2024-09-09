@@ -15,14 +15,12 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { COLORS, SIZES } from '../../../constants/Theme';
 import data from '../../../data/QuizEnglish';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function EnglishQuizScreen({ route }) {
   const { selectedAge, iqscore } = route.params;
-
-  const allQuestions = data;
   const navigation = useNavigation();
 
+  const [allQuestions, setAllQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentOptionSelected, setCurrentOptionSelected] = useState(null);
   const [correctOption, setCorrectOption] = useState(null);
@@ -35,6 +33,28 @@ export default function EnglishQuizScreen({ route }) {
   const [results, setResults] = useState([]); // Array to store the results
 
   useEffect(() => {
+    // Function to randomly select one question from each type
+    const getRandomQuestions = () => {
+      let selectedQuestions = [];
+
+      // Loop through each question type and select one random question
+      data.forEach((questionType) => {
+        const randomIndex = Math.floor(Math.random() * questionType.length);
+        selectedQuestions.push(questionType[randomIndex]);
+      });
+
+      return selectedQuestions;
+    };
+
+    // Set the selected random questions
+    const selectedQuestions = getRandomQuestions();
+
+    // Ensure the length is 5 (since you have 5 types, it will be)
+    if (selectedQuestions.length === 5) {
+      setAllQuestions(selectedQuestions);
+    }
+
+    // Timer setup
     let interval;
     if (!showScoreModal) {
       interval = setInterval(() => {
@@ -44,6 +64,7 @@ export default function EnglishQuizScreen({ route }) {
       clearInterval(interval);
       setTimeTaken(timer);
     }
+
     return () => clearInterval(interval);
   }, [showScoreModal]);
 

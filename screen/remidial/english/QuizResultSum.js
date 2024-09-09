@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import { addDoc, collection } from 'firebase/firestore'; // Import Firestore functions
+import { auth, db } from '../../firebase';
 import Svg, { Circle, G } from 'react-native-svg';
 import { COLORS } from '../../../constants/Theme';
 
@@ -76,8 +78,34 @@ const QuizSummary = ({ route, navigation }) => {
   } = route.params;
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const percentageiq = (iqscore / totalQuestions) * 100;
   const percentage = (score / totalQuestions) * 100;
+
+  // Function to store the quiz results in Firestore
+  const storeResultsInFirestore = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      const userId = user.uid;
+      try {
+        await addDoc(collection(db, 'quizResults'), {
+          userId, // Store userId in Firestore
+          selectedAge,
+          iqscore,
+          score,
+          totalQuestions,
+          timeTaken,
+          questionResults,
+          createdAt: new Date(), // Timestamp for when the data is stored
+        });
+        console.log('Results stored successfully!');
+      } catch (error) {
+        console.error('Error storing results:', error);
+      }
+    } else {
+      console.error('No user is logged in');
+    }
+  };
 
   useEffect(() => {
     // Prepare data for API request
@@ -93,7 +121,7 @@ const QuizSummary = ({ route, navigation }) => {
     };
 
     // Fetch prediction from Flask API
-    fetch('http://192.168.36.38:5001/predict', {
+    fetch('http://192.168.1.200:5001/predict', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -104,7 +132,10 @@ const QuizSummary = ({ route, navigation }) => {
       .then((data) => {
         console.log('Prediction:', data.prediction);
         setPrediction(data.prediction);
-        setLoading(false); // Ensure loading is set to false
+        setLoading(false);
+
+        // Store the quiz results in Firestore after prediction
+        storeResultsInFirestore();
       })
       .catch((error) => {
         console.error('Error:', error);

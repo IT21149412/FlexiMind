@@ -1,23 +1,43 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 
+const wordsUnit1 = [
+  { left: 'மரம்', right: 'பாடு' },
+  { left: 'கரம்', right: 'நாடு' },
+  { left: 'பாடு', right: 'மணி' },
+  { left: 'நாடு', right: 'கரம்' },
+  { left: 'மணி', right: 'அணி' },
+  { left: 'அணி', right: 'மரம்' },
+];
+
+const wordsUnit2 = [
+  { left: 'பலத்தை', right: 'குமிழ்' },
+  { left: 'பளத்தை', right: 'தமிழ்' },
+  { left: 'கரத்தில்', right: 'கரத்தில்' },
+  { left: 'தரத்தில்', right: 'தரத்தில்' },
+  { left: 'குமிழ்', right: 'பலத்தை' },
+  { left: 'தமிழ்', right: 'பளத்தை' },
+];
+
 const MatchTamHome = ({ navigation }) => {
   const handle1 = () => {
-    navigation.navigate('matchTam');
+    navigation.navigate('matchTam', { words: wordsUnit1 });
   };
-
-  const handleLearn = () => {
-    //Navigate your screens
+  const handle2 = () => {
+    navigation.navigate('matchTam', { words: wordsUnit2 });
   };
-
-  const handleMaths = () => {
-    //Navigate your screens
+  const handle3 = () => {
+    navigation.navigate('matchTam', { words: wordsUnit1 });
   };
-
-  const handleRemedial = () => {
-    navigation.navigate('HomeRemidial');
+  const handle4 = () => {
+    navigation.navigate('matchTam', { words: wordsUnit2 });
   };
-
+  const handle5 = () => {
+    navigation.navigate('matchTam', { words: wordsUnit1 });
+  };
+  const handle6 = () => {
+    navigation.navigate('matchTam', { words: wordsUnit2 });
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.textTopic}>ஒரே போன்ற சொற்களை{'\n'}பொருத்துவோம்!</Text>
@@ -44,7 +64,7 @@ const MatchTamHome = ({ navigation }) => {
         <View style={styles.orangeCircle2}>
           <View style={styles.whiteCircle2}></View>
         </View>
-        <Text style={styles.learn} onPress={handleLearn}>
+        <Text style={styles.learn} onPress={handle2}>
           கண்ணாடி எழுத்து
         </Text>
         <Text style={styles.unitDescription2}>அலகு 2</Text>
@@ -54,7 +74,7 @@ const MatchTamHome = ({ navigation }) => {
         <View style={styles.orangeCircle1}>
           <View style={styles.whiteCircle1}></View>
         </View>
-        <Text style={styles.dyslexia} onPress={handleMaths}>
+        <Text style={styles.dyslexia} onPress={handle3}>
           தலைகீழ் கடிதங்கள்
         </Text>
         <Text style={styles.unitDescription1}>அலகு 3</Text>
@@ -64,7 +84,7 @@ const MatchTamHome = ({ navigation }) => {
         <View style={styles.orangeCircle2}>
           <View style={styles.whiteCircle2}></View>
         </View>
-        <Text style={styles.learn} onPress={handleRemedial}>
+        <Text style={styles.learn} onPress={handle4}>
           ஒலிக்கேற்ப எழுத்து
         </Text>
         <Text style={styles.unitDescription2}>அலகு 4</Text>
@@ -74,7 +94,7 @@ const MatchTamHome = ({ navigation }) => {
         <View style={styles.orangeCircle1}>
           <View style={styles.whiteCircle1}></View>
         </View>
-        <Text style={styles.dyslexia} onPress={handle1}>
+        <Text style={styles.dyslexia} onPress={handle5}>
           ஒரே போன்ற சொற்கள்
         </Text>
         <Text style={styles.unitDescription1}>அலகு 5</Text>
@@ -84,7 +104,7 @@ const MatchTamHome = ({ navigation }) => {
         <View style={styles.orangeCircle2}>
           <View style={styles.whiteCircle2}></View>
         </View>
-        <Text style={styles.learn} onPress={handleRemedial}>
+        <Text style={styles.learn} onPress={handle6}>
           கலப்பு கடிதங்கள்
         </Text>
         <Text style={styles.unitDescription2}>அலகு 6</Text>
@@ -138,9 +158,9 @@ const styles = StyleSheet.create({
   rectangle1: {
     position: 'absolute',
     width: 320,
-    height: 60,
+    height: 57,
     left: 28,
-    top: '29%',
+    top: '30%',
     backgroundColor: '#4D86F7',
     borderRadius: 20,
   },
@@ -168,7 +188,7 @@ const styles = StyleSheet.create({
     width: 69,
     height: 66,
     left: -5,
-    bottom: '-7%',
+    bottom: '-10%',
     backgroundColor: '#FFD166',
     borderRadius: 34,
   },
@@ -193,7 +213,7 @@ const styles = StyleSheet.create({
   learn: {
     left: 30,
     fontWeight: '900',
-    fontSize: 20,
+    fontSize: 21,
     color: '#FFD166',
     top: 5,
   },
@@ -220,7 +240,7 @@ const styles = StyleSheet.create({
     width: 320,
     height: 57,
     left: 28,
-    top: '51%',
+    top: '50%',
     backgroundColor: '#4D86F7',
     borderRadius: 20,
   },
@@ -229,7 +249,7 @@ const styles = StyleSheet.create({
     width: 320,
     height: 57,
     left: 28,
-    top: '62%',
+    top: '60%',
     backgroundColor: '#4D86F7',
     borderRadius: 20,
   },
@@ -238,7 +258,7 @@ const styles = StyleSheet.create({
     width: 330,
     height: 57,
     left: 28,
-    top: '73%',
+    top: '70%',
     backgroundColor: '#4D86F7',
     borderRadius: 20,
   },
@@ -248,7 +268,7 @@ const styles = StyleSheet.create({
     width: 320,
     height: 57,
     left: 28,
-    top: '85%',
+    top: '80%',
     backgroundColor: '#4D86F7',
     borderRadius: 20,
   },
