@@ -151,6 +151,7 @@ const DA_ReadOutLoudScreen = ({ navigation, route }) => {
     setStartTime(Date.now()); // Start time for each round
   };
 
+  //recording function
   const startRecording = async () => {
     try {
       await Audio.requestPermissionsAsync();
@@ -187,6 +188,7 @@ const DA_ReadOutLoudScreen = ({ navigation, route }) => {
     }
   };
 
+  //stop recording after 5 seconds and save
   const stopRecording = async () => {
     setRecordingInProgress(false);
     if (recordingRef.current) {

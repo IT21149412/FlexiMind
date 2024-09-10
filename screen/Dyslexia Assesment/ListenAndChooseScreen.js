@@ -321,9 +321,24 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, Modal } from 'react-native';
 import { Audio } from 'expo-av';
-import { auth, db } from '../firebase'; // Import Firebase Authentication and Firestore instance
+import { auth, db } from '../firebase'; // Firebase imports
 import { doc, setDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore'; // Firestore methods
+import * as FileSystem from 'expo-file-system';
 
+const logFilePath = `${FileSystem.documentDirectory}app_logs.txt`; 
+
+// Function to write to the log file
+const writeToLogFile = async (message) => {
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] ${message}\n`;
+  
+  try {
+    await FileSystem.writeAsStringAsync(logFilePath, logMessage, { append: true });
+    console.log('Log written:', logMessage);
+  } catch (error) {
+    console.error('Failed to write log:', error);
+  }
+};
 
 const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, playYellowWordAudio }) => {
   const [clickedWord, setClickedWord] = useState(null);
@@ -332,6 +347,7 @@ const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext
     if (!timerExpired) {
       setClickedWord(word);
       onClickWord(word);
+      writeToLogFile(`Word clicked: ${word}`);
     }
   };
 
@@ -379,6 +395,7 @@ const TamilScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, 
     if (!timerExpired) {
       setClickedWord(word);
       onClickWord(word);
+      writeToLogFile(`Word clicked: ${word}`);
     }
   };
 
@@ -434,7 +451,6 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
   const [startTime, setStartTime] = useState(null);
   const maxRounds = 4;
   const [intervalId, setIntervalId] = useState(null);
-  const [documentId, setDocumentId] = useState(null); // To store the document ID
 
   const englishWordPairs = [
     { yellow: 'TOOK', audio: require('../../assets/VoiceRecordings/Took.mp3'), words: ['LOOK', 'TOOK', 'BOOK'] },
@@ -461,9 +477,9 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
   useEffect(() => {
     startTimer();
     return () => {
-      clearInterval(intervalId); // Clear the interval on unmount
+      clearInterval(intervalId);
       if (soundObject) {
-        soundObject.unloadAsync(); // Unload the sound object on unmount
+        soundObject.unloadAsync();
       }
     };
   }, [wordPair]);
@@ -473,8 +489,9 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
     const selectedWordPair = wordPairs[randomIndex];
     setWordPair(selectedWordPair);
     playYellowWordAudio(selectedWordPair.audio);
-    setClickedWord(null); // Reset clicked word for each round
-    setStartTime(Date.now()); // Start time for the round
+    setClickedWord(null);
+    setStartTime(Date.now());
+    writeToLogFile(`New word pair selected: ${selectedWordPair.yellow}`);
   };
 
   const playYellowWordAudio = async (audio) => {
@@ -486,6 +503,7 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
     try {
       await yellowWordSoundObj.loadAsync(audio);
       await yellowWordSoundObj.playAsync();
+      writeToLogFile(`Playing audio for: ${audio}`);
     } catch (error) {
       console.error('Error loading yellow word audio:', error);
     }
@@ -494,7 +512,7 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
 
   const startTimer = () => {
     if (intervalId) {
-      clearInterval(intervalId); // Clear any existing interval before starting a new one
+      clearInterval(intervalId);
     }
 
     let seconds = 30;
@@ -503,8 +521,9 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
       if (seconds === 0) {
         clearInterval(id);
         setTimer('00:00');
-        setTimerExpired(true); // Timer expired
+        setTimerExpired(true);
         handleModal();
+        writeToLogFile('Timer expired');
       } else {
         const formattedTime = `${Math.floor(seconds / 60)
           .toString()
@@ -521,7 +540,7 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
 
   const handleModal = async () => {
     setModalVisible(true);
-    const timeTaken = (Date.now() - startTime) / 1000; // Time taken in seconds
+    const timeTaken = (Date.now() - startTime) / 1000;
 
     const result = {
       round: currentRound,
@@ -531,7 +550,6 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
       timeTaken: timeTaken.toFixed(2),
     };
 
-    // Save the result to Firestore
     await saveResults(result);
 
     if (!clickedWord) {
@@ -544,50 +562,48 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
       setAnimationType('wrong');
       setModalMessage("Let's do better in the next round!");
     }
+    writeToLogFile(`Modal shown for round: ${currentRound}, Correct: ${result.isCorrect}`);
   };
 
   const saveResults = async (result) => {
-    const user = auth.currentUser; // Get the current authenticated user
+    const user = auth.currentUser;
     if (user) {
       const userId = user.uid;
-  
+
       try {
-        // Check if it's the first round (create new document), or append to the existing document
         if (currentRound === 1) {
-          // Create a new document on the first round
           await setDoc(doc(db, 'listen_and_choose_results', userId), {
-            userId, // Store the user's ID
+            userId,
             level: 'Level 1',
-            results: [result], // Initialize with an array containing the first result
+            results: [result],
             timestamp: serverTimestamp(),
           });
         } else {
-          // Append results for subsequent rounds
           const docRef = doc(db, 'listen_and_choose_results', userId);
           await updateDoc(docRef, {
-            results: arrayUnion(result), // Append new result to the array
+            results: arrayUnion(result),
           });
         }
-  
+
         console.log('Results successfully stored in Firestore');
+        writeToLogFile(`Results saved to Firestore for round: ${currentRound}`);
       } catch (error) {
         console.error('Error adding document: ', error);
+        writeToLogFile(`Error saving results to Firestore: ${error.message}`);
       }
     } else {
       console.error('No user is logged in');
+      writeToLogFile('Error: No user is logged in');
     }
   };
-  
 
   const handleNext = async () => {
-    // Reset state variables
     setModalVisible(false);
     setClickedWord(null);
     setTimerExpired(false);
     setTimer('00:30');
     setAnimationType('');
 
-    // Unload sound object and clear timer when navigating away
     if (soundObject) {
       await soundObject.unloadAsync();
     }
@@ -597,12 +613,10 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
 
     if (currentRound < maxRounds) {
       setCurrentRound(currentRound + 1);
+      writeToLogFile(`Moving to next round: ${currentRound + 1}`);
     } else {
-      console.log('All rounds completed');
-      // Move to the next screen
-      navigation.navigate('DA_BingoDescriptionScreen', {
-        language,
-      });
+      writeToLogFile('All rounds completed. Navigating to next screen.');
+      navigation.navigate('DA_BingoDescriptionScreen', { language });
     }
   };
 
@@ -662,7 +676,6 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
     </>
   );
 };
-
 
 
 const styles = StyleSheet.create({

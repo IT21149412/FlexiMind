@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 20,
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: 'bold',
     color: '#051650', 
   },

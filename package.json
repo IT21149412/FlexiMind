@@ -15,6 +15,7 @@
     "@react-navigation/stack": "^6.3.29",
     "axios": "^1.7.4",
     "expo": "~51.0.28",
+    "expo-asset": "~10.0.10",
     "expo-av": "~14.0.6",
     "expo-camera": "~15.0.14",
     "expo-dev-client": "~4.0.23",
@@ -27,6 +28,7 @@
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-audio-recorder-player": "^3.6.10",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-orientation-locker": "^1.7.0",
     "react-native-progress": "^5.0.1",
@@ -34,7 +36,7 @@
     "react-native-sound": "^0.11.2",
     "react-native-svg": "15.2.0",
     "react-native-tts": "^4.1.0",
-    "expo-asset": "~10.0.10"
+    "expo-file-system": "~17.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
