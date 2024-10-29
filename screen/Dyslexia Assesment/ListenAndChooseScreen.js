@@ -569,7 +569,14 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
     const user = auth.currentUser;
     if (user) {
       const userId = user.uid;
-
+  
+      // Log the user ID to ensure it's valid
+      console.log('Current user ID:', userId);
+  
+      // Refresh the user's token if needed
+      await auth.currentUser.getIdToken(true);
+  
+      // Firestore operations here
       try {
         if (currentRound === 1) {
           await setDoc(doc(db, 'listen_and_choose_results', userId), {
@@ -584,11 +591,11 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
             results: arrayUnion(result),
           });
         }
-
+  
         console.log('Results successfully stored in Firestore');
         writeToLogFile(`Results saved to Firestore for round: ${currentRound}`);
       } catch (error) {
-        console.error('Error adding document: ', error);
+        console.error('Error adding document:', error);
         writeToLogFile(`Error saving results to Firestore: ${error.message}`);
       }
     } else {
@@ -596,6 +603,7 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
       writeToLogFile('Error: No user is logged in');
     }
   };
+  
 
   const handleNext = async () => {
     setModalVisible(false);
