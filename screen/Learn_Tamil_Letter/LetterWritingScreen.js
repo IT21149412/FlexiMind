@@ -1,67 +1,58 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 
-const translations = {
-    English: {
-        title: "TAMIL LETTER\n WRITING",
-        vowel: "Tamil Vowel\n Letter Write",
-        consonant: "Tamil Consonant\n Letter Write",
-        home: "Home",
-        number1: "1",
-        number2: "2",
-    },
-    Tamil: {
-        title: "தமிழ் எழுத்து\n எழுதுதல்",
-        vowel: "தமிழ் உயிர்\n எழுத்து எழுதுதல்",
-        consonant: "தமிழ் மெய்\n எழுத்து எழுதுதல்",
-        home: "முகப்பு",
-        number1: "1",
-        number2: "2",
-    }
-};
+const LetterWritingScreen = ({ navigation }) => {
+    const { t, i18n } = useTranslation();
+    //const language = useSelector((state) => state.settings.language); // Get language from Redux
+    const language = useSelector((state) => state.language.currentLanguage);
+    useEffect(() => {
+        if (language) {
+            i18n.changeLanguage(language); // Set i18n language based on Redux state
+        }
 
-const LetterWritingScreen = ({ navigation, route }) => {
-    // const { language } = route.params;
-    // const texts = translations[language] || translations.English;
-    const texts = translations.English
+        console.log('selected language:', language)
+    }, [language, i18n]);
+
     const handleHome = () => {
         navigation.navigate('Home');
     };
 
     const handleVowel = () => {
-        navigation.navigate('WritingLetter', { category: 'vowel'});
+        navigation.navigate('WritingLetter', { category: 'vowel' });
     };
 
     const handleConsonant = () => {
-        navigation.navigate('WritingLetter', { category: 'consonant'});
+        navigation.navigate('WritingLetter', { category: 'consonant' });
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.textTopic}>{texts.title}</Text>
+            <Text style={styles.textTopic}>{t('title')}</Text>
             <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
             <View style={styles.overlay} />
             <Image style={styles.dashImg} source={require('../../assets/write2.png')} />
 
             <View style={styles.ellipse}>
-                <Text style={styles.text}>{texts.number1}</Text>
+                <Text style={styles.text}>{t('number1')}</Text>
             </View>
 
             <View style={styles.rectangle1}>
                 <TouchableOpacity onPress={handleVowel}>
-                    <Text style={styles.text1}>{texts.vowel}</Text>
+                    <Text style={styles.text1}>{t('vowel')}</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.line1} />
 
             <View style={styles.ellipse2}>
-                <Text style={styles.text}>{texts.number2}</Text>
+                <Text style={styles.text}>{t('number2')}</Text>
             </View>
 
             <View style={styles.rectangle2}>
                 <TouchableOpacity onPress={handleConsonant}>
-                    <Text style={styles.text1}>{texts.consonant}</Text>
+                    <Text style={styles.text1}>{t('consonant')}</Text>
                 </TouchableOpacity>
             </View>
 

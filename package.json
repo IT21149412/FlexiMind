@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "jest"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",
@@ -14,20 +15,25 @@
     "@react-navigation/drawer": "^6.6.15",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
+    "@reduxjs/toolkit": "^2.3.0",
     "@terrylinla/react-native-sketch-canvas": "^0.8.0",
     "axios": "^1.7.2",
     "expo": "^51.0.8",
     "expo-av": "~14.0.4",
+    "expo-camera": "~15.0.15",
     "expo-clipboard": "~6.0.3",
     "expo-file-system": "~17.0.1",
+    "expo-image-manipulator": "~12.0.5",
     "expo-media-library": "~16.0.3",
     "expo-secure-store": "~13.0.1",
     "expo-sharing": "~12.0.1",
     "expo-speech": "~12.0.2",
     "expo-status-bar": "~1.12.1",
     "firebase": "^10.9.0",
+    "i18next": "^23.16.4",
     "lottie-react-native": "^6.7.2",
     "react": "18.2.0",
+    "react-i18next": "^15.1.0",
     "react-native": "^0.74.1",
     "react-native-draw": "^0.0.1",
     "react-native-fs": "^2.20.0",
@@ -40,11 +46,17 @@
     "react-native-tts": "^4.1.0",
     "react-native-view-shot": "3.8.0",
     "react-native-webview": "13.8.6",
-    "expo-camera": "~15.0.15",
-    "expo-image-manipulator": "~12.0.5"
+    "react-redux": "^9.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
+  },
+  "jest": {
+    "preset": "react-native",
+    "setupFilesAfterEnv": [
+      "@testing-library/react-native/cleanup-after-each"
+    ],
+    "verbose": true
   },
   "private": true
 }

@@ -1,8 +1,11 @@
 import React from "react";
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 const LetterSoundScreen = ({ navigation }) => {
-    // const { language } = route.params;
+    const { i18n } = useTranslation();
+    const currentLanguage = useSelector((state) => state.language.currentLanguage); // Get current language from Redux
 
     const handleHome = () => {
         navigation.navigate('Home');
@@ -17,42 +20,29 @@ const LetterSoundScreen = ({ navigation }) => {
     }
 
     const renderWords = () => {
-        // if (language === 'Tamil') {
-        //     return (
-        //         <>
-        //             <Text style={styles.text2}>தமிழ் உயிர் எழுத்து ஒலிகள்</Text>
-        //         </>
-        //     );
-        // } else {
         return (
             <>
-                <Text style={styles.text1}>Tamil Vowel Letter Sounds</Text>
+                <Text style={styles.text1}>
+                    {i18n.t('vowelSounds')} {/* Assuming you have a key 'vowelSounds' in your translations */}
+                </Text>
             </>
         );
-        // }
     }
 
     const renderWords2 = () => {
-        // if (language === 'Tamil') {
-        //     return (
-        //         <>
-        //             <Text style={styles.text2}>தமிழ் மெய் எழுத்து ஒலிகள்</Text>
-        //         </>
-        //     );
-        // } else {
         return (
             <>
-                <Text style={styles.text1}>Tamil Consonant Letter Sounds</Text>
+                <Text style={styles.text1}>
+                    {i18n.t('consonantSounds')} {/* Assuming you have a key 'consonantSounds' in your translations */}
+                </Text>
             </>
         );
-        //}
     }
 
     return (
         <View style={styles.container}>
             <Text style={styles.textTopic}>
-                {/* {language === 'Tamil' ? 'தமிழ் எழுத்து ஒலிகள்' : 'TAMIL LETTER\n SOUNDS'} */}
-                {'TAMIL LETTER\n SOUNDS'}
+                {i18n.t('letterSounds')} {/* Assuming you have a key 'letterSounds' */}
             </Text>
             <Image style={styles.bgImg} source={require('../../assets/bg.jpg')}></Image>
             <View style={styles.overlay}></View>

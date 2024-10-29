@@ -163,6 +163,10 @@ const SoundVowelScreen = ({ route }) => {
                     ? "http://13.51.198.180/tamilLetter"
                     : "http://13.51.198.180/tamilConsonantLetter";
 
+                // const apiUrl = category === 'vowel'
+                //     ? "http://192.168.1.5/tamilLetter"
+                //     : "http://192.168.1.5/tamilConsonantLetter";
+
                 const response = await fetch(apiUrl, {
                     method: "POST",
                     body: formData,

@@ -4,6 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from './screen/HomeScreen';
 import LoginScreen from './screen/LoginScreen';
 import RegisterScreen from './screen/RegisterScreen';
+import './i18n';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 
 //assessment
 import DA_SelectLanguage from './screen/Dyslexia Assesment/SelectLanguageScreen';
@@ -71,7 +74,7 @@ import GameMap from "./screen/MathHands/GamesMap";
 import DemoVideosScreen from "./screen/MathHands/DemoVideosScreen";
 import SixTimesScreen from "./screen/MathHands/SixTimesScreen";
 import LevelOneScreen from "./screen/MathHands/level1";
- 
+
 //learn Tamil
 import LetterSoundScreen from './screen/Learn_Tamil_Letter/LetterSoundScreen';
 import LearnTamilScreen from './screen/Learn_Tamil_Letter/LearnTamilScreen';
@@ -83,6 +86,8 @@ import FirstLetterGame from './screen/Learn_Tamil_Letter/FirstLatterGame';
 import GameSelect from './screen/Learn_Tamil_Letter/GameSelect';
 import MatchingLettersGameScreen from './screen/Learn_Tamil_Letter/MatchingLettersGameScreen';
 import SelectWordGameScreen from './screen/Learn_Tamil_Letter/SelectWordGameScreen';
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 const Stack = createStackNavigator();
 const MathHandsStack = createStackNavigator();
@@ -179,319 +184,323 @@ const App = () => {
   const changeLanguage = (lang) => setLanguage(lang);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
+    <Provider store={store}>
+      <I18nextProvider i18n={i18n}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={RegisterScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ headerShown: false }}
+            />
 
-        {/* Assesment */}
+            {/* Assesment */}
 
-        <Stack.Screen
-          name="DA_SelectLanguage"
-          component={DA_SelectLanguage}
-          options={{ 
-            headerShown: false,
-            gestureEnabled: false,
-          }}
-        />
-        <Stack.Screen
-          name="DA_ParentConsentScreen"
-          component={DA_ParentConsentScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_MatchingWordsScreen"
-          component={DA_MatchingWordsScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_GoodJobScreen"
-          component={DA_GoodJobScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_ListenAndChooseScreen"
-          component={DA_ListenAndChooseScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_GoodJobScreenListen"
-          component={DA_GoodJobScreenListen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_ReadOutLoudScreen"
-          component={DA_ReadOutLoudScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_SpellingScreen"
-          component={DA_SpellingScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_SpellingScreen2"
-          component={DA_SpellingScreen2}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_SpellingScreen3"
-          component={DA_SpellingScreen3}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_SpellingScreen4"
-          component={DA_SpellingScreen4}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_GoodJobScreenSpell"
-          component={DA_GoodJobScreenSpell}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_MatchingWordsDescriptionScreen"
-          component={DA_MachingWordsDescriptionScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_ListenAndChooseDescriptionScreen"
-          component={DA_ListenAndChooseDescriptionScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_SpellingDescriptionScreen"
-          component={DA_SpellingDescriptionScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_ResultsScreen"
-          component={DA_ResultsScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_BingoScreen"
-          component={DA_BingoScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DA_BingoDescriptionScreen"
-          component={DA_BingoDescriptionScreen}
-          options={{ headerShown: false }}
-        />
+            <Stack.Screen
+              name="DA_SelectLanguage"
+              component={DA_SelectLanguage}
+              options={{
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
+            <Stack.Screen
+              name="DA_ParentConsentScreen"
+              component={DA_ParentConsentScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_MatchingWordsScreen"
+              component={DA_MatchingWordsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_GoodJobScreen"
+              component={DA_GoodJobScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_ListenAndChooseScreen"
+              component={DA_ListenAndChooseScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_GoodJobScreenListen"
+              component={DA_GoodJobScreenListen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_ReadOutLoudScreen"
+              component={DA_ReadOutLoudScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_SpellingScreen"
+              component={DA_SpellingScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_SpellingScreen2"
+              component={DA_SpellingScreen2}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_SpellingScreen3"
+              component={DA_SpellingScreen3}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_SpellingScreen4"
+              component={DA_SpellingScreen4}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_GoodJobScreenSpell"
+              component={DA_GoodJobScreenSpell}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_MatchingWordsDescriptionScreen"
+              component={DA_MachingWordsDescriptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_ListenAndChooseDescriptionScreen"
+              component={DA_ListenAndChooseDescriptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_SpellingDescriptionScreen"
+              component={DA_SpellingDescriptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_ResultsScreen"
+              component={DA_ResultsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_BingoScreen"
+              component={DA_BingoScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_BingoDescriptionScreen"
+              component={DA_BingoDescriptionScreen}
+              options={{ headerShown: false }}
+            />
 
-        {/* Remidial */}
+            {/* Remidial */}
 
-        <Stack.Screen
-          name="HomeRemidial"
-          component={HomeScreenRemidial}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="HomeRemidialTamil"
-          component={HomeScreenRemidialTamil}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Language"
-          component={LanguageScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ageEng"
-          component={AgeEnglish}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ageTamil"
-          component={AgeTamil}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="iqEng"
-          component={IQEnglishScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="iqTam"
-          component={IQTamilScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="startEng"
-          component={StartEngQuiz}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="startTam"
-          component={StartTamQuiz}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="EnglishQuiz"
-          component={EnglishQuizScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TamilQuiz"
-          component={TamilQuizScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="activityEng"
-          component={ActivityEng}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="unitsScreenEng"
-          component={UnitsScreenEng}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="unit1Eng"
-          component={Unit1EngNew}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="matchEng"
-          component={MatchEng}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="matchEngHome"
-          component={MatchEngHome}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="wordSoundHome"
-          component={WordSoundHome}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="engWordSounds"
-          component={EngWordSounds}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="activityTam"
-          component={ActivityTam}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="unitsScreenTam"
-          component={UnitsScreenTam}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="unit1Tam"
-          component={Unit1Tamil}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="matchTam"
-          component={MatchTam}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="matchTamHome"
-          component={MatchTamHome}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="wordSoundHomeTam"
-          component={WordSoundHomeTam}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="tamWordSounds"
-          component={TamWordSounds}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="quizSummary"
-          component={QuizSummary}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="quizSummarytam"
-          component={QuizSummaryTam}
-          options={{ headerShown: false }}
-        />
+            <Stack.Screen
+              name="HomeRemidial"
+              component={HomeScreenRemidial}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="HomeRemidialTamil"
+              component={HomeScreenRemidialTamil}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Language"
+              component={LanguageScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ageEng"
+              component={AgeEnglish}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ageTamil"
+              component={AgeTamil}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="iqEng"
+              component={IQEnglishScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="iqTam"
+              component={IQTamilScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="startEng"
+              component={StartEngQuiz}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="startTam"
+              component={StartTamQuiz}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EnglishQuiz"
+              component={EnglishQuizScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TamilQuiz"
+              component={TamilQuizScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="activityEng"
+              component={ActivityEng}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="unitsScreenEng"
+              component={UnitsScreenEng}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="unit1Eng"
+              component={Unit1EngNew}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="matchEng"
+              component={MatchEng}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="matchEngHome"
+              component={MatchEngHome}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="wordSoundHome"
+              component={WordSoundHome}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="engWordSounds"
+              component={EngWordSounds}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="activityTam"
+              component={ActivityTam}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="unitsScreenTam"
+              component={UnitsScreenTam}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="unit1Tam"
+              component={Unit1Tamil}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="matchTam"
+              component={MatchTam}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="matchTamHome"
+              component={MatchTamHome}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="wordSoundHomeTam"
+              component={WordSoundHomeTam}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="tamWordSounds"
+              component={TamWordSounds}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="quizSummary"
+              component={QuizSummary}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="quizSummarytam"
+              component={QuizSummaryTam}
+              options={{ headerShown: false }}
+            />
 
-        {/* Math hands */}
-        <Stack.Screen
-          name="MathHands"
-          component={MathHandsScreens}
-          options={{ headerShown: false }}
-        />
+            {/* Math hands */}
+            <Stack.Screen
+              name="MathHands"
+              component={MathHandsScreens}
+              options={{ headerShown: false }}
+            />
 
-        {/*Learn Tamil*/}
-        <Stack.Screen
-          name="Learn"
-          component={LearnTamilScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="GameSelect"
-          component={GameSelect}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Writing"
-          component={LetterWritingScreen}
-          options={{ title: 'Tamil Letter Writing', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        />
-        <Stack.Screen
-          name="Sound1"
-          component={LetterSoundScreen}
-          options={{ title: 'Tamil Letter Sounds', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        />
-        <Stack.Screen
-          name="WritingLetter"
-          component={WriteLetterScreen}
-          options={{ title: 'Write Letter', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        />
-        <Stack.Screen
-          name="Vowel"
-          component={SoundVowelScreen}
-          options={{ title: 'LISTEN SOUND', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        />
-        <Stack.Screen
-          name="Game"
-          component={GameScreen}
-          options={{ title: 'PLAY GAME',headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        />
-        <Stack.Screen
-          name="FirstLetterGame"
-          component={FirstLetterGame}
-          options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        />
-        <Stack.Screen
-          name="MatchingLettersGameScreen"
-          component={MatchingLettersGameScreen}
-          options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        />
-        <Stack.Screen
-          name="SelectWordGameScreen"
-          component={SelectWordGameScreen}
-          options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
-        />
-       
-      </Stack.Navigator>
-    </NavigationContainer>
+            {/*Learn Tamil*/}
+            <Stack.Screen
+              name="Learn"
+              component={LearnTamilScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="GameSelect"
+              component={GameSelect}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Writing"
+              component={LetterWritingScreen}
+              options={{ title: 'Tamil Letter Writing', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="Sound1"
+              component={LetterSoundScreen}
+              options={{ title: 'Tamil Letter Sounds', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="WritingLetter"
+              component={WriteLetterScreen}
+              options={{ title: 'Write Letter', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="Vowel"
+              component={SoundVowelScreen}
+              options={{ title: 'LISTEN SOUND', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="Game"
+              component={GameScreen}
+              options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="FirstLetterGame"
+              component={FirstLetterGame}
+              options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="MatchingLettersGameScreen"
+              component={MatchingLettersGameScreen}
+              options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="SelectWordGameScreen"
+              component={SelectWordGameScreen}
+              options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+
+          </Stack.Navigator>
+        </NavigationContainer>
+      </I18nextProvider>
+    </Provider>
   );
 };
 

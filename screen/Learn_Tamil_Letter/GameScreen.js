@@ -91,7 +91,7 @@ const GameScreen = ({ navigation, route }) => {
                 'All answers are correct!');
 
         Alert.alert(alertTitle, alertMessage, [
-            { text: 'OK', onPress: () => navigation.navigate('Learn') }
+            { text: 'OK', onPress: () => navigation.navigate('GameSelect') }
         ], { cancelable: false });
     };
 
@@ -105,27 +105,39 @@ const GameScreen = ({ navigation, route }) => {
             {questions.length === 0 ? (
                 <Text style={styles.noQuestionsText}>No questions available</Text>
             ) : (
-                questions.map((question, index) => (
-                    <View key={question.id} style={styles.questionContainer}>
-                        <Picker
-                            selectedValue={question.selectedAnswer}
-                            onValueChange={(itemValue) => handleAnswerChange(itemValue, index)}
-                            style={styles.picker}
-                            dropdownIconColor="#000"
-                        >
-                            <Picker.Item label="___" value="" />
-                            {question.answerOptions.map((option, optionIndex) => (
-                                <Picker.Item key={optionIndex} label={option} value={option} />
-                            ))}
-                        </Picker>
+                questions.map((question, index) => {
+                    // Split the text into parts to highlight the selected letter
+                    const parts = question.text.split("___");
 
-                        {question.selectedAnswer === "" ? (
-                            <Text style={styles.quest}>{question.text}</Text>
-                        ) : (
-                            <Text style={styles.quest}>{question.text.replace("___", question.selectedAnswer)}</Text>
-                        )}
-                    </View>
-                ))
+                    return (
+                        <View key={question.id} style={styles.questionContainer}>
+                            <Picker
+                                selectedValue={question.selectedAnswer}
+                                onValueChange={(itemValue) => handleAnswerChange(itemValue, index)}
+                                style={styles.picker}
+                                dropdownIconColor="#000"
+                            >
+                                <Picker.Item label="___" value="" />
+                                {question.answerOptions.map((option, optionIndex) => (
+                                    <Picker.Item key={optionIndex} label={option} value={option} />
+                                ))}
+                            </Picker>
+
+                            <Text style={styles.quest}>
+                                {parts[0]}
+                                <Text
+                                    style={[
+                                        styles.highlightedLetter,
+                                        { color: question.selectedAnswer ? (question.selectedAnswer === question.answer ? "green" : "red") : "black" }
+                                    ]}
+                                >
+                                    {question.selectedAnswer || "___"}
+                                </Text>
+                                {parts[1]}
+                            </Text>
+                        </View>
+                    );
+                })
             )}
 
 

@@ -1,10 +1,29 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity, Modal } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setLanguage } from "../../store/languageSlice";
+import { useTranslation } from "react-i18next";
+import { View, StyleSheet, Text, Image, TouchableOpacity, Button } from "react-native";
 
-const LearnTamilScreen = ({ navigation, route }) => {
-    // const { language } = route.params;
+const LearnTamilScreen = ({ navigation }) => {
+    const { t, i18n } = useTranslation();
+    const dispatch = useDispatch();
+    const language = useSelector((state) => state.language.currentLanguage);
 
-    // const stylesEnglish = language === 'Tamil' ? stylesTamil : stylesEnglish;
+    const handleChangeLanguage = () => {
+        console.log("Change language function called"); 
+        const newLang = language === 'en' ? 'ta' : 'en';
+        i18n.changeLanguage(newLang).then(() => {
+            setLanguage(newLang); // Make sure this happens after language change
+            console.log("Language changed to:", newLang);
+            dispatch(setLanguage(newLang));
+        });
+    };   
+
+    useEffect(() => {
+        i18n.changeLanguage(language);
+        
+        console.log("Current language from Redux:", language);
+    }, [language]);
 
     const handleHome = () => {
         navigation.navigate('Home');
@@ -24,41 +43,40 @@ const LearnTamilScreen = ({ navigation, route }) => {
 
     return (
         <View style={stylesEnglish.container}>
+            {/* Language toggle button */}
+            <View style={stylesEnglish.languageToggle}>
+                <Button
+                    title={language === 'en' ? "Switch to Tamil" : "Switch to English"}
+                    onPress={handleChangeLanguage}
+                />
+            </View>
+
             <Text style={stylesEnglish.textTopic}>
-                {'LET’S LEARN\nTAMIL LETTERS'}
-                {/* {language === 'Tamil' ? 'தமிழ் எழுத்துக்களை கற்போம்' : 'LET’S LEARN\nTAMIL LETTERS'} */}
+                {t('learnTamil')}
             </Text>
             <Image style={stylesEnglish.bgImg} source={require('../../assets/bg.jpg')} />
             <View style={stylesEnglish.overlay}></View>
             <Image style={stylesEnglish.dashImg} source={require('../../assets/learn.png')} />
 
+            {/* Other content */}
             <View style={stylesEnglish.rectangle1}>
                 <TouchableOpacity onPress={handleWrite}>
                     <Image style={stylesEnglish.writeImg} source={require('../../assets/write-tamil.png')} />
-                    <Text style={stylesEnglish.text1}>
-                        {/* {language === 'Tamil' ? 'தமிழ் எழுத்து \nஎழுதுதல்' : 'Tamil Letter\nWriting'} */}
-                        {'Tamil Letter\nWriting'}
-                    </Text>
+                    <Text style={stylesEnglish.text1}>{t('writing')}</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={stylesEnglish.rectangle2}>
                 <TouchableOpacity onPress={handleSound}>
                     <Image style={stylesEnglish.listenImg} source={require('../../assets/listen.png')} />
-                    <Text style={stylesEnglish.text1}>
-                        {/* {language === 'Tamil' ? 'தமிழ் எழுத்து \nஒலிகள்' : 'Tamil Letter\nSounds'} */}
-                        {'Tamil Letter\nSounds'}
-                    </Text>
+                    <Text style={stylesEnglish.text1}>{t('sounds')}</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={stylesEnglish.rectangle3}>
                 <TouchableOpacity onPress={handleGame}>
                     <Image style={stylesEnglish.listenImg} source={require('../../assets/game.png')} />
-                    <Text style={stylesEnglish.text1}>
-                        {/* {language === 'Tamil' ? 'தமிழ் எழுத்து\n  விளையாட்டு' : 'Tamil Letter\nGames'} */}
-                        {'Tamil Letter\nGames'}
-                    </Text>
+                    <Text style={stylesEnglish.text1}>{t('games')}</Text>
                 </TouchableOpacity>
             </View>
 
