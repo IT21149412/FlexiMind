@@ -114,12 +114,13 @@ const generatePDFReport = async (userData) => {
       <head>
         <style>
           body { font-family: Arial, sans-serif; }
-          h1 { color: #003f5c; font-size: 24px; }
-          h2 { color: #4D86F7; font-size: 20px; }
+          h1 { color: #003f5c; font-size: 28px; }
+          h2 { color: #4D86F7; font-size: 25px; }
           .section-title { color: #FFD166; font-size: 18px; margin-top: 20px; }
           .details, .result { margin-top: 5px; }
-          .result { color: #2a9d8f; font-size: 16px; }
+          .result { color: #020035; font-size: 25px; }
           .activity { font-size: 16px; color: #264653; margin-top: 15px; font-weight: bold; }
+          h3 { color: #033500; font-size: 23px; }
         </style>
       </head>
       <body>
