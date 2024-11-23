@@ -13,7 +13,7 @@ const LearnTamilScreen = ({ navigation }) => {
         console.log("Change language function called"); 
         const newLang = language === 'en' ? 'ta' : 'en';
         i18n.changeLanguage(newLang).then(() => {
-            setLanguage(newLang); // Make sure this happens after language change
+            setLanguage(newLang); 
             console.log("Language changed to:", newLang);
             dispatch(setLanguage(newLang));
         });

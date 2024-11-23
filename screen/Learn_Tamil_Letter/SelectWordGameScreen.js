@@ -36,7 +36,7 @@ const SelectWordGameScreen = ({ navigation }) => {
     };
 
     const handleHomePress = () => {
-        navigation.navigate('Home');
+        navigation.navigate('GameSelect');
     };
 
     return (

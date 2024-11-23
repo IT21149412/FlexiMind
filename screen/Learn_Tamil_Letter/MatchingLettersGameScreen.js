@@ -46,7 +46,7 @@ const MatchingLettersGameScreen = ({ navigation }) => {
 
     const handleHomePress = () => {
         //navigation.navigate('Home', { language: language });
-        navigation.navigate('Home');
+        navigation.navigate('GameSelect');
     };
 
     return (
