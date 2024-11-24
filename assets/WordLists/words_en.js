@@ -91,3 +91,26 @@ export const words_en = [
     { word: 'dip', similar: ['zip', 'lip', 'nip', 'sip', 'tip'] },
   ];
   
+
+//   export const audio_en = [
+//     { yellow: 'CAT', audio: require('../../assets/VoiceRecordings/Cat.mp3'), words: ['BAT', 'CAT', 'MAT'] },
+//     { yellow: 'DOG', audio: require('../../assets/VoiceRecordings/Dog.mp3'), words: ['LOG', 'FOG', 'DOG'] },
+//     { yellow: 'HAT', audio: require('../../assets/VoiceRecordings/Hat.mp3'), words: ['HAT', 'RAT', 'SAT'] },
+//     { yellow: 'SUN', audio: require('../../assets/VoiceRecordings/Sun.mp3'), words: ['FUN', 'SUN', 'RUN'] },
+//     { yellow: 'BELL', audio: require('../../assets/VoiceRecordings/Bell.mp3'), words: ['SELL', 'TELL', 'BELL'] },
+//     { yellow: 'FISH', audio: require('../../assets/VoiceRecordings/Fish.mp3'), words: ['DISH', 'FISH', 'WISH'] },
+//     { yellow: 'MOUSE', audio: require('../../assets/VoiceRecordings/Mouse.mp3'), words: ['HOUSE', 'LOUSE', 'MOUSE'] },
+//     { yellow: 'TREE', audio: require('../../assets/VoiceRecordings/Tree.mp3'), words: ['FREE', 'TREE', 'SEE'] },
+//     { yellow: 'BOOK', audio: require('../../assets/VoiceRecordings/Book.mp3'), words: ['LOOK', 'HOOK', 'BOOK'] },
+//     { yellow: 'CAR', audio: require('../../assets/VoiceRecordings/Car.mp3'), words: ['BAR', 'FAR', 'CAR'] },
+//     { yellow: 'JUMP', audio: require('../../assets/VoiceRecordings/Jump.mp3'), words: ['PUMP', 'DUMP', 'JUMP'] },
+//     { yellow: 'WIND', audio: require('../../assets/VoiceRecordings/Wind.mp3'), words: ['WIND', 'FIND', 'MIND'] },
+//     { yellow: 'STAR', audio: require('../../assets/VoiceRecordings/Star.mp3'), words: ['FAR', 'STAR', 'BAR'] },
+//     { yellow: 'SING', audio: require('../../assets/VoiceRecordings/Sing.mp3'), words: ['RING', 'SING', 'KING'] },
+//     { yellow: 'BIRD', audio: require('../../assets/VoiceRecordings/Bird.mp3'), words: ['WORD', 'BIRD', 'HERD'] },
+//     { yellow: 'PLANE', audio: require('../../assets/VoiceRecordings/Plane.mp3'), words: ['BRAIN', 'PLANE', 'TRAIN'] },
+//     { yellow: 'TRAIN', audio: require('../../assets/VoiceRecordings/Train.mp3'), words: ['RAIN', 'TRAIN', 'PAIN'] },
+//     { yellow: 'SNAKE', audio: require('../../assets/VoiceRecordings/Snake.mp3'), words: ['LAKE', 'SNAKE', 'BAKE'] },
+//     { yellow: 'FIRE', audio: require('../../assets/VoiceRecordings/Fire.mp3'), words: ['TIRE', 'FIRE', 'WIRE'] },
+//     { yellow: 'CHAIR', audio: require('../../assets/VoiceRecordings/Chair.mp3'), words: ['FAIR', 'CHAIR', 'HAIR'] },
+// ];

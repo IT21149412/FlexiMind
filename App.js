@@ -14,12 +14,10 @@ import DA_ParentConsentScreen from './screen/Dyslexia Assesment/ParentConsentScr
 import DA_MatchingWordsScreen from './screen/Dyslexia Assesment/MatchingWordsScreen';
 import DA_GoodJobScreen from './screen/Dyslexia Assesment/GoodJobScreen';
 import DA_ListenAndChooseScreen from './screen/Dyslexia Assesment/ListenAndChooseScreen';
+import DA_ReadOutLoudDescriptionScreen from './screen/Dyslexia Assesment/ReadOutLoudDescriptionScreen';
 import DA_GoodJobScreenListen from './screen/Dyslexia Assesment/GoodJobScreenListen';
 import DA_ReadOutLoudScreen from './screen/Dyslexia Assesment/ReadOutLoudScreen';
 import DA_SpellingScreen from './screen/Dyslexia Assesment/SpellingScreen';
-import DA_SpellingScreen2 from './screen/Dyslexia Assesment/SpellingScreen2';
-import DA_SpellingScreen3 from './screen/Dyslexia Assesment/SpellingScreen3';
-import DA_SpellingScreen4 from './screen/Dyslexia Assesment/SpellingScreen4';
 import DA_GoodJobScreenSpell from './screen/Dyslexia Assesment/GoodJobScreenSpell';
 import DA_MachingWordsDescriptionScreen from './screen/Dyslexia Assesment/MatchingWordsDescriptionScreen';
 import DA_ListenAndChooseDescriptionScreen from './screen/Dyslexia Assesment/ListenAndChooseDescriptionScreen';
@@ -27,6 +25,7 @@ import DA_SpellingDescriptionScreen from './screen/Dyslexia Assesment/SpellingDe
 import DA_ResultsScreen from './screen/Dyslexia Assesment/ResultsScreen';
 import DA_BingoScreen from './screen/Dyslexia Assesment/BingoScreen';
 import DA_BingoDescriptionScreen from './screen/Dyslexia Assesment/BingoDescriptionScreen';
+
 
 // Remidial
 import HomeScreenRemidial from './screen/remidial/HomeScreen';
@@ -299,6 +298,91 @@ const App = () => {
               component={DA_BingoDescriptionScreen}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="DA_SelectLanguage"
+              component={DA_SelectLanguage}
+              options={{
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
+            <Stack.Screen
+              name="DA_ParentConsentScreen"
+              component={DA_ParentConsentScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_MatchingWordsScreen"
+              component={DA_MatchingWordsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_GoodJobScreen"
+              component={DA_GoodJobScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_ListenAndChooseScreen"
+              component={DA_ListenAndChooseScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_GoodJobScreenListen"
+              component={DA_GoodJobScreenListen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_ReadOutLoudDescriptionScreen"
+              component={DA_ReadOutLoudDescriptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_ReadOutLoudScreen"
+              component={DA_ReadOutLoudScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_SpellingScreen"
+              component={DA_SpellingScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_GoodJobScreenSpell"
+              component={DA_GoodJobScreenSpell}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_MatchingWordsDescriptionScreen"
+              component={DA_MachingWordsDescriptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_ListenAndChooseDescriptionScreen"
+              component={DA_ListenAndChooseDescriptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_SpellingDescriptionScreen"
+              component={DA_SpellingDescriptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_ResultsScreen"
+              component={DA_ResultsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_BingoScreen"
+              component={DA_BingoScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DA_BingoDescriptionScreen"
+              component={DA_BingoDescriptionScreen}
+              options={{ headerShown: false }}
+            />
+
+
 
             {/* Remidial */}
 

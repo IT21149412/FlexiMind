@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     },
     dashImg: {
         alignSelf: 'center',
-        marginTop: '2%',
+        marginTop: '10%',
         width: '100%',
         height: '50%',
     },
