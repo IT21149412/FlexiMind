@@ -247,10 +247,10 @@ const TamilQuizScreen = ({ navigation }) => {
                   alignItems: 'center',
                 }}
               >
-                <Image
+                {/* <Image
                   source={require('../../../assets/images/check.png')}
                   style={{ width: 24, height: 24 }}
-                />
+                /> */}
               </View>
             ) : option == currentOptionSelected ? (
               <View
@@ -263,10 +263,10 @@ const TamilQuizScreen = ({ navigation }) => {
                   alignItems: 'center',
                 }}
               >
-                <Image
+                {/* <Image
                   source={require('../../../assets/images/cross.png')}
                   style={{ width: 24, height: 24 }}
-                />
+                /> */}
               </View>
             ) : null}
           </TouchableOpacity>
@@ -326,10 +326,10 @@ const TamilQuizScreen = ({ navigation }) => {
             zIndex: 1,
           }}
         >
-          <Image
+          {/* <Image
             source={require('../../../assets/images/cross1.png')}
             style={{ width: 35, height: 35 }}
-          />
+          /> */}
         </TouchableOpacity>
         <View
           style={{
