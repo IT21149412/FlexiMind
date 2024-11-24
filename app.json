@@ -3,6 +3,7 @@
     "name": "FlexiMind",
     "slug": "FlexiMind",
     "version": "1.0.0",
+    "newArchEnabled": true,
     "icon": "./assets/logo1.png",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
