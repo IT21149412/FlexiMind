@@ -30,7 +30,7 @@
     "firebase": "^10.9.0",
     "lottie-react-native": "7.1.0",
     "react": "18.3.1",
-    "react-native": "0.76.2",
+    "react-native": "0.76.3",
     "react-native-audio-recorder-player": "^3.6.10",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.20.2",
