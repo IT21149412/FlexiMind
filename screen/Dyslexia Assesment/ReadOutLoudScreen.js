@@ -217,7 +217,7 @@ const DA_ReadOutLoudScreen = ({ navigation, route }) => {
         name: `recording.${fileType}`,
       });
 
-      const response = await axios.post('http://172.20.10.3:8000/transcribe', formData, {
+      const response = await axios.post('http://192.168.1.10:8000/transcribe', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import LottieView from "lottie-react-native";
 import { useNavigation } from "@react-navigation/native";
 import { translations } from "./locales";
-import { useLanguage } from "../../App";
+//import { useLanguage } from "../../App";
 
 const MathHandsMainScreen = () => {
   const navigation = useNavigation();
