@@ -13,11 +13,9 @@ import axios from "axios";
 import * as ImageManipulator from "expo-image-manipulator";
 import Svg, { Circle, Text as SvgText } from "react-native-svg";
 import LottieView from "lottie-react-native";
-import { translations } from "./locales";
+import { BASE_URL } from "./MathHandsConfig";
 
-const AdditionAlleyScreen = ({  route, navigation }) => {
-  const { language } = route.params;
-  const t = translations[language];
+const AdditionAlleyScreen = ({ navigation }) => {
   const [number1, setNumber1] = useState(0);
   const [number2, setNumber2] = useState(0);
   const [facing, setFacing] = useState("front");
@@ -39,10 +37,11 @@ const AdditionAlleyScreen = ({  route, navigation }) => {
       intervalId = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev === 1) {
-            captureAndProcessImage();
+            captureAndProcessImage().then(() => {
+              setIsCapturing(false);
+              showFeedbackModal(); // Show the modal after feedback is updated
+            });
             clearInterval(intervalId);
-            setIsCapturing(false);
-            showFeedbackModal();
             return 5;
           }
           return prev - 1;
@@ -66,12 +65,12 @@ const AdditionAlleyScreen = ({  route, navigation }) => {
         setFeedback("Correct! Great job!");
         setShowLottie(true); // Show Lottie animation if correct
         setShowIncorrectLottie(false); // Hide incorrect Lottie animation
-
       } else {
-        setFeedback(`Incorrect. The correct answer is ${expectedAnswer}.\n                    please try again!`);
-        setShowLottie(false); // Show Lottie animation if correct
-        setShowIncorrectLottie(true); // Hide incorrect Lottie animation
-
+        setFeedback(
+          `Incorrect. The correct answer is ${expectedAnswer}.\nPlease try again!`
+        );
+        setShowLottie(false); // Hide correct Lottie animation
+        setShowIncorrectLottie(true); // Show incorrect Lottie animation
       }
     }
   }, [fingerCount, number1, number2]);
@@ -120,15 +119,12 @@ const AdditionAlleyScreen = ({  route, navigation }) => {
       });
 
       try {
-        const response = await axios.post(
-          "http://192.168.8.107:5000/process",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await axios.post(`${BASE_URL}/process`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
         setFingerCount(response.data.finger_count);
       } catch (error) {
         console.error("Error processing image:", error);
@@ -179,9 +175,10 @@ const AdditionAlleyScreen = ({  route, navigation }) => {
       </Svg>
     );
   };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.textTopic}>{t.additionAlley}</Text>
+      <Text style={styles.textTopic}>Addition Alley</Text>
       <Image style={styles.bgImg} source={require("../../assets/bg.jpg")} />
       <View style={styles.overlay}>
         <View style={styles.numberBox}>
@@ -200,11 +197,9 @@ const AdditionAlleyScreen = ({  route, navigation }) => {
         </View>
         <View style={styles.messageBox}>
           <Text style={styles.messageText}>
-            <Image
-              source={require("../../assets/warning.png")}
-              style={styles.warningIcon}
-            />
-            {t.showMathProblem}
+            Show the answer to your math problem using your fingers. Math Hands
+            will then recognize your finger positions and confirm if your
+            answer is correct!
           </Text>
         </View>
         <View style={styles.cameraContainer}>
@@ -212,7 +207,7 @@ const AdditionAlleyScreen = ({  route, navigation }) => {
         </View>
         <View style={styles.uiContainer}>
           {isCapturing && renderCircularTimer()}
- 
+
           <TouchableOpacity style={styles.button1} onPress={toggleCameraFacing}>
             <Image
               source={require("../../assets/flip.png")}
@@ -236,22 +231,22 @@ const AdditionAlleyScreen = ({  route, navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-          {showLottie && !showIncorrectLottie && ( // Conditionally render correct Lottie animation
-        <LottieView
-          source={require('../../assets/welldone.json')} // Path to your correct Lottie file
-          autoPlay
-          loop={false}
-          style={styles.lottie}
-        />
-      )}
-      {showIncorrectLottie && ( // Conditionally render incorrect Lottie animation
-        <LottieView
-          source={require('../../assets/sad3.json')} // Path to your incorrect Lottie file
-          autoPlay
-          loop={true}
-          style={styles.lottie}
-        />
-      )}
+            {showLottie && !showIncorrectLottie && (
+              <LottieView
+                source={require("../../assets/welldone.json")}
+                autoPlay
+                loop={false}
+                style={styles.lottie}
+              />
+            )}
+            {showIncorrectLottie && (
+              <LottieView
+                source={require("../../assets/sad3.json")}
+                autoPlay
+                loop={true}
+                style={styles.lottie}
+              />
+            )}
             <Text style={styles.resultText}>
               Detected Finger Count: {fingerCount}
             </Text>
@@ -365,7 +360,6 @@ const styles = StyleSheet.create({
     left: "35%",
     marginTop: 10,
     padding: 10,
-    // backgroundColor: '#14274e',
     borderRadius: 4,
   },
   text: {
