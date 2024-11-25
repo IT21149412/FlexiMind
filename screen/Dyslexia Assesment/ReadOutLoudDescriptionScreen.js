@@ -5,11 +5,11 @@ import { Audio } from 'expo-av';
 // English screen component
 const EnglishScreen = ({ handleNext }) => (
     <View style={styles.container}>
-        <Text style={styles.textTopicE}>Match The Words!</Text>
+        <Text style={styles.textTopicE}>Read Out Loud!</Text>
         <Image style={styles.bgImg} source={require('../../assets/bg.jpg')}></Image>
         <View style={styles.overlay}></View>
         <Text style={styles.contentE}>
-        Hey There! 🧙‍♂️ It's time to show off your matching skills! Look at the words on the screen, and find the words that looks exaclty the same. Let's get started!
+        Hey There! 🧙‍♂️ It's time to show off your reading skills! Look at the words on the screen, and when you are ready, click the START RECORDING button and say the word out loud! You have 5 seconds to say the word.. Let's get started!
         </Text>
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
             <Text style={styles.nextButtonText}>Next</Text>
@@ -22,20 +22,19 @@ const EnglishScreen = ({ handleNext }) => (
 // Tamil screen component
 const TamilScreen = ({ handleNext }) => (
     <View style={styles.container}>
-        <Text style={styles.textTopicT}>வார்த்தைகளை பொருத்து!</Text>
+        <Text style={styles.textTopicT}>சத்தமாகப் படியுங்கள்!</Text>
         <Image style={styles.bgImg} source={require('../../assets/bg.jpg')}></Image>
         <View style={styles.overlay}></View>
         <Image style={styles.dashImg} source={require('../../assets/Celebrate.png')}></Image>
         <Text style={styles.contentT}>
-        ஏய்! 🧙‍♂️ உங்கள் பொருந்தக்கூடிய திறமைகளை வெளிப்படுத்த வேண்டிய நேரம் இது! திரையில் உள்ள சொற்களைப் பாருங்கள், அதே போல் துல்லியமாகத் தோன்றும் சொற்களைக் கண்டறியவும். தொடங்குவோம்!
-        </Text>
+        ஏய்! 🧙‍♂️ உங்கள் வாசிப்புத் திறனை வெளிப்படுத்த வேண்டிய நேரம் இது! திரையில் உள்ள வார்த்தைகளைப் பார்த்து, நீங்கள் தயாரானதும், 'பதிவு செய்யத் தொடங்கு' பொத்தானைக் கிளிக் செய்து, அந்த வார்த்தையை உரக்கச் சொல்லுங்கள்! வார்த்தை சொல்ல உங்களுக்கு 5 வினாடிகள் உள்ளன.. தொடங்குவோம்!        </Text>
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
             <Text style={styles.nextButtonText}>அடுத்தது</Text>
         </TouchableOpacity>
     </View>
 );
 
-const DA_BingoDescriptionScreen = ({ navigation, route }) => {
+const DA_ReadOutLoudDescriptionScreen = ({ navigation, route }) => {
     const { language, results, setResults } = route.params;  // Receiving the results and setResults
     const [sound, setSound] = useState(null);
     const [hasNavigated, setHasNavigated] = useState(false);
@@ -80,7 +79,7 @@ const DA_BingoDescriptionScreen = ({ navigation, route }) => {
                 await sound.stopAsync();
                 await sound.unloadAsync();
             }
-            navigation.navigate('DA_BingoScreen', { language, results, setResults });
+            navigation.navigate('DA_ReadOutLoudScreen', { language, results, setResults });
         }
     };
 
@@ -210,4 +209,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DA_BingoDescriptionScreen;
+export default DA_ReadOutLoudDescriptionScreen;

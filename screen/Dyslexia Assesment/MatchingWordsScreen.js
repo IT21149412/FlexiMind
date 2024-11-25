@@ -712,15 +712,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, Modal, BackHandler } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { doc, setDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore';
+import { db, auth } from '../firebase'; // Firebase instance for Firestore
 
-const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, clickedWord, validateAnswer }) => {
+const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, clickedWord }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.textTopicE}>Let's Find The Matching Word!</Text>
       <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
       <View style={styles.overlay} />
 
-      {/* Highlighted Correct Word */}
       <View style={styles.correctWordContainer}>
         <Image style={styles.highlightIcon} source={require('../../assets/star.png')} />
         <Text style={styles.correctWordText}>{wordPair.yellow}</Text>
@@ -756,14 +757,13 @@ const EnglishScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext
   );
 };
 
-const TamilScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, clickedWord, validateAnswer }) => {
+const TamilScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, clickedWord }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.textTopicT}>பொருந்தக்கூடிய சொற்களைக் கண்டுபிடிப்போம்!</Text>
       <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
       <View style={styles.overlay} />
 
-      {/* Highlighted Correct Word */}
       <View style={styles.correctWordContainer}>
         <Image style={styles.highlightIcon} source={require('../../assets/star.png')} />
         <Text style={styles.correctWordText}>{wordPair.yellow}</Text>
@@ -799,9 +799,8 @@ const TamilScreen = ({ timer, wordPair, onClickWord, timerExpired, onClickNext, 
   );
 };
 
-
 const DA_MatchingWordsScreen = ({ navigation, route }) => {
-  const { language , results, setResults } = route.params;
+  const { language } = route.params;
   const [timer, setTimer] = useState('00:30');
   const [wordPair, setWordPair] = useState({ yellow: '', words: [] });
   const [timerExpired, setTimerExpired] = useState(false);
@@ -814,10 +813,7 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
   const maxRounds = 4;
   const [intervalId, setIntervalId] = useState(null);
 
-  const [gameData, setGameData] = useState([]);
-  const [updatedResults, setUpdatedResults] = useState(results);
-
-  const wordLists = language === 'ENGLISH' ? require('../../assets/WordLists/words_en').words_en : require('../../assets/WordLists/words_ta').words_ta;
+  const wordLists = language === 'en' ? require('../../assets/WordLists/words_en').words_en : require('../../assets/WordLists/words_ta').words_ta;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -826,11 +822,6 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
       return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, [])
   );
-  
-  useEffect(() => {
-    console.log('Results state matching words:', updatedResults);
-  }, [updatedResults]);
-
 
   useEffect(() => {
     setNewWordPair();
@@ -838,7 +829,10 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     startTimer();
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+      setModalVisible(false);
+    };
   }, [wordPair]);
 
   const setNewWordPair = () => {
@@ -849,7 +843,7 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
       words: [selectedWord.word, ...selectedWord.similar].sort(() => 0.5 - Math.random())
     });
     setClickedWord(null);
-    setStartTime(Date.now()); // Start time for the round
+    setStartTime(Date.now());
   };
 
   const startTimer = () => {
@@ -879,10 +873,42 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
     setClickedWord(word);
   };
 
-  const handleModal = () => {
-    setModalVisible(true);
-    const timeTaken = (Date.now() - startTime) / 1000; // Time taken in seconds
 
+  const storeResultsInFirestore = async (roundData) => {
+    const user = auth.currentUser;
+    if (user) {
+      const userId = user.uid;
+      const docRef = doc(db, 'MatchingWords_Results', userId);
+
+      try {
+        if (currentRound === 1) {
+          await setDoc(docRef, {
+            userId,
+            activity: 'matching_words',
+            results: [roundData],
+            timestamp: serverTimestamp(),
+          });
+        } else {
+          await updateDoc(docRef, {
+            results: arrayUnion(roundData),
+          });
+        }
+      } catch (error) {
+        console.error('Error storing round data in Firestore:', error);
+      }
+    } else {
+      console.error('No user logged in');
+    }
+  };
+
+  const handleModal = async () => {
+    // Prevent modal actions after the max round
+    if (currentRound > maxRounds) {
+      return;
+    }
+
+    setModalVisible(true);
+    const timeTaken = (Date.now() - startTime) / 1000;
 
     const roundData = {
       activity: 'matching_words',
@@ -893,14 +919,10 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
       timeTaken: timeTaken.toFixed(2),
     };
 
-    // Log the current results and the new roundData to be added
-    console.log('Current Results:', updatedResults);
-    console.log('New Round Data:', roundData);
-
-    // Update the results state
-    setUpdatedResults([...updatedResults, roundData]);
-
-    setGameData([...gameData, roundData]);
+    // Store the results in Firestore only if within the allowed rounds
+    if (currentRound <= maxRounds) {
+      await storeResultsInFirestore(roundData);
+    }
 
     if (!clickedWord) {
       setAnimationType('better');
@@ -914,29 +936,25 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
     }
   };
 
-  const handleNext = () => {
-    setModalVisible(false);
-    if (currentRound < maxRounds) {
-      setCurrentRound(currentRound + 1);
+  const handleNext = async () => {
+      setModalVisible(false);
+      setClickedWord(null);
       setTimerExpired(false);
       setTimer('00:30');
-    } else {
-      const correctAnswers = gameData.filter(round => round.isCorrect).length;
-      const totalMark = (correctAnswers / maxRounds) * 100;
-      console.log('Results:', gameData);
-      console.log(`Total mark for matching_words: ${totalMark}%`);
+      setAnimationType('');
 
-      // Navigate to the next screen and pass the results
-      console.log('Final Results before navigation:', updatedResults);
-      setResults(updatedResults); // Update the global results state
-      navigation.navigate('DA_SpellingDescriptionScreen', {
-        language,
-        results: updatedResults, // Pass the updated results state
-        setResults, // Pass the setResults function
-      });
-    }
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+
+      // Prevent moving to the next round if maxRounds is reached
+      if (currentRound < maxRounds) {
+        setCurrentRound(currentRound + 1);
+      } else {
+        console.log('All rounds completed');
+        navigation.navigate('DA_SpellingDescriptionScreen', { language });
+      }
   };
-
 
   const renderAnimation = () => {
     switch (animationType) {
@@ -953,7 +971,7 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
 
   return (
     <>
-      {language === 'ENGLISH' ? (
+      {language === 'en' ? (
         <EnglishScreen
           timer={timer}
           wordPair={wordPair}
@@ -961,7 +979,6 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
           timerExpired={timerExpired}
           onClickNext={handleModal}
           clickedWord={clickedWord}
-          validateAnswer={timerExpired}
         />
       ) : (
         <TamilScreen
@@ -971,7 +988,6 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
           timerExpired={timerExpired}
           onClickNext={handleModal}
           clickedWord={clickedWord}
-          validateAnswer={timerExpired}
         />
       )}
       <Modal
@@ -996,7 +1012,6 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
     </>
   );
 };
-
 const styles = StyleSheet.create({
   // The styles are reused from the Listen and Choose screen to match UI
   container: {
@@ -1057,7 +1072,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFD700',
     padding: 10,
     borderRadius: 15,
-    marginVertical: 20,
+    marginTop: 50,
   },
   correctWordText: {
     fontSize: 36,
@@ -1077,7 +1092,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 20,
+    marginTop: 25,
   },
   timerIcon: {
     width: 20,
@@ -1153,9 +1168,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
+    width: 270,
+    padding: 20,
     backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 30,
+    borderRadius: 10,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -1163,6 +1179,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
+
   modalText: {
     fontSize: 20,
     marginVertical: 20,
@@ -1180,8 +1197,8 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   gif: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
   },
 });
 

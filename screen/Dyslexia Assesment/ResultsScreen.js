@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Image, Animated, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, Animated, TouchableOpacity, Alert, Platform } from 'react-native';
 import Svg, { Circle, G } from 'react-native-svg';
+import { db, auth } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import * as Print from 'expo-print';
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
+import { ImageBackground } from 'react-native';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -25,24 +31,8 @@ const SmallPieChart = ({ percentage, activityName }) => {
     <View style={styles.smallPieContainer}>
       <Svg width="100" height="100" viewBox="0 0 36 36" style={styles.svg}>
         <G rotation="-90" origin="18, 18">
-          <Circle
-            cx="18"
-            cy="18"
-            r="15.9155"
-            fill="transparent"
-            stroke="#6ecbc3"
-            strokeWidth="3.8"
-          />
-          <AnimatedCircle
-            cx="18"
-            cy="18"
-            r="15.9155"
-            fill="transparent"
-            stroke="#2a9d8f"
-            strokeWidth="3.8"
-            strokeDasharray="100"
-            strokeDashoffset={strokeDashoffset}
-          />
+          <Circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#6ecbc3" strokeWidth="3.8" />
+          <AnimatedCircle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#2a9d8f" strokeWidth="3.8" strokeDasharray="100" strokeDashoffset={strokeDashoffset} />
         </G>
       </Svg>
       <View style={styles.innerSmallCircle}>
@@ -74,24 +64,8 @@ const PieChart = ({ averagePercentage }) => {
     <View style={styles.pieContainer}>
       <Svg width="200" height="200" viewBox="0 0 36 36" style={styles.svg}>
         <G rotation="-90" origin="18, 18">
-          <Circle
-            cx="18"
-            cy="18"
-            r="15.9155"
-            fill="transparent"
-            stroke="#f7f5bc"
-            strokeWidth="3.8"
-          />
-          <AnimatedCircle
-            cx="18"
-            cy="18"
-            r="15.9155"
-            fill="transparent"
-            stroke="#f4a261"
-            strokeWidth="3.8"
-            strokeDasharray="100"
-            strokeDashoffset={strokeDashoffset}
-          />
+          <Circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#f7f5bc" strokeWidth="3.8" />
+          <AnimatedCircle cx="18" cy="18" r="15.9155" fill="transparent" stroke="#f4a261" strokeWidth="3.8" strokeDasharray="100" strokeDashoffset={strokeDashoffset} />
         </G>
       </Svg>
       <View style={styles.innerCircle}>
@@ -101,8 +75,153 @@ const PieChart = ({ averagePercentage }) => {
   );
 };
 
+// Fetch user results
+const fetchUserResults = async () => {
+  const user = auth.currentUser;
+  if (!user) {
+    Alert.alert('Error', 'No user is logged in.');
+    return {};
+  }
+
+  const userId = user.uid;
+  const collections = [
+    'Bingo_Results',
+    'MatchingWords_Results',
+    'ReadOutLoud_Results',
+    'Spelling_Results',
+    'listen_and_choose_results',
+  ];
+
+  let results = {};
+  for (const collection of collections) {
+    const docRef = doc(db, collection, userId);
+    const docSnapshot = await getDoc(docRef);
+    if (docSnapshot.exists()) {
+      results[collection] = docSnapshot.data();
+    } else {
+      console.warn(`No data found for collection: ${collection}`);
+    }
+  }
+  return results;
+};
+
+
+
+// Generate PDF report with expo-print and save to media library
+const generatePDFReport = async (userData) => {
+  const htmlContent = `
+    <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; }
+          h1 { color: #003f5c; font-size: 28px; }
+          h2 { color: #4D86F7; font-size: 25px; }
+          .section-title { color: #FFD166; font-size: 18px; margin-top: 20px; }
+          .details, .result { margin-top: 5px; }
+          .result { color: #020035; font-size: 25px; }
+          .activity { font-size: 16px; color: #264653; margin-top: 15px; font-weight: bold; }
+          h3 { color: #033500; font-size: 23px; }
+        </style>
+      </head>
+      <body>
+        <h1>Child's Dyslexia Assessment Report</h1>
+        <h2>Personal Details</h2>
+        <div><strong>Name:</strong> ${userData.childName || 'N/A'}</div>
+        <div><strong>Age:</strong> ${userData.childAge || 'N/A'}</div>
+        <div><strong>Guardian's Email:</strong> ${userData.guardianEmail || 'N/A'}</div>
+        <div><strong>Psychiatrist's Email:</strong> ${userData.psychiatristEmail || 'N/A'}</div>
+
+        <h2>Results Summary</h2>
+        <div class="section-title">Total Score and Activity Percentage:</div>
+        <div class="result">Overall Percentage: ${calculateOverallPercentage(userData)}%</div>
+
+        <h2>Activity Breakdown</h2>
+        ${generateActivityResultsHTML(userData)}
+      </body>
+    </html>
+  `;
+
+  try {
+    const { uri } = await Print.printToFileAsync({ html: htmlContent });
+    if (Platform.OS === 'ios') {
+      await Sharing.shareAsync(uri);
+    } else {
+      const permission = await MediaLibrary.requestPermissionsAsync();
+      if (permission.granted) {
+        await MediaLibrary.createAssetAsync(uri);
+        Alert.alert("PDF generated", "The report has been saved to your gallery.");
+      }
+    }
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+  }
+};
+
+// Calculate the percentage of correct answers for each activity
+const calculateActivityPercentage = (results) => {
+  if (!results || !results.results || results.results.length === 0) return 0;
+
+  const correctRounds = results.results.filter((round) => round.isCorrect || round.isFullyCorrect);
+  return (correctRounds.length / results.results.length) * 100;
+};
+
+// Calculate overall percentage across all activities
+const calculateOverallPercentage = (userData) => {
+  const activities = [
+    userData.Bingo_Results,
+    userData.MatchingWords_Results,
+    userData.ReadOutLoud_Results,
+    userData.Spelling_Results,
+    userData.listen_and_choose_results,
+  ];
+
+  let totalCorrect = 0;
+  let totalRounds = 0;
+
+  activities.forEach((activity) => {
+    if (activity?.results) {
+      const correct = activity.results.filter((res) => res.isCorrect || res.isFullyCorrect).length;
+      totalCorrect += correct;
+      totalRounds += activity.results.length;
+    }
+  });
+
+  return ((totalCorrect / totalRounds) * 100).toFixed(2);
+};
+
+// Generate HTML for each activity’s results
+// Generate HTML for each activity’s results with detailed information
+const generateActivityResultsHTML = (userData) => {
+  const activities = [
+    { title: 'Bingo Results', data: userData.Bingo_Results },
+    { title: 'Matching Words Results', data: userData.MatchingWords_Results },
+    { title: 'Read Out Loud Results', data: userData.ReadOutLoud_Results },
+    { title: 'Spelling Results', data: userData.Spelling_Results },
+    { title: 'Listen and Choose Results', data: userData.listen_and_choose_results },
+  ];
+
+  return activities
+    .map((activity) => {
+      if (!activity.data?.results) return ''; // Skip if there is no data for the activity
+
+      // Generate HTML for each round
+      const roundsHTML = activity.data.results
+        .map((round, index) => {
+          const roundDetails = Object.entries(round)
+            .map(([key, value]) => `<strong>${key}</strong>: ${value}`)
+            .join('<br>');
+          return `<div><strong>Round ${index + 1}</strong><br>${roundDetails}</div>`;
+        })
+        .join('<br>');
+
+      return `<div class="activity"><h3>${activity.title}</h3>${roundsHTML}</div>`;
+    })
+    .join('<br>');
+};
+
+
 // English screen component
-const EnglishScreen = ({ navigation }) => {
+const EnglishScreen = ({ navigation, activityPercentages, averagePercentage }) => {
   const navigateHome = () => {
     navigation.navigate('Home');
   };
@@ -112,16 +231,19 @@ const EnglishScreen = ({ navigation }) => {
       <Text style={styles.textTopicE}>Assessment Results</Text>
       <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
       <View style={styles.overlay} />
-      <Text style={styles.guardianMessage}>Below are the results of the assessment conducted for dyslexia diagnosis:</Text>
+      <Text style={styles.guardianMessage}>
+        Below are the results of the assessment conducted for dyslexia diagnosis:
+      </Text>
 
-      <PieChart averagePercentage={57} />
+      <PieChart averagePercentage={averagePercentage} />
       <View style={styles.resultoverlay} />
       <Text style={styles.resultBreakdown}>Result Breakdown</Text>
       <View style={styles.smallChartsContainer}>
-        <SmallPieChart percentage={100} activityName="Visual Stimulation" />
-        <SmallPieChart percentage={50} activityName="Auditory Stimulation" />
-        <SmallPieChart percentage={0} activityName="Verbal Stimulation" />
-        <SmallPieChart percentage={75} activityName="Spelling Words" />
+        <SmallPieChart percentage={activityPercentages.bingo} activityName="Bingo" />
+        <SmallPieChart percentage={activityPercentages.matchingWords} activityName="Matching Words" />
+        <SmallPieChart percentage={activityPercentages.readOutLoud} activityName="Read Out Loud" />
+        <SmallPieChart percentage={activityPercentages.spelling} activityName="Spelling Words" />
+        <SmallPieChart percentage={activityPercentages.listenAndChoose} activityName="Listen and Choose" />
       </View>
       <TouchableOpacity onPress={navigateHome} style={styles.backHomeButton}>
         <Image source={require('../../assets/backhome.png')} style={styles.homeIcon} />
@@ -131,26 +253,29 @@ const EnglishScreen = ({ navigation }) => {
 };
 
 // Tamil screen component
-const TamilScreen = ({ navigation }) => {
+const TamilScreen = ({ navigation, activityPercentages, averagePercentage }) => {
   const navigateHome = () => {
-    navigation.navigate('DA_SelectLanguage');
+    navigation.navigate('Home');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.textTopicT}>அருமையான வேலை, வார்த்தை வழிகாட்டி!!</Text>
       <View style={styles.overlay} />
-      <Text style={styles.guardianMessage}>கீழே இடப்பட்டுள்ளவை குறைவுகோள் கண்டறிதல் நடத்திய ஆய்வின் முடிவுகள்:</Text>
+      <Text style={styles.guardianMessage}>
+        கீழே இடப்பட்டுள்ளவை குறைவுகோள் கண்டறிதல் நடத்திய ஆய்வின் முடிவுகள்:
+      </Text>
       <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
-      
-      <PieChart averagePercentage={38} />
+
+      <PieChart averagePercentage={averagePercentage} />
       <View style={styles.resultoverlay} />
       <Text style={styles.resultBreakdown}>முடிவு முறிவு</Text>
       <View style={styles.smallChartsContainer}>
-        <SmallPieChart percentage={75} activityName="காட்சி தூண்டுதல்" />
-        <SmallPieChart percentage={50} activityName="செவிவழி தூண்டுதல்" />
-        <SmallPieChart percentage={25} activityName="எழுத்துப்பிழை வார்த்தைகள்" />
-        <SmallPieChart percentage={0} activityName="வாய்மொழி தூண்டுதல்" />
+        <SmallPieChart percentage={activityPercentages.bingo} activityName="பிங்கோ" />
+        <SmallPieChart percentage={activityPercentages.matchingWords} activityName="பொருத்தும் வார்த்தைகள்" />
+        <SmallPieChart percentage={activityPercentages.readOutLoud} activityName="உச்சரித்தல்" />
+        <SmallPieChart percentage={activityPercentages.spelling} activityName="எழுத்துப்பிழை வார்த்தைகள்" />
+        <SmallPieChart percentage={activityPercentages.listenAndChoose} activityName="கேட்டு தேர்ந்தெடுக்கவும்" />
       </View>
       <TouchableOpacity onPress={navigateHome} style={styles.backHomeButton}>
         <Image source={require('../../assets/backhome.png')} style={styles.homeIcon} />
@@ -159,25 +284,62 @@ const TamilScreen = ({ navigation }) => {
   );
 };
 
+
+// DA_ResultsScreen component
 const DA_ResultsScreen = ({ navigation, route }) => {
   const { language } = route.params;
-
-  // Example state management for clearing state
-  const [dataCleared, setDataCleared] = useState(false);
+  const [activityPercentages, setActivityPercentages] = useState({
+    bingo: 0,
+    matchingWords: 0,
+    readOutLoud: 0,
+    spelling: 0,
+    listenAndChoose: 0,
+  });
+  const [averagePercentage, setAveragePercentage] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Clear any relevant data when component mounts
-    setDataCleared(false); // Example state variable to clear data
+    const loadDataAndGeneratePDF = async () => {
+      const results = await fetchUserResults();
+
+      // Calculate the percentage for each activity
+      const newActivityPercentages = {
+        bingo: calculateActivityPercentage(results.Bingo_Results),
+        matchingWords: calculateActivityPercentage(results.MatchingWords_Results),
+        readOutLoud: calculateActivityPercentage(results.ReadOutLoud_Results),
+        spelling: calculateActivityPercentage(results.Spelling_Results),
+        listenAndChoose: calculateActivityPercentage(results.listen_and_choose_results),
+      };
+
+      setActivityPercentages(newActivityPercentages);
+      setAveragePercentage(calculateOverallPercentage(results));
+      await generatePDFReport(results); // Generate PDF as soon as results are loaded
+      setLoading(false);
+    };
+
+    loadDataAndGeneratePDF();
   }, []);
 
-  return (
-    language === 'ENGLISH' ? (
-      <EnglishScreen navigation={navigation} />
-    ) : (
-      <TamilScreen navigation={navigation} />
-    )
-  );
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ImageBackground
+          source={require('../../assets/LoadingBackground.jpg')}
+          style={styles.loadingBackground} // Set the size and positioning for the background image
+          resizeMode="cover"
+        >
+          <Image source={require('../../assets/loading.gif')} style={styles.loadingGif} />
+          <Text style={styles.loadingText}>Loading Results...</Text>
+        </ImageBackground>
+      </View>
+    );
+  }
+
+  return language === 'en' ? <EnglishScreen {...{ navigation, activityPercentages, averagePercentage }} /> : <TamilScreen {...{ navigation, activityPercentages, averagePercentage }} />;
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -217,7 +379,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 15,
     color: '#051650',
-    marginTop: 25,
+    marginTop: 50,
     paddingHorizontal: 20,
   },
   resultBreakdown: {
@@ -225,7 +387,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#051650',
     paddingHorizontal: 20,
-    marginTop: '6%'
+    marginTop: '6%',
+    marginBottom: '6%'
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -238,8 +401,8 @@ const styles = StyleSheet.create({
   resultoverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(173, 216, 230, 0.7)', 
-    top: '52%',
-    height: '39%',
+    top: '56%',
+    height: '35%',
     width: '95%',
     borderRadius: 25,
     marginLeft: '2.5%',
@@ -327,6 +490,29 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingBackground: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingGif: {
+    width: 150,
+    height: 150,
+  },
+  loadingText: {
+    marginTop: 20,
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#051650', 
+  },
 });
 
 export default DA_ResultsScreen;
+
+

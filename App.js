@@ -1,12 +1,14 @@
 import React, { createContext, useState, useContext } from "react";
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import './i18n';
+import { I18nextProvider } from 'react-i18next';
 import HomeScreen from './screen/HomeScreen';
 import LoginScreen from './screen/LoginScreen';
 import RegisterScreen from './screen/RegisterScreen';
-import './i18n';
-import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 //assessment
 import DA_SelectLanguage from './screen/Dyslexia Assesment/SelectLanguageScreen';
@@ -14,12 +16,10 @@ import DA_ParentConsentScreen from './screen/Dyslexia Assesment/ParentConsentScr
 import DA_MatchingWordsScreen from './screen/Dyslexia Assesment/MatchingWordsScreen';
 import DA_GoodJobScreen from './screen/Dyslexia Assesment/GoodJobScreen';
 import DA_ListenAndChooseScreen from './screen/Dyslexia Assesment/ListenAndChooseScreen';
+import DA_ReadOutLoudDescriptionScreen from './screen/Dyslexia Assesment/ReadOutLoudDescriptionScreen';
 import DA_GoodJobScreenListen from './screen/Dyslexia Assesment/GoodJobScreenListen';
 import DA_ReadOutLoudScreen from './screen/Dyslexia Assesment/ReadOutLoudScreen';
 import DA_SpellingScreen from './screen/Dyslexia Assesment/SpellingScreen';
-import DA_SpellingScreen2 from './screen/Dyslexia Assesment/SpellingScreen2';
-import DA_SpellingScreen3 from './screen/Dyslexia Assesment/SpellingScreen3';
-import DA_SpellingScreen4 from './screen/Dyslexia Assesment/SpellingScreen4';
 import DA_GoodJobScreenSpell from './screen/Dyslexia Assesment/GoodJobScreenSpell';
 import DA_MachingWordsDescriptionScreen from './screen/Dyslexia Assesment/MatchingWordsDescriptionScreen';
 import DA_ListenAndChooseDescriptionScreen from './screen/Dyslexia Assesment/ListenAndChooseDescriptionScreen';
@@ -27,6 +27,7 @@ import DA_SpellingDescriptionScreen from './screen/Dyslexia Assesment/SpellingDe
 import DA_ResultsScreen from './screen/Dyslexia Assesment/ResultsScreen';
 import DA_BingoScreen from './screen/Dyslexia Assesment/BingoScreen';
 import DA_BingoDescriptionScreen from './screen/Dyslexia Assesment/BingoDescriptionScreen';
+
 
 // Remidial
 import HomeScreenRemidial from './screen/remidial/HomeScreen';
@@ -86,8 +87,6 @@ import FirstLetterGame from './screen/Learn_Tamil_Letter/FirstLatterGame';
 import GameSelect from './screen/Learn_Tamil_Letter/GameSelect';
 import MatchingLettersGameScreen from './screen/Learn_Tamil_Letter/MatchingLettersGameScreen';
 import SelectWordGameScreen from './screen/Learn_Tamil_Letter/SelectWordGameScreen';
-import { Provider } from "react-redux";
-import { store } from "./store/store";
 
 const Stack = createStackNavigator();
 const MathHandsStack = createStackNavigator();
@@ -194,8 +193,7 @@ const App = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="Register"
-              component={RegisterScreen}
+              name="Register"              component={RegisterScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -209,7 +207,7 @@ const App = () => {
             <Stack.Screen
               name="DA_SelectLanguage"
               component={DA_SelectLanguage}
-              options={{
+              options={{ 
                 headerShown: false,
                 gestureEnabled: false,
               }}
@@ -240,6 +238,11 @@ const App = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="DA_ReadOutLoudDescriptionScreen"
+              component={DA_ReadOutLoudDescriptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="DA_ReadOutLoudScreen"
               component={DA_ReadOutLoudScreen}
               options={{ headerShown: false }}
@@ -247,21 +250,6 @@ const App = () => {
             <Stack.Screen
               name="DA_SpellingScreen"
               component={DA_SpellingScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="DA_SpellingScreen2"
-              component={DA_SpellingScreen2}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="DA_SpellingScreen3"
-              component={DA_SpellingScreen3}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="DA_SpellingScreen4"
-              component={DA_SpellingScreen4}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -299,6 +287,8 @@ const App = () => {
               component={DA_BingoDescriptionScreen}
               options={{ headerShown: false }}
             />
+            
+            
 
             {/* Remidial */}
 
@@ -501,6 +491,7 @@ const App = () => {
         </NavigationContainer>
       </I18nextProvider>
     </Provider>
+  
   );
 };
 

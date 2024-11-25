@@ -149,7 +149,7 @@ const RegisterScreen = ({ navigation }) => {
                     <Text style={styles.createTxt}>Already have an account?</Text>
                 </TouchableOpacity>
                 {<Text style={styles.errorMessage}>{errorMessage}</Text>}
-                {isLoading && <ActivityIndicator size="large" color="#FF3939" />} 
+                {isLoading && <ActivityIndicator size={50} color="#FF3939" />} 
             </View>
         </ScrollView>
     );

@@ -48,3 +48,26 @@ export const words_ta = [
     { word: 'நிலம்', similar: ['நிலவ', 'நிலர', 'நிலம', 'நிலா', 'நிலவ'] },
   ];
   
+
+//   export const audio_ta = [
+//     { yellow: 'மரம்', audio: require('../VoiceRecordings/Maram.ogg'), words: ['கரம்', 'பரம்', 'மரம்'] },
+//     { yellow: 'நூல்', audio: require('../VoiceRecordings/Nool.ogg'), words: ['நூல்', 'மூல்', 'சூல்'] },
+//     { yellow: 'காடு', audio: require('../VoiceRecordings/Kaadu.ogg'), words: ['நாடு', 'காடு', 'பாடு'] },
+//     { yellow: 'நதி', audio: require('../VoiceRecordings/Nadhi.ogg'), words: ['நதி', 'சதி', 'கதி'] },
+//     { yellow: 'தொலை', audio: require('../VoiceRecordings/Tholai.ogg'), words: ['தொலை', 'சொலை', 'மொலை'] },
+//     { yellow: 'குடம்', audio: require('../VoiceRecordings/Kudam.ogg'), words: ['குடம்', 'துடம்', 'புடம்'] },
+//     { yellow: 'விழி', audio: require('../VoiceRecordings/Vizhi.ogg'), words: ['விழி', 'மிழி', 'நிழி'] },
+//     { yellow: 'மருந்து', audio: require('../VoiceRecordings/Marundhu.ogg'), words: ['கருந்து', 'மருந்து', 'பருந்து'] },
+//     { yellow: 'தலை', audio: require('../VoiceRecordings/Thalai.ogg'), words: ['தலை', 'சலை', 'நலை'] },
+//     { yellow: 'பசு', audio: require('../VoiceRecordings/Pasu.ogg'), words: ['பசு', 'மசு', 'சசு'] },
+//     { yellow: 'புத்தகம்', audio: require('../VoiceRecordings/Puthagam.ogg'), words: ['புத்தகம்', 'வுத்தகம்', 'சுத்தகம்'] },
+//     { yellow: 'வண்டி', audio: require('../VoiceRecordings/Vandi.ogg'), words: ['கண்டி', 'வண்டி', 'தண்டி'] },
+//     { yellow: 'அம்மா', audio: require('../VoiceRecordings/Amma.ogg'), words: ['அம்மா', 'தம்மா', 'சம்மா'] },
+//     { yellow: 'படம்', audio: require('../VoiceRecordings/Padam.ogg'), words: ['படம்', 'நடம்', 'கடம்'] },
+//     { yellow: 'விண்மீன்', audio: require('../VoiceRecordings/Vinmeen.ogg'), words: ['மண்மீன்', 'விண்மீன்', 'பண்மீன்'] },
+//     { yellow: 'கடல்', audio: require('../VoiceRecordings/Kadal.ogg'), words: ['கடல்', 'நடல்', 'தடல்'] },
+//     { yellow: 'மலை', audio: require('../VoiceRecordings/Malai.ogg'), words: ['சிலை', 'மலை', 'வலை'] },
+//     { yellow: 'வீடு', audio: require('../VoiceRecordings/Veedu.ogg'), words: ['பீடு', 'வீடு', 'சீடு'] },
+//     { yellow: 'தோட்டம்', audio: require('../VoiceRecordings/Thottam.ogg'), words: ['நோட்டம்', 'தோட்டம்', 'வோட்டம்'] },
+//     { yellow: 'கழுதை', audio: require('../VoiceRecordings/Kazhudhai.ogg'), words: ['கழுதை', 'மழுதை', 'தழுதை'] },
+// ];

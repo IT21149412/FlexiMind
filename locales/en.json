@@ -11,5 +11,21 @@
     "number2": "2",
     "letterSounds": "TAMIL LETTER\n SOUNDS",
     "vowelSounds": "Tamil Vowel Letter Sounds",
-    "consonantSounds": "Tamil Consonant Letter Sounds"
+    "consonantSounds": "Tamil Consonant Letter Sounds",
+
+
+    "titlelnc": "Listen and Choose!",
+    "description": "Hey there! 🌟 Get ready for a new challenge! Listen carefully as a word is spoken out loud. Then, pick the same word from the list below. Need to hear it again? Tap your speaker on the writing board for another listen. Let's dive in and show off your amazing listening skills!",
+    "nextButton": "Next",
+    "consentTitle": "Your Child's Dyslexia Assessment Journey Begins Here...",
+    "namePlaceholder": "Enter your child's name",
+    "ageLabel": "Select Child's Age (6-10)",
+    "guardianEmailPlaceholder": "Enter guardian's email",
+    "psychiatristEmailPlaceholder": "Enter psychiatrist's email (Optional)",
+    "keywordPlaceholder": "Enter a keyword",
+    "consentText": "I consent to sharing detailed assessment results with both myself (as the guardian) and my child's psychiatrist.",
+    "modalDescription": "Ready to start? Enter the required details and tap 'Begin'. Our activities are carefully crafted to help us understand dyslexia better, like detectives solving a mystery! Before we dive in, please give us your consent to share detailed results with you and your child's trusted psychiatrist. Thanks for trusting us with this important journey!",
+    "beginButton": "BEGIN",
+    "proceedButton": "Proceed",
+    "cancelButton": "Cancel"
 }
