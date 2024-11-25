@@ -3,14 +3,16 @@ import { View, Text, TextInput, Image, TouchableOpacity, Modal, StyleSheet } fro
 import { translations } from './PhraseList'; // Import translations
 import { auth, db } from '../firebase'; // Import Firebase auth and Firestore
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { useTranslation } from 'react-i18next';
 
 const languageMap = {
-  ENGLISH: 'en',
-  TAMIL: 'ta',
+  en: 'en',
+  ta: 'ta',
 };
 
 const DA_ParentConsentScreen = ({ route, navigation }) => {
-  const { language = 'ENGLISH' } = route.params; // Extract language from route params
+  const { t } = useTranslation(); // Use the hook to access translations
+  const { language = 'en' } = route.params; // Extract language from route params
   const mappedLanguage = languageMap[language] || 'en'; // Map language
 
   const [childName, setChildName] = useState('');

@@ -9,14 +9,14 @@ const DA_ListenAndChooseDescriptionScreen = ({ navigation, route }) => {
   const [hasNavigated, setHasNavigated] = useState(false);
 
   // Convert the language to lowercase to match the keys in the translations object
-  const langKey = language.toLowerCase() === 'english' ? 'en' : 'ta'; 
+  const langKey = language.toLowerCase() === 'en' ? 'en' : 'ta'; 
   const langData = translations[langKey];
 
   useEffect(() => {
     const loadSound = async () => {
       const soundObject = new Audio.Sound();
       const source =
-        language === 'ENGLISH'
+        language === 'en'
           ? require('../../assets/VoiceRecordings/ListenAndChooseEnglish.mp3')
           : require('../../assets/VoiceRecordings/tamil.m4a');
 
@@ -56,19 +56,19 @@ const DA_ListenAndChooseDescriptionScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={language === 'ENGLISH' ? styles.textTopicE : styles.textTopicT}>
-        {langData.title}
+      <Text style={language === 'en' ? styles.textTopicE : styles.textTopicT}>
+        {langData.titlelnc}
       </Text>
       <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
       <View style={styles.overlay}></View>
-      <Text style={language === 'ENGLISH' ? styles.contentE : styles.contentT}>
+      <Text style={language === 'en' ? styles.contentE : styles.contentT}>
         {langData.description}
       </Text>
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>{langData.nextButton}</Text>
       </TouchableOpacity>
       <Image
-        style={language === 'ENGLISH' ? styles.dashImgE : styles.dashImg}
+        style={language === 'en' ? styles.dashImgE : styles.dashImg}
         source={require('../../assets/Celebrate.png')}
       />
     </View>

@@ -336,7 +336,7 @@ const DA_ResultsScreen = ({ navigation, route }) => {
     );
   }
 
-  return language === 'ENGLISH' ? <EnglishScreen {...{ navigation, activityPercentages, averagePercentage }} /> : <TamilScreen {...{ navigation, activityPercentages, averagePercentage }} />;
+  return language === 'en' ? <EnglishScreen {...{ navigation, activityPercentages, averagePercentage }} /> : <TamilScreen {...{ navigation, activityPercentages, averagePercentage }} />;
 };
 
 

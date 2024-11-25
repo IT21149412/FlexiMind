@@ -717,7 +717,7 @@ const DA_BingoScreen = ({ navigation, route }) => {
   const userId = user ? user.uid : null;
 
   useEffect(() => {
-    const wordList = language === 'ENGLISH' ? words_en : words_ta;
+    const wordList = language === 'en' ? words_en : words_ta;
     const { correctWord, shuffledWords } = generateWordSet(usedWords, wordList);
     setCorrectWord(correctWord); // Now you can use setCorrectWord since it's defined
     setBingoCard(shuffledWords);
@@ -771,7 +771,7 @@ const DA_BingoScreen = ({ navigation, route }) => {
         navigation.navigate('DA_MatchingWordsDescriptionScreen', { language });
     } else {
         // If it's not the last round, continue to the next round
-        const wordList = language === 'ENGLISH' ? words_en : words_ta;
+        const wordList = language === 'en' ? words_en : words_ta;
         const { correctWord, shuffledWords } = generateWordSet([...usedWords, correctWord], wordList);
 
         // Set up the next round

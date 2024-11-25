@@ -213,8 +213,8 @@ import { db, auth } from '../firebase'; // Firebase instance for Firestore
 import { doc, setDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore'; // Firestore methods
 
 const wordList = {
-  ENGLISH: ['CLASS', 'GLASS', 'GRASS', 'BURN', 'TURN', 'FURN', 'FRANCE', 'TRANCE', 'CHANCE', 'BEACH', 'REACH', 'TEACH', 'FUNNY', 'SUNNY', 'BUNNY', 'GAME', 'SAME', 'CAME'],
-  TAMIL: ['மரம்', 'வனம்', 'பதம்', 'வனம்', 'மண்', 'நலம்', 'பணம்', 'வனத', 'அரசவ', 'பணவ', 'மகன', 'கலத']
+  en: ['CLASS', 'GLASS', 'GRASS', 'BURN', 'TURN', 'FURN', 'FRANCE', 'TRANCE', 'CHANCE', 'BEACH', 'REACH', 'TEACH', 'FUNNY', 'SUNNY', 'BUNNY', 'GAME', 'SAME', 'CAME'],
+  ta: ['மரம்', 'வனம்', 'பதம்', 'வனம்', 'மண்', 'நலம்', 'பணம்', 'வனத', 'அரசவ', 'பணவ', 'மகன', 'கலத']
 };
 
 const getCompoundLetters = (word) => {
@@ -314,7 +314,7 @@ const DA_SpellingScreen = ({ navigation, route }) => {
 
   const getRandomAdditionalLetters = (word, count) => {
     const additionalLetters = [];
-    const allLetters = language === 'ENGLISH' ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : 'அஆஇஈஉஊஎஏஐஒஓஔகஙசஞடணதநபமயரலவழளறன';
+    const allLetters = language === 'en' ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : 'அஆஇஈஉஊஎஏஐஒஓஔகஙசஞடணதநபமயரலவழளறன';
     for (let i = 0; i < count; i++) {
       let randomLetter;
       do {
@@ -408,9 +408,9 @@ const DA_SpellingScreen = ({ navigation, route }) => {
     } else {
       setTimeout(() => {
         setModalVisible(false);
-        if (language === 'TAMIL') {
+        if (language === 'ta') {
           navigation.navigate('DA_ReadOutLoudDescriptionScreen', { language });
-        } else if (language === 'ENGLISH') {
+        } else if (language === 'en') {
           navigation.navigate('DA_GoodJobScreenSpell', { language });
         }
       }, 100);
@@ -419,7 +419,7 @@ const DA_SpellingScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textTopic}>{language === 'ENGLISH' ? 'Spell the Word!' : 'வார்த்தையை உச்சரிக்கவும்!'}</Text>
+      <Text style={styles.textTopic}>{language === 'en' ? 'Spell the Word!' : 'வார்த்தையை உச்சரிக்கவும்!'}</Text>
       <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
       <View style={styles.overlay} />
       <View style={styles.descriptionContainer}>
@@ -447,7 +447,7 @@ const DA_SpellingScreen = ({ navigation, route }) => {
       </View>
 
       <TouchableOpacity style={styles.nextButton} onPress={onClickShowModal}>
-        <Text style={styles.nextButtonText}>{language === 'ENGLISH' ? 'Next' : 'அடுத்தது'}</Text>
+        <Text style={styles.nextButtonText}>{language === 'en' ? 'Next' : 'அடுத்தது'}</Text>
       </TouchableOpacity>
       
       <Modal
@@ -461,7 +461,7 @@ const DA_SpellingScreen = ({ navigation, route }) => {
             {renderAnimation()}
             <Text style={styles.modalText}>{renderModalText()}</Text>
             <TouchableOpacity style={styles.modalNextButton} onPress={onClickNextInModal}>
-              <Text style={styles.nextButtonText}>{language === 'ENGLISH' ? 'Next' : 'அடுத்தது'}</Text>
+              <Text style={styles.nextButtonText}>{language === 'en' ? 'Next' : 'அடுத்தது'}</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -121,7 +121,7 @@ const DA_ReadOutLoudScreen = ({ navigation, route }) => {
   const [startTime, setStartTime] = useState(null); // To track time taken for each round
   const [usedWords, setUsedWords] = useState([]); // Track used words
 
-  const wordLists = language === 'ENGLISH' ? require('../../assets/WordLists/read_words_en').read_words_en : require('../../assets/WordLists/read_words_ta').read_words_ta;
+  const wordLists = language === 'en' ? require('../../assets/WordLists/read_words_en').read_words_en : require('../../assets/WordLists/read_words_ta').read_words_ta;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -326,7 +326,7 @@ const DA_ReadOutLoudScreen = ({ navigation, route }) => {
 
   return (
     <>
-      {language === 'ENGLISH' ? (
+      {language === 'en' ? (
         <EnglishScreen
           wordPair={{ yellow: correctWord }}
           onClickRecord={startRecording}
