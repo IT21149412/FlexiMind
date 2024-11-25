@@ -813,7 +813,7 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
   const maxRounds = 4;
   const [intervalId, setIntervalId] = useState(null);
 
-  const wordLists = language === 'ENGLISH' ? require('../../assets/WordLists/words_en').words_en : require('../../assets/WordLists/words_ta').words_ta;
+  const wordLists = language === 'en' ? require('../../assets/WordLists/words_en').words_en : require('../../assets/WordLists/words_ta').words_ta;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -971,7 +971,7 @@ const DA_MatchingWordsScreen = ({ navigation, route }) => {
 
   return (
     <>
-      {language === 'ENGLISH' ? (
+      {language === 'en' ? (
         <EnglishScreen
           timer={timer}
           wordPair={wordPair}

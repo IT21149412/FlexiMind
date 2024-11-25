@@ -470,7 +470,7 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
   ];
 
   useEffect(() => {
-    const wordPairs = language === 'ENGLISH' ? englishWordPairs : tamilWordPairs;
+    const wordPairs = language === 'en' ? englishWordPairs : tamilWordPairs;
     setNewWordPair(wordPairs);
   }, [language, currentRound]);
 
@@ -643,7 +643,7 @@ const DA_ListenAndChooseScreen = ({ navigation, route }) => {
 
   return (
     <>
-      {language === 'ENGLISH' ? (
+      {language === 'en' ? (
         <EnglishScreen
           timer={timer}
           wordPair={wordPair}

@@ -42,7 +42,7 @@ const DA_ReadOutLoudDescriptionScreen = ({ navigation, route }) => {
     useEffect(() => {
         const loadSound = async () => {
             const soundObject = new Audio.Sound();
-            const source = language === 'ENGLISH' ? require('../../assets/VoiceRecordings/ListenAndChooseEnglish.mp3') : require('../../assets/VoiceRecordings/tamil.m4a');
+            const source = language === 'en' ? require('../../assets/VoiceRecordings/ListenAndChooseEnglish.mp3') : require('../../assets/VoiceRecordings/tamil.m4a');
 
             try {
                 await soundObject.loadAsync(source);
@@ -84,7 +84,7 @@ const DA_ReadOutLoudDescriptionScreen = ({ navigation, route }) => {
     };
 
     return (
-        language === 'ENGLISH' ? (
+        language === 'en' ? (
             <EnglishScreen handleNext={handleNext} />
         ) : (
             <TamilScreen handleNext={handleNext} />

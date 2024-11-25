@@ -42,7 +42,7 @@ const DA_GoodJobScreenListen = ({ navigation, route }) => {
   useEffect(() => {
     const loadSound = async () => {
       const soundObject = new Audio.Sound();
-      const source = language === 'ENGLISH' ? require('../../assets/VoiceRecordings/GoodJobEnglish.mp3') : require('../../assets/VoiceRecordings/tamil.m4a');
+      const source = language === 'en' ? require('../../assets/VoiceRecordings/GoodJobEnglish.mp3') : require('../../assets/VoiceRecordings/tamil.m4a');
 
       try {
         await soundObject.loadAsync(source);
@@ -70,7 +70,7 @@ const DA_GoodJobScreenListen = ({ navigation, route }) => {
     navigation.navigate('DA_SpellingDescriptionScreen', { language });
   };
 
-  return language === 'ENGLISH' ? <EnglishScreen handleNext={handleNext} /> : <TamilScreen handleNext={handleNext} />;
+  return language === 'en' ? <EnglishScreen handleNext={handleNext} /> : <TamilScreen handleNext={handleNext} />;
 };
 
 const styles = StyleSheet.create({
