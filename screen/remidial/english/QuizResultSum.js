@@ -121,7 +121,7 @@ const QuizSummary = ({ route, navigation }) => {
     };
 
     // Fetch prediction from Flask API
-    fetch('http://192.168.1.200:5001/predict', {
+    fetch('http://192.168.186.38:5001/predict', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

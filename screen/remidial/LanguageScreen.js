@@ -3,11 +3,11 @@ import { View, Text, Button, Image, StyleSheet } from 'react-native';
 
 const QuizSelectionScreen = ({ navigation }) => {
   const handleEnglish = () => {
-    navigation.navigate('HomeRemidial');
+    navigation.navigate('HomeRemidial', { language: 'en' });
   };
 
   const handleTamil = () => {
-    navigation.navigate('HomeRemidialTamil');
+    navigation.navigate('HomeRemidial', { language: 'ta' });
   };
 
   return (
