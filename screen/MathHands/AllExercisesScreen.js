@@ -1,52 +1,51 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import LottieView from "lottie-react-native";
-import { translations } from "./locales";
 
-const Allexercises = ({ route, navigation }) => {
-  const { language } = route.params;
-  const t = translations[language];
-
+const Allexercises = ({ navigation }) => {
   const basicmath = () => {
-    navigation.navigate("DetectiveScreen", { language: language });
+    navigation.navigate("DetectiveScreen");
   };
 
   const numberCrunches = () => {
-    navigation.navigate("MathHandsMenu", { language: language });
+    navigation.navigate("MathHandsMenu");
   };
+  
   const allnumdet = () => {
-    navigation.navigate("FlashcardMatchingScreen", { language: language });
+    navigation.navigate("FlashcardMatchingScreen");
   };
 
   const MemmoryMissionStart = () => {
-    navigation.navigate("SpacedRepetitionScreen", { language: language });
+    navigation.navigate("SpacedRepetitionScreen");
   };
+
   const startMagicQuest = () => {
-    navigation.navigate("GameMap", { language: language });
+    navigation.navigate("GameMap");
   };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.textTopic}>{t.startLearning}</Text>
+      <Text style={styles.textTopic}>Let's get started</Text>
       <Image style={styles.bgImg} source={require("../../assets/bg.jpg")} />
       <View style={styles.overlay}>
         <View style={styles.listContainer}>
           <TouchableOpacity style={styles.listItem} onPress={numberCrunches}>
-            <Text style={styles.listItemText}>{t.numberLearning}</Text>
+            <Text style={styles.listItemText}>Number Learning</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.listItem} onPress={basicmath}>
-            <Text style={styles.listItemText}>{t.numberDetectives}</Text>
+            <Text style={styles.listItemText}>Number Detectives</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.listItem} onPress={allnumdet}>
-            <Text style={styles.listItemText}>{t.numberMatching}</Text>
+            <Text style={styles.listItemText}>Number Matching</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.listItem}
             onPress={MemmoryMissionStart}
           >
-            <Text style={styles.listItemText}>{t.memoryMission}</Text>
+            <Text style={styles.listItemText}>Memory Mission</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.listItem} onPress={startMagicQuest}>
-            <Text style={styles.listItemText}>Visit magic garden</Text>
+            <Text style={styles.listItemText}>Visit Magic Garden</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.magicButton}
@@ -58,15 +57,6 @@ const Allexercises = ({ route, navigation }) => {
             />
           </TouchableOpacity>
         </View>
-        {/* <View style={styles.characterContainer}>
-          <LottieView
-            style={styles.characterAnimation}
-            source={require("../../assets/fox.json")}
-            autoPlay
-            loop
-          />
-          <Text style={styles.characterText}>{t.meetMia}</Text>
-        </View> */}
         <View style={{ flex: 1 }}>
           <LottieView
             style={styles.lottie}
@@ -127,37 +117,6 @@ const styles = StyleSheet.create({
   },
   listItemText: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: "#4D86F7",
-  },
-  characterContainer: {
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  characterAnimation: {
-    width: 200,
-    height: 200,
-  },
-  characterText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#4D86F7",
-  },
-  hintButton: {
-    position: "absolute",
-    bottom: 20,
-    left: 20,
-    backgroundColor: "#FFF",
-    padding: 10,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  hintButtonText: {
-    fontSize: 16,
     fontWeight: "bold",
     color: "#4D86F7",
   },

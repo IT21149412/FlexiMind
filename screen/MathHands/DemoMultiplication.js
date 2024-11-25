@@ -13,11 +13,9 @@ import axios from "axios";
 import * as ImageManipulator from "expo-image-manipulator";
 import Svg, { Circle, Text as SvgText } from "react-native-svg";
 import LottieView from "lottie-react-native";
-import { translations } from "./locales";
+import { BASE_URL } from "./MathHandsConfig";
 
-const DemoMultiplication = ({ route, navigation }) => {
-  const { language } = route.params;
-  const t = translations[language];
+const DemoMultiplication = ({ navigation }) => {
   const [number1, setNumber1] = useState(0);
   const [number2, setNumber2] = useState(0);
   const [facing, setFacing] = useState("front");
@@ -28,14 +26,14 @@ const DemoMultiplication = ({ route, navigation }) => {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
   const [timeLeft, setTimeLeft] = useState(5);
-  const [showLottie, setShowLottie] = useState(false); // New state for Lottie
-  const [showIncorrectLottie, setShowIncorrectLottie] = useState(false); // New state for incorrect Lottie animation
+  const [showLottie, setShowLottie] = useState(false); 
+  const [showIncorrectLottie, setShowIncorrectLottie] = useState(false);
 
   useEffect(() => {
     let intervalId = null;
 
     if (isCapturing) {
-      setTimeLeft(5); // Reset the timer
+      setTimeLeft(5);
       intervalId = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev === 1) {
@@ -60,38 +58,27 @@ const DemoMultiplication = ({ route, navigation }) => {
       const expectedAnswer = number1 * number2;
       if (fingerCount === expectedAnswer) {
         setFeedback("Correct! Great job!");
-        setShowLottie(true); // Show Lottie animation if correct
-        setShowIncorrectLottie(false); // Hide incorrect Lottie animation
+        setShowLottie(true);
+        setShowIncorrectLottie(false);
       } else {
         setFeedback(
-          `Incorrect. The correct answer is ${expectedAnswer}.\n                    please try again!`
+          `Incorrect. The correct answer is ${expectedAnswer}.\nPlease try again!`
         );
-        setShowLottie(false); // Show Lottie animation if correct
-        setShowIncorrectLottie(true); // Hide incorrect Lottie animation
+        setShowLottie(false);
+        setShowIncorrectLottie(true);
       }
     }
   }, [fingerCount, number1, number2]);
 
   useEffect(() => {
     generateRandomNumbers();
-  }, []); // Empty dependency array to run only once on component mount
+  }, []);
 
   const generateRandomNumbers = () => {
-    // Generate random numbers between 1 (inclusive) and a higher limit (e.g., 20)
-    const maxNumber = 20; // Adjust the max number as needed
-    let tempNum1 = Math.floor(Math.random() * maxNumber) + 1;
-    let tempNum2 = Math.floor(Math.random() * maxNumber) + 1;
+    const maxNumber = 10;
+    const tempNum1 = Math.floor(Math.random() * maxNumber) + 1;
+    const tempNum2 = Math.floor(Math.random() * maxNumber) + 1;
 
-    // Ensure the product is within the desired range (0-10)
-    let product = tempNum1 * tempNum2;
-    while (product > 10) {
-      // If the product is greater than 10, regenerate one or both numbers
-      tempNum1 = Math.floor(Math.random() * maxNumber) + 1;
-      tempNum2 = Math.floor(Math.random() * maxNumber) + 1;
-      product = tempNum1 * tempNum2;
-    }
-
-    // Update state variables with the generated numbers
     setNumber1(tempNum1);
     setNumber2(tempNum2);
   };
@@ -117,14 +104,14 @@ const DemoMultiplication = ({ route, navigation }) => {
 
   const captureAndProcessImage = async () => {
     if (cameraRef.current) {
-      let photo = await cameraRef.current.takePictureAsync();
-      let resizedPhoto = await ImageManipulator.manipulateAsync(
+      const photo = await cameraRef.current.takePictureAsync();
+      const resizedPhoto = await ImageManipulator.manipulateAsync(
         photo.uri,
         [{ resize: { width: 640 } }],
         { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
       );
 
-      let formData = new FormData();
+      const formData = new FormData();
       formData.append("image", {
         uri: resizedPhoto.uri,
         type: "image/jpeg",
@@ -133,7 +120,7 @@ const DemoMultiplication = ({ route, navigation }) => {
 
       try {
         const response = await axios.post(
-          "http://192.168.8.107:5000/process",
+          `${BASE_URL}/process`,
           formData,
           {
             headers: {
@@ -194,7 +181,7 @@ const DemoMultiplication = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textTopic}>{t.multiplicationMagic}</Text>
+      <Text style={styles.textTopic}>Multiplication Magic</Text>
       <Image
         style={styles.bgImg}
         source={require("../../assets/bg.jpg")}
@@ -216,11 +203,9 @@ const DemoMultiplication = ({ route, navigation }) => {
         </View>
         <View style={styles.messageBox}>
           <Text style={styles.messageText}>
-            <Image
-              source={require("../../assets/warning.png")}
-              style={styles.warningIcon}
-            />
-            {t.showMathProblem}
+            Show the answer to your math problem using your fingers. Math Hands
+            will then recognize your finger positions and confirm if your
+            answer is correct!
           </Text>
         </View>
         <View style={styles.cameraContainer}>
@@ -252,18 +237,17 @@ const DemoMultiplication = ({ route, navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            {showLottie &&
-              !showIncorrectLottie && ( // Conditionally render correct Lottie animation
-                <LottieView
-                  source={require("../../assets/welldone.json")} // Path to your correct Lottie file
-                  autoPlay
-                  loop={false}
-                  style={styles.lottie}
-                />
-              )}
-            {showIncorrectLottie && ( // Conditionally render incorrect Lottie animation
+            {showLottie && !showIncorrectLottie && (
               <LottieView
-                source={require("../../assets/sad3.json")} // Path to your incorrect Lottie file
+                source={require("../../assets/welldone.json")}
+                autoPlay
+                loop={false}
+                style={styles.lottie}
+              />
+            )}
+            {showIncorrectLottie && (
+              <LottieView
+                source={require("../../assets/sad3.json")}
                 autoPlay
                 loop={true}
                 style={styles.lottie}
@@ -382,7 +366,6 @@ const styles = StyleSheet.create({
     left: "35%",
     marginTop: 10,
     padding: 10,
-    // backgroundColor: '#14274e',
     borderRadius: 4,
   },
   text: {
