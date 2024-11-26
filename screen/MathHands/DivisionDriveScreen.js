@@ -7,17 +7,17 @@ import {
   Image,
   Button,
   Modal,
-} from 'react-native';
-import { CameraView, useCameraPermissions } from 'expo-camera';
-import axios from 'axios';
-import * as ImageManipulator from 'expo-image-manipulator';
-import Svg, { Circle, Text as SvgText } from 'react-native-svg';
-import LottieView from 'lottie-react-native';
-import { translations } from './locales';
 
-const DivisionDriveScreen = ({ route, navigation }) => {
-  const { language } = route.params;
-  const t = translations[language];
+} from "react-native";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import axios from "axios";
+import * as ImageManipulator from "expo-image-manipulator";
+import Svg, { Circle, Text as SvgText } from "react-native-svg";
+import LottieView from "lottie-react-native";
+import { BASE_URL } from "./MathHandsConfig";
+
+
+const DivisionDriveScreen = ({ navigation }) => {
   const [number1, setNumber1] = useState(0);
   const [number2, setNumber2] = useState(0);
   const [facing, setFacing] = useState('front');
@@ -28,14 +28,14 @@ const DivisionDriveScreen = ({ route, navigation }) => {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
   const [timeLeft, setTimeLeft] = useState(5);
-  const [showLottie, setShowLottie] = useState(false); // New state for Lottie
-  const [showIncorrectLottie, setShowIncorrectLottie] = useState(false); // New state for incorrect Lottie animation
+  const [showLottie, setShowLottie] = useState(false);
+  const [showIncorrectLottie, setShowIncorrectLottie] = useState(false);
 
   useEffect(() => {
     let intervalId = null;
 
     if (isCapturing) {
-      setTimeLeft(5); // Reset the timer
+      setTimeLeft(5);
       intervalId = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev === 1) {
@@ -57,35 +57,33 @@ const DivisionDriveScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     generateRandomNumbers();
-  }, []); // Empty dependency array to run only once on component mount
+  }, []);
 
   useEffect(() => {
     if (fingerCount !== null) {
       const expectedAnswer = number1 / number2;
       if (fingerCount === expectedAnswer) {
-        setFeedback('Correct! Great job!');
-        setShowLottie(true); // Show Lottie animation if correct
-        setShowIncorrectLottie(false); // Hide incorrect Lottie animation
+
+        setFeedback("Correct! Great job!");
+        setShowLottie(true);
+        setShowIncorrectLottie(false);
+
       } else {
         setFeedback(
-          `Incorrect. The correct answer is ${expectedAnswer}.\n                    please try again!`
+          `Incorrect. The correct answer is ${expectedAnswer}. Please try again!`
         );
-        setShowLottie(false); // Show Lottie animation if correct
-        setShowIncorrectLottie(true); // Hide incorrect Lottie animation
+        setShowLottie(false);
+        setShowIncorrectLottie(true);
       }
     }
   }, [fingerCount, number1, number2]);
 
   const generateRandomNumbers = () => {
-    // Generate a random divisor within the desired range (1-10)
     const divisor = Math.floor(Math.random() * 10) + 1;
-
-    // Generate a dividend that is a multiple of the divisor within the range (0-10)
     let dividend = Math.floor(Math.random() * 10) * divisor;
     while (dividend > 10) {
       dividend = Math.floor(Math.random() * 10) * divisor;
     }
-
     setNumber1(dividend);
     setNumber2(divisor);
   };
@@ -111,15 +109,17 @@ const DivisionDriveScreen = ({ route, navigation }) => {
 
   const captureAndProcessImage = async () => {
     if (cameraRef.current) {
-      let photo = await cameraRef.current.takePictureAsync();
-      let resizedPhoto = await ImageManipulator.manipulateAsync(
+      const photo = await cameraRef.current.takePictureAsync();
+      const resizedPhoto = await ImageManipulator.manipulateAsync(
         photo.uri,
         [{ resize: { width: 640 } }],
         { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
       );
 
-      let formData = new FormData();
-      formData.append('image', {
+
+      const formData = new FormData();
+      formData.append("image", {
+
         uri: resizedPhoto.uri,
         type: 'image/jpeg',
         name: 'photo.jpg',
@@ -127,7 +127,9 @@ const DivisionDriveScreen = ({ route, navigation }) => {
 
       try {
         const response = await axios.post(
-          'http://192.168.8.101:5000/process',
+
+          `${BASE_URL}/process`,
+
           formData,
           {
             headers: {
@@ -188,7 +190,7 @@ const DivisionDriveScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textTopic}>{t.divisionDrive}</Text>
+      <Text style={styles.textTopic}>Division Drive</Text>
       <Image
         style={styles.bgImg}
         source={require('../../assets/bg.jpg')}
@@ -210,11 +212,11 @@ const DivisionDriveScreen = ({ route, navigation }) => {
         </View>
         <View style={styles.messageBox}>
           <Text style={styles.messageText}>
-            <Image
-              source={require('../../assets/warning.png')}
-              style={styles.warningIcon}
-            />
-            {t.showMathProblem}
+
+            Show the answer to your math problem using your fingers. Math Hands
+            will then recognize your finger positions and confirm if your
+            answer is correct!
+
           </Text>
         </View>
         <View style={styles.cameraContainer}>
@@ -246,18 +248,19 @@ const DivisionDriveScreen = ({ route, navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            {showLottie &&
-              !showIncorrectLottie && ( // Conditionally render correct Lottie animation
-                <LottieView
-                  source={require('../../assets/welldone.json')} // Path to your correct Lottie file
-                  autoPlay
-                  loop={false}
-                  style={styles.lottie}
-                />
-              )}
-            {showIncorrectLottie && ( // Conditionally render incorrect Lottie animation
+
+            {showLottie && !showIncorrectLottie && (
               <LottieView
-                source={require('../../assets/sad3.json')} // Path to your incorrect Lottie file
+                source={require("../../assets/welldone.json")}
+                autoPlay
+                loop={false}
+                style={styles.lottie}
+              />
+            )}
+            {showIncorrectLottie && (
+              <LottieView
+                source={require("../../assets/sad3.json")}
+
                 autoPlay
                 loop={true}
                 style={styles.lottie}
@@ -347,10 +350,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: 'white',
   },
-  warningIcon: {
-    width: 20,
-    height: 20,
-  },
   cameraContainer: {
     width: '80%',
     height: 300,
@@ -376,7 +375,6 @@ const styles = StyleSheet.create({
     left: '35%',
     marginTop: 10,
     padding: 10,
-    // backgroundColor: '#14274e',
     borderRadius: 4,
   },
   text: {

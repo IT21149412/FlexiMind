@@ -1,0 +1,20 @@
+export const read_words_en = [
+    'CLASS',
+    'GLASS',
+    'GRASS',
+    'BURN',
+    'TURN',
+    'FURN', 
+    'FRANCE', 
+    'TRANCE', 
+    'CHANCE', 
+    'BEACH', 
+    'REACH', 
+    'TEACH', 
+    'FUNNY', 
+    'SUNNY', 
+    'BUNNY', 
+    'GAME', 
+    'SAME', 
+    'CAME'
+];

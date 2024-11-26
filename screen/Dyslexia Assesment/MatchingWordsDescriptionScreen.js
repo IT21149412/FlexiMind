@@ -13,7 +13,7 @@ const DA_MatchingWordsDescriptionScreen = ({ navigation, route }) => {
         const loadAndPlaySound = async () => {
             try {
                 const { sound: newSound } = await Audio.Sound.createAsync(
-                    language === 'ENGLISH'
+                    language === 'en'
                         ? require('../../assets/VoiceRecordings/MatchingWordsEnglish.mp3')
                         : require('../../assets/VoiceRecordings/tamil.m4a')
                 );
@@ -62,7 +62,7 @@ const DA_MatchingWordsDescriptionScreen = ({ navigation, route }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            {language === 'ENGLISH' ? (
+            {language === 'en' ? (
                 <EnglishScreen handleNext={handleNext} />
             ) : (
                 <TamilScreen handleNext={handleNext} />

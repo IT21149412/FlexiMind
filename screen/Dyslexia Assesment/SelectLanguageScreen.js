@@ -26,17 +26,17 @@ const DA_SelectLanguage = ({ navigation }) => {
 
             <View style={styles.languageContainer}>
                 <TouchableOpacity
-                    style={[styles.languageButton, selectedLanguage === 'TAMIL' ? styles.selectedLanguage : null]}
-                    onPress={() => handleSelectLanguage('TAMIL')}
+                    style={[styles.languageButton, selectedLanguage === 'ta' ? styles.selectedLanguage : null]}
+                    onPress={() => handleSelectLanguage('ta')}
                 >
-                    {selectedLanguage === 'TAMIL' && <View style={styles.circle}><Text style={styles.tick}>&#10004;</Text></View>}
+                    {selectedLanguage === 'ta' && <View style={styles.circle}><Text style={styles.tick}>&#10004;</Text></View>}
                     <Text style={styles.languageButtonText}>TAMIL</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.languageButton, selectedLanguage === 'ENGLISH' ? styles.selectedLanguage : null]}
-                    onPress={() => handleSelectLanguage('ENGLISH')}
+                    style={[styles.languageButton, selectedLanguage === 'en' ? styles.selectedLanguage : null]}
+                    onPress={() => handleSelectLanguage('en')}
                 >
-                    {selectedLanguage === 'ENGLISH' && <View style={styles.circle}><Text style={styles.tick}>&#10004;</Text></View>}
+                    {selectedLanguage === 'en' && <View style={styles.circle}><Text style={styles.tick}>&#10004;</Text></View>}
                     <Text style={styles.languageButtonText}>ENGLISH</Text>
                 </TouchableOpacity>
             </View>

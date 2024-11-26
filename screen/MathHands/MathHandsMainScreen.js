@@ -1,22 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import LottieView from "lottie-react-native";
 import { useNavigation } from "@react-navigation/native";
-import { translations } from "./locales";
-import { useLanguage } from "../../App";
 
 const MathHandsMainScreen = () => {
   const navigation = useNavigation();
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
-  const { changeLanguage } = useLanguage();
-
-  const handleLanguageChange = (lang) => {
-    setSelectedLanguage(lang);
-    changeLanguage(lang);
-  };
 
   const MathHandsMenu = () => {
-    navigation.navigate("Allexercises", { language: selectedLanguage });
+    navigation.navigate("Allexercises"); // No need to pass language
   };
 
   return (
@@ -32,25 +23,6 @@ const MathHandsMainScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>GO BACK</Text>
-        </TouchableOpacity>
-        <Text style={styles.subtitle}>Choose your language </Text>
-        <TouchableOpacity
-          style={[
-            styles.languageButton,
-            selectedLanguage === "en" && styles.selectedButton,
-          ]}
-          onPress={() => handleLanguageChange("en")}
-        >
-          <Text style={styles.buttonText}>English</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.languageButton,
-            selectedLanguage === "ta" && styles.selectedButton,
-          ]}
-          onPress={() => handleLanguageChange("ta")}
-        >
-          <Text style={styles.buttonText}>தமிழ்</Text>
         </TouchableOpacity>
         <View style={styles.lottieContainer}>
           <LottieView
@@ -109,18 +81,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: "80%",
     alignItems: "center",
-  },
-  languageButton: {
-    backgroundColor: "#7DCEA0",
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 25,
-    marginVertical: 5,
-    width: "60%",
-    alignItems: "center",
-  },
-  selectedButton: {
-    backgroundColor: "#2980b9", // Change this color to indicate selection
   },
   buttonText: {
     color: "white",

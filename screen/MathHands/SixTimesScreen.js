@@ -7,12 +7,15 @@ import {
   Image,
   Modal,
   Button,
-} from 'react-native';
-import { CameraView, useCameraPermissions } from 'expo-camera';
-import axios from 'axios';
-import * as ImageManipulator from 'expo-image-manipulator';
-import Svg, { Circle, Text as SvgText } from 'react-native-svg';
-import LottieView from 'lottie-react-native';
+
+} from "react-native";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import axios from "axios";
+import * as ImageManipulator from "expo-image-manipulator";
+import Svg, { Circle, Text as SvgText } from "react-native-svg";
+import LottieView from "lottie-react-native";
+import { BASE_URL2 } from "./MathHandsConfig";
+
 
 const SixTimesScreen = ({ route, navigation }) => {
   const [facing, setFacing] = useState('front');
@@ -85,7 +88,9 @@ const SixTimesScreen = ({ route, navigation }) => {
         });
 
         const response = await axios.post(
-          'http://192.168.8.101:5000/process-six-times-table',
+
+          `${BASE_URL2}/process-six-times-table`,
+
           formData,
           {
             headers: {
@@ -183,7 +188,9 @@ const SixTimesScreen = ({ route, navigation }) => {
       case 2:
         return (
           <View style={styles.stepContainer}>
-            <Text style={styles.stepText}>Step 2: Multiply by 5</Text>
+            <Text style={styles.stepText}>
+              Step 2: Multiply the raised fingers by 5
+            </Text>
             <View style={styles.iconsContainer}>
               {[...Array(result.finger_count)].map((_, i) => (
                 <Image
@@ -203,21 +210,18 @@ const SixTimesScreen = ({ route, navigation }) => {
         );
       case 3:
         return (
-          <View style={styles.stepContainer}>
-            <Text style={styles.stepText}>Step 3: Add Fingers</Text>
+          <View style={[styles.stepContainer, styles.stepBox]}>
+            <Text style={styles.stepText}>
+              Step 3: Add answers for step 1 and step 2
+            </Text>
             <View style={styles.additionContainer}>
-              <Image
-                source={require('../../assets/5.png')}
-                style={styles.additionImage}
-              />
-              <Text style={styles.additionText}>+</Text>
-              <Image
-                source={require('../../assets/2.png')}
-                style={styles.additionImage}
-              />
+
+              {/* Add images or icons for the numbers if needed */}
+
             </View>
-            <Text style={styles.explanationText}>
-              {result.multiple_of_5} + {result.finger_count} = {result.result}
+            <Text style={styles.explanationText2}>
+              Answer: {result.multiple_of_5} + {result.finger_count} ={" "}
+              {result.result}
             </Text>
           </View>
         );
@@ -430,6 +434,12 @@ const styles = StyleSheet.create({
     margin: 5,
     textAlign: 'center',
   },
+  explanationText2: {
+    fontSize: 24,
+    color: "black",
+    margin: 5,
+    textAlign: "center",
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -472,6 +482,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     marginHorizontal: 5,
+  },
+  stepBox: {
+    borderWidth: 2,
+    borderColor: "black",
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: "#f9f9f9", // Optional: add background color for better visibility
   },
 });
 

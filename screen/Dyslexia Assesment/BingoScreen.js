@@ -673,6 +673,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { doc, setDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore'; // Firestore methods
+import { db, auth } from '../firebase'; // Firebase instance for Firestore
 import { words_en } from '../../assets/WordLists/words_en';
 import { words_ta } from '../../assets/WordLists/words_ta';
 
@@ -698,8 +700,7 @@ const generateWordSet = (usedWords, wordList) => {
 };
 
 const DA_BingoScreen = ({ navigation, route }) => {
-  const { language, results, setResults } = route.params; // Receive the results and setResults
-
+  const { language } = route.params; // Results passed no longer needed since we're using Firestore
   const [usedWords, setUsedWords] = useState([]);
   const [bingoCard, setBingoCard] = useState([]);
   const [selectedWords, setSelectedWords] = useState([]);
@@ -709,24 +710,19 @@ const DA_BingoScreen = ({ navigation, route }) => {
   const [currentRound, setCurrentRound] = useState(1);
   const [startTime, setStartTime] = useState(null);
   const maxRounds = 4;
+  const [correctWord, setCorrectWord] = useState(''); // Fix: Add this state to track the correct word
 
-  const [gameData, setGameData] = useState([]);
-  const [correctWord, setCorrectWord] = useState('');
-
-  // Move updatedResults to a higher scope
-  const [updatedResults, setUpdatedResults] = useState(results);
+  // Firebase User
+  const user = auth.currentUser;
+  const userId = user ? user.uid : null;
 
   useEffect(() => {
-    const wordList = language === 'ENGLISH' ? words_en : words_ta;
+    const wordList = language === 'en' ? words_en : words_ta;
     const { correctWord, shuffledWords } = generateWordSet(usedWords, wordList);
-    setCorrectWord(correctWord);
+    setCorrectWord(correctWord); // Now you can use setCorrectWord since it's defined
     setBingoCard(shuffledWords);
     setStartTime(Date.now()); // Start time for the round
   }, [usedWords, language]);
-
-  useEffect(() => {
-    console.log('Results state:', updatedResults);
-  }, [updatedResults]);
 
   const handleWordPress = (id) => {
     if (selectedWords.includes(id)) {
@@ -736,70 +732,96 @@ const DA_BingoScreen = ({ navigation, route }) => {
     }
   };
 
-  const checkResults = () => {
-    const selectedCorrectWords = selectedWords.filter(id => bingoCard.find(item => item.id === id && item.word === correctWord));
-    const correctCount = selectedCorrectWords.length;
-    const totalSelected = selectedWords.length;
-    const timeTaken = (Date.now() - startTime) / 1000; // Time taken in seconds
-
-
-    const roundData = {
-      activity: 'bingo',
-      round: currentRound,
-      correctWord,
-      selectedWords: selectedWords.map(id => bingoCard.find(item => item.id === id)?.word),
-      correctCount,
-      isFullyCorrect: correctCount === 5 && totalSelected === 5,
-      timeTaken: timeTaken.toFixed(2),
-    };
-
-    // Log the current results and the new roundData to be added
-    console.log('Current Results:', updatedResults);
-    console.log('New Round Data:', roundData);
-
-    // Update the results state
-    setUpdatedResults([...updatedResults, roundData]);
-
-    setGameData([...gameData, roundData]);
-
-    if (correctCount === 5 && totalSelected === 5) {
-      setModalMessage('Good Job! You got all the words correct!');
-      setAnimationType('correct');
-    } else if (correctCount === 0) {
-      setModalMessage('Don’t be sad! Let’s do the next activity better!');
-      setAnimationType('wrong');
-    } else {
-      setModalMessage('You can do better next time!');
-      setAnimationType('better');
+  const storeResultsInFirestore = async (roundData) => {
+    if (!userId) {
+      console.error('No user logged in');
+      return;
     }
 
-    setModalVisible(true);
+    const docRef = doc(db, 'Bingo_Results', userId);
+
+    try {
+      if (currentRound === 1) {
+        await setDoc(docRef, {
+          userId,
+          activity: 'bingo',
+          results: [roundData],
+          timestamp: serverTimestamp(),
+        });
+      } else {
+        await updateDoc(docRef, {
+          results: arrayUnion(roundData),
+        });
+      }
+    } catch (error) {
+      console.error('Error storing round data in Firestore:', error);
+    }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    // Reset selections and hide the modal
     setSelectedWords([]);
     setModalVisible(false);
 
-    if (currentRound < maxRounds) {
-      const wordList = language === 'ENGLISH' ? words_en : words_ta;
-      const { correctWord, shuffledWords } = generateWordSet([...usedWords, correctWord], wordList);
-      setCorrectWord(correctWord);
-      setBingoCard(shuffledWords);
-      setUsedWords([...usedWords, correctWord]);
-      setCurrentRound(currentRound + 1);
+    // Check if the current round is the last round
+    if (currentRound >= maxRounds) {
+        console.log('All rounds completed');
+
+        // Navigate to the next screen and pass necessary params
+        navigation.navigate('DA_MatchingWordsDescriptionScreen', { language });
     } else {
-      const totalCorrectRounds = gameData.filter(round => round.isFullyCorrect).length;
-      const totalScore = (totalCorrectRounds / maxRounds) * 100;
+        // If it's not the last round, continue to the next round
+        const wordList = language === 'en' ? words_en : words_ta;
+        const { correctWord, shuffledWords } = generateWordSet([...usedWords, correctWord], wordList);
 
-      console.log('Final Results:', gameData);
-      console.log(`Total Score: ${totalScore}%`);
-
-      // Pass the updated results state to the next screen
-      console.log('Final Results before navigation:', updatedResults);
-      setResults(updatedResults); // Update the global results state
-      navigation.navigate('DA_MatchingWordsDescriptionScreen', { language, results: updatedResults, setResults });
+        // Set up the next round
+        setCorrectWord(correctWord);
+        setBingoCard(shuffledWords);
+        setUsedWords([...usedWords, correctWord]);
+        setCurrentRound(currentRound + 1);
     }
   };
+
+  const checkResults = async () => {
+      // Ensure we are within the allowed number of rounds
+      if (currentRound > maxRounds) return;
+
+      const selectedCorrectWords = selectedWords.filter(id => bingoCard.find(item => item.id === id && item.word === correctWord));
+      const correctCount = selectedCorrectWords.length;
+      const totalSelected = selectedWords.length;
+      const timeTaken = (Date.now() - startTime) / 1000; // Time taken in seconds
+
+      const roundData = {
+          activity: 'bingo',
+          round: currentRound,
+          correctWord,
+          selectedWords: selectedWords.map(id => bingoCard.find(item => item.id === id)?.word),
+          correctCount,
+          isFullyCorrect: correctCount === 5 && totalSelected === 5,
+          timeTaken: timeTaken.toFixed(2),
+      };
+
+      console.log('New Round Data:', roundData);
+
+      // Store in Firestore
+      await storeResultsInFirestore(roundData);
+
+      // Display appropriate messages
+      if (correctCount === 5 && totalSelected === 5) {
+          setModalMessage('Good Job! You got all the words correct!');
+          setAnimationType('correct');
+      } else if (correctCount === 0) {
+          setModalMessage('Don’t be sad! Let’s do the next activity better!');
+          setAnimationType('wrong');
+      } else {
+          setModalMessage('You can do better next time!');
+          setAnimationType('better');
+      }
+
+      // Show modal with result feedback
+      setModalVisible(true);
+  };
+
 
   const renderAnimation = () => {
     switch (animationType) {
@@ -818,11 +840,7 @@ const DA_BingoScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
       <View style={styles.overlay}></View>
-      <Text style={styles.header}>Select the Same Words</Text>
-
-      <View style={styles.correctWordContainer}>
-        <Text style={styles.correctWordText}>{correctWord}</Text>
-      </View>
+      <Text style={styles.header}>Select the same looking words!</Text>
 
       <FlatList
         data={bingoCard}
@@ -839,7 +857,7 @@ const DA_BingoScreen = ({ navigation, route }) => {
         contentContainerStyle={styles.wordListContainer}
       />
       <TouchableOpacity style={styles.nextButton} onPress={checkResults}>
-        <Text style={styles.nextButtonText}>Check</Text>
+        <Text style={styles.nextButtonText}>Next</Text>
       </TouchableOpacity>
       <Modal
         transparent={true}
@@ -863,7 +881,6 @@ const DA_BingoScreen = ({ navigation, route }) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -914,9 +931,10 @@ const styles = StyleSheet.create({
   wordListContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 100
   },
   wordButton: {
-    backgroundColor: '#4D86F7',
+    backgroundColor: '#4682B4',
     margin: 10,
     padding: 20,
     borderRadius: 10,
@@ -930,7 +948,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   selected: {
-    backgroundColor: '#FFD166',
+    backgroundColor: '#FF7F50',
   },
   nextButton: {
     backgroundColor: '#FFD166',
@@ -938,6 +956,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     marginTop: 20,
+    marginBottom: 170
   },
   nextButtonText: {
     fontSize: 20,

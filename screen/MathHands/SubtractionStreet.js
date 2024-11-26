@@ -7,17 +7,17 @@ import {
   Image,
   Modal,
   Button,
-} from 'react-native';
-import { CameraView, useCameraPermissions } from 'expo-camera';
-import axios from 'axios';
-import * as ImageManipulator from 'expo-image-manipulator';
-import Svg, { Circle, Text as SvgText } from 'react-native-svg';
-import LottieView from 'lottie-react-native';
-import { translations } from './locales';
 
-const SubtractionAlleyScreen = ({ route, navigation }) => {
-  const { language } = route.params;
-  const t = translations[language];
+} from "react-native";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import axios from "axios";
+import * as ImageManipulator from "expo-image-manipulator";
+import Svg, { Circle, Text as SvgText } from "react-native-svg";
+import LottieView from "lottie-react-native";
+import { BASE_URL } from "./MathHandsConfig";
+
+
+const SubtractionAlleyScreen = ({ navigation }) => {
   const [number1, setNumber1] = useState(0);
   const [number2, setNumber2] = useState(0);
   const [facing, setFacing] = useState('front');
@@ -68,7 +68,7 @@ const SubtractionAlleyScreen = ({ route, navigation }) => {
         setShowIncorrectLottie(false); // Hide incorrect Lottie animation
       } else {
         setFeedback(
-          `Incorrect. The correct answer is ${expectedAnswer}.\n                    please try again!`
+          `Incorrect. The correct answer is ${expectedAnswer}.\nPlease try again!`
         );
         setShowLottie(false); // Show Lottie animation if correct
         setShowIncorrectLottie(true); // Hide incorrect Lottie animation
@@ -121,7 +121,9 @@ const SubtractionAlleyScreen = ({ route, navigation }) => {
         });
 
         const response = await axios.post(
-          'http://192.168.8.101:5000/process',
+
+          `${BASE_URL}/process`,
+
           formData,
           {
             headers: {
@@ -183,8 +185,10 @@ const SubtractionAlleyScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textTopic}> {t.subtractionStreet}</Text>
-      <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
+
+      <Text style={styles.textTopic}>Subtraction Street</Text>
+      <Image style={styles.bgImg} source={require("../../assets/bg.jpg")} />
+
       <View style={styles.overlay}>
         <View style={styles.numberBox}>
           <Text style={styles.numberText}>
@@ -202,11 +206,11 @@ const SubtractionAlleyScreen = ({ route, navigation }) => {
         </View>
         <View style={styles.messageBox}>
           <Text style={styles.messageText}>
-            <Image
-              source={require('../../assets/warning.png')}
-              style={styles.warningIcon}
-            />
-            {t.showMathProblem}
+
+            Show the answer to your math problem using your fingers. Math Hands
+            will then recognize your finger positions and confirm if your
+            answer is correct!
+
           </Text>
         </View>
         <View style={styles.cameraContainer}>
@@ -238,18 +242,19 @@ const SubtractionAlleyScreen = ({ route, navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            {showLottie &&
-              !showIncorrectLottie && ( // Conditionally render correct Lottie animation
-                <LottieView
-                  source={require('../../assets/welldone.json')} // Path to your correct Lottie file
-                  autoPlay
-                  loop={false}
-                  style={styles.lottie}
-                />
-              )}
-            {showIncorrectLottie && ( // Conditionally render incorrect Lottie animation
+
+            {showLottie && !showIncorrectLottie && (
               <LottieView
-                source={require('../../assets/sad3.json')} // Path to your incorrect Lottie file
+                source={require("../../assets/welldone.json")}
+                autoPlay
+                loop={false}
+                style={styles.lottie}
+              />
+            )}
+            {showIncorrectLottie && (
+              <LottieView
+                source={require("../../assets/sad3.json")}
+
                 autoPlay
                 loop={true}
                 style={styles.lottie}
@@ -339,10 +344,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: 'white',
   },
-  warningIcon: {
-    width: 20,
-    height: 20,
-  },
   cameraContainer: {
     width: '80%',
     height: 300,
@@ -368,7 +369,6 @@ const styles = StyleSheet.create({
     left: '35%',
     marginTop: 10,
     padding: 10,
-    // backgroundColor: '#14274e',
     borderRadius: 4,
   },
   text: {
