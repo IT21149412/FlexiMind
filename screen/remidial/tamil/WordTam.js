@@ -7,19 +7,26 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
+import { Audio } from 'expo-av'; // For playing audio
 
-const EngWordSounds = ({ navigation }) => {
-  const playSound = (word) => {
-    // Implement the sound playing logic here
-    console.log('Playing sound for:', word);
+const EngWordSounds = ({ route }) => {
+  const { data } = route.params; // The array of words with sounds is passed here
+
+  // Function to play the sound for each word
+  const playSound = async (soundFile) => {
+    const { sound } = await Audio.Sound.createAsync(soundFile);
+    await sound.playAsync();
+    // Ensure that the sound stops and resources are released after playing
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (status.didJustFinish) {
+        sound.unloadAsync();
+      }
+    });
   };
-
-  const words = ['மரம்', 'கரம்', 'தரம்', 'சரம்', 'படம்', 'மடம்'];
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>வார்த்தைகளை உரக்கப் படியுங்கள்</Text>
-      <Text style={styles.level}>எளிதான நிலை</Text>
 
       <Image style={styles.bgImg} source={require('../../../assets/bg.jpg')} />
       <View style={styles.overlay}></View>
@@ -28,16 +35,16 @@ const EngWordSounds = ({ navigation }) => {
         source={require('../../../assets/images/girlsound.png')}
       />
       <ScrollView style={styles.wordsContainer}>
-        {words.map((word, index) => (
+        {data.map((item, index) => (
           <TouchableOpacity
             key={index}
             style={styles.wordButton}
-            onPress={() => playSound(word)}
+            onPress={() => playSound(item.sound)} // Accessing the 'sound' property from each object in the array
           >
-            <Text style={styles.wordText}>{word}</Text>
+            <Text style={styles.wordText}>{item.word}</Text>
             <Image
               style={styles.soundIcon}
-              source={require('../../../assets/images/speaker.png')} // Replace with your sound icon image path
+              source={require('../../../assets/images/speaker.png')}
             />
           </TouchableOpacity>
         ))}
@@ -64,21 +71,14 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     top: '4%',
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
-  },
-  level: {
-    fontSize: 18,
-    top: '5%',
-    color: '#FF6347',
-    marginTop: 5,
-    textAlign: 'center',
   },
   characterImage: {
     position: 'absolute',
     alignSelf: 'center',
-    top: '17%',
+    top: '13%',
     width: 150,
     height: 150,
   },
@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 50,
     width: '80%',
-    top: '30%',
-    left: '10%', // Center the ScrollView
-    height: '70%', // Set the height of the ScrollView
+    top: '25%',
+    left: '10%',
+    height: '70%',
   },
   wordButton: {
     flexDirection: 'row',
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    top: '18%',
+    top: '12%',
     height: '90%',
     borderRadius: 85,
   },

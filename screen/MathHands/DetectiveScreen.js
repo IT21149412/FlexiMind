@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Image,
   Button,
   Modal,
+
 } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import axios from "axios";
@@ -19,8 +20,9 @@ const DetectiveScreen = ({ navigation }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [question, setQuestion] = useState(null);
   const [facing, setFacing] = useState("front");
+
   const [fingerCount, setFingerCount] = useState(null);
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState('');
   const [isCapturing, setIsCapturing] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
@@ -38,11 +40,11 @@ const DetectiveScreen = ({ navigation }) => {
   ];
 
   const imageDict = {
-    1: require("../../assets/monkey.png"),
-    2: require("../../assets/apple.jpg"),
-    3: require("../../assets/carrot.png"),
-    4: require("../../assets/banana.png"),
-    5: require("../../assets/tree.jpg"),
+    1: require('../../assets/monkey.png'),
+    2: require('../../assets/apple.jpg'),
+    3: require('../../assets/carrot.png'),
+    4: require('../../assets/banana.png'),
+    5: require('../../assets/tree.jpg'),
   };
 
   const generateQuestion = () => {
@@ -56,6 +58,7 @@ const DetectiveScreen = ({ navigation }) => {
     } while (leftNumber === rightNumber);
 
     let leftImage, rightImage;
+
 
     if (questionText.includes("monkeys")) {
       leftImage = imageDict[1];
@@ -72,6 +75,7 @@ const DetectiveScreen = ({ navigation }) => {
     } else if (questionText.includes("trees")) {
       leftImage = imageDict[5];
       rightImage = imageDict[5];
+
     }
 
     const leftImages = Array(leftNumber).fill(leftImage);
@@ -123,10 +127,12 @@ const DetectiveScreen = ({ navigation }) => {
   }, [isCapturing]);
 
   useEffect(() => {
+
     if (fingerCount !== null && question !== null) {
       const expectedAnswer = Math.max(question.leftNumber, question.rightNumber);
+
       if (fingerCount === expectedAnswer) {
-        setFeedback("Correct! Great job!");
+        setFeedback('Correct! Great job!');
         setShowLottie(true);
         setShowIncorrectLottie(false);
       } else {
@@ -139,6 +145,8 @@ const DetectiveScreen = ({ navigation }) => {
     }
   }, [fingerCount, question]);
 
+
+
   const captureAndProcessImage = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
@@ -148,22 +156,26 @@ const DetectiveScreen = ({ navigation }) => {
         { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
       );
 
+
       const formData = new FormData();
       formData.append("image", {
+
         uri: resizedPhoto.uri,
-        type: "image/jpeg",
-        name: "photo.jpg",
+        type: 'image/jpeg',
+        name: 'photo.jpg',
       });
 
       try {
+
         const response = await axios.post(`${BASE_URL}/process`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+
         setFingerCount(response.data.finger_count);
       } catch (error) {
-        console.error("Error processing image:", error);
+        console.error('Error processing image:', error);
       }
     }
   };
@@ -233,8 +245,10 @@ const DetectiveScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+
       <Text style={styles.textTopic}>Let's Get Started</Text>
       <Image style={styles.bgImg} source={require("../../assets/bg.jpg")} />
+
       <View style={styles.overlay}>
         {question && (
           <>
@@ -244,7 +258,9 @@ const DetectiveScreen = ({ navigation }) => {
               onPress={() => generateNewQuestion()}
             >
               <Image
+
                 source={require("../../assets/arrows.png")}
+
                 style={styles.refreshIcon}
               />
             </TouchableOpacity>
@@ -261,7 +277,9 @@ const DetectiveScreen = ({ navigation }) => {
               </View>
             </View>
             <View style={styles.cameraContainer}>
+
               <CameraView ref={cameraRef} style={styles.camera} facing={facing} />
+
             </View>
             <View style={styles.uiContainer}>
               {isCapturing && renderCircularTimer()}
@@ -271,7 +289,9 @@ const DetectiveScreen = ({ navigation }) => {
                 onPress={toggleCameraFacing}
               >
                 <Image
+
                   source={require("../../assets/flip.png")}
+
                   style={styles.flipButton}
                 />
               </TouchableOpacity>
@@ -281,7 +301,9 @@ const DetectiveScreen = ({ navigation }) => {
                 onPress={handleCaptureButtonPress}
               >
                 <Text style={styles.text}>
+
                   {isCapturing ? "Stop " : "Start"}
+
                 </Text>
               </TouchableOpacity>
             </View>
@@ -293,6 +315,7 @@ const DetectiveScreen = ({ navigation }) => {
             >
               <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
+
                   {showLottie && !showIncorrectLottie && (
                     <LottieView
                       source={require("../../assets/welldone.json")}
@@ -304,6 +327,7 @@ const DetectiveScreen = ({ navigation }) => {
                   {showIncorrectLottie && (
                     <LottieView
                       source={require("../../assets/sad3.json")}
+
                       autoPlay
                       loop={true}
                       style={styles.lottie}
@@ -331,69 +355,69 @@ const DetectiveScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: "relative",
-    width: "auto",
-    height: "100%",
-    backgroundColor: "#4D86F7",
+    position: 'relative',
+    width: 'auto',
+    height: '100%',
+    backgroundColor: '#4D86F7',
   },
   bgImg: {
-    alignSelf: "center",
-    top: "10%",
-    width: "100%",
-    height: "80%",
+    alignSelf: 'center',
+    top: '10%',
+    width: '100%',
+    height: '80%',
     borderWidth: 1,
     borderRadius: 90,
   },
   textTopic: {
-    textAlign: "center",
-    fontWeight: "900",
+    textAlign: 'center',
+    fontWeight: '900',
     fontSize: 35,
-    color: "#FFD166",
-    top: "8%",
+    color: '#FFD166',
+    top: '8%',
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    top: "15%",
-    height: "80%",
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    top: '15%',
+    height: '80%',
     borderRadius: 85,
   },
   container2: {
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 10,
   },
   numberBox: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
-    top: "1%",
-    right: "0.50%",
-    width: "45%",
-    height: "60%",
+    top: '1%',
+    right: '0.50%',
+    width: '45%',
+    height: '60%',
     padding: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "black",
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'black',
     borderWidth: 1,
-    borderStyle: "dotted",
+    borderStyle: 'dotted',
   },
   numberBox2: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
-    top: "1%",
-    left: "10%",
-    width: "45%",
-    height: "60%",
+    top: '1%',
+    left: '10%',
+    width: '45%',
+    height: '60%',
     padding: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "black",
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'black',
     borderWidth: 1,
-    borderStyle: "dotted",
+    borderStyle: 'dotted',
   },
   qtext: {
     fontSize: 13,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     marginVertical: 10,
     paddingVertical: 5,
   },
@@ -407,27 +431,27 @@ const styles = StyleSheet.create({
     right: 2,
   },
   refreshIcon: {
-    left: "90%",
+    left: '90%',
     width: 20,
-    height: 20
+    height: 20,
   },
   cameraContainer: {
-    width: "80%",
+    width: '80%',
     height: 300,
-    overflow: "hidden",
+    overflow: 'hidden',
     borderRadius: 10,
     marginTop: -89,
-    left: "10%",
+    left: '10%',
   },
   camera: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   uiContainer: {
     marginTop: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
-  flipButton: { 
+  flipButton: {
     top: 1,
     width: 30,
     height: 30,
@@ -435,51 +459,51 @@ const styles = StyleSheet.create({
   button: {
     marginTop: -20,
     padding: 10,
-    backgroundColor: "#14274e",
+    backgroundColor: '#14274e',
     borderRadius: 4,
   },
   button1: {
-    left: "35%",
+    left: '35%',
     marginTop: 10,
     padding: 10,
     borderRadius: 4,
   },
   text: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   resultText: {
     marginTop: 10,
     fontSize: 18,
-    color: "#333",
+    color: '#333',
   },
   feedbackText: {
     marginTop: 10,
     fontSize: 16,
-    color: "#666",
+    color: '#666',
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     width: 300,
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
   closeButton: {
-    backgroundColor: "#f00",
+    backgroundColor: '#f00',
     padding: 10,
     borderRadius: 10,
     marginTop: 10,
   },
   closeButtonText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
   },
   lottie: {

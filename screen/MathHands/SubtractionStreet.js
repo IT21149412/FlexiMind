@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Image,
   Modal,
   Button,
+
 } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import axios from "axios";
@@ -15,12 +16,13 @@ import Svg, { Circle, Text as SvgText } from "react-native-svg";
 import LottieView from "lottie-react-native";
 import { BASE_URL } from "./MathHandsConfig";
 
+
 const SubtractionAlleyScreen = ({ navigation }) => {
   const [number1, setNumber1] = useState(0);
   const [number2, setNumber2] = useState(0);
-  const [facing, setFacing] = useState("front");
+  const [facing, setFacing] = useState('front');
   const [fingerCount, setFingerCount] = useState(null);
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState('');
   const [isCapturing, setIsCapturing] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
@@ -61,7 +63,7 @@ const SubtractionAlleyScreen = ({ navigation }) => {
     if (fingerCount !== null) {
       const expectedAnswer = number1 - number2;
       if (fingerCount === expectedAnswer) {
-        setFeedback("Correct! Great job!");
+        setFeedback('Correct! Great job!');
         setShowLottie(true); // Show Lottie animation if correct
         setShowIncorrectLottie(false); // Hide incorrect Lottie animation
       } else {
@@ -89,7 +91,7 @@ const SubtractionAlleyScreen = ({ navigation }) => {
   if (!permission.granted) {
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: "center" }}>
+        <Text style={{ textAlign: 'center' }}>
           We need your permission to show the camera
         </Text>
         <Button onPress={requestPermission} title="Grant Permission" />
@@ -98,7 +100,7 @@ const SubtractionAlleyScreen = ({ navigation }) => {
   }
 
   function toggleCameraFacing() {
-    setFacing((current) => (current === "back" ? "front" : "back"));
+    setFacing((current) => (current === 'back' ? 'front' : 'back'));
   }
 
   const captureAndProcessImage = async () => {
@@ -112,25 +114,27 @@ const SubtractionAlleyScreen = ({ navigation }) => {
         );
 
         let formData = new FormData();
-        formData.append("image", {
+        formData.append('image', {
           uri: resizedPhoto.uri,
-          type: "image/jpeg",
-          name: "photo.jpg",
+          type: 'image/jpeg',
+          name: 'photo.jpg',
         });
 
         const response = await axios.post(
+
           `${BASE_URL}/process`,
+
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              'Content-Type': 'multipart/form-data',
             },
           }
         );
         setFingerCount(response.data.finger_count);
       } catch (error) {
-        console.error("Error processing image:", error);
-        setFeedback("Error processing the image. Please try again.");
+        console.error('Error processing image:', error);
+        setFeedback('Error processing the image. Please try again.');
       }
     }
   };
@@ -181,8 +185,10 @@ const SubtractionAlleyScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+
       <Text style={styles.textTopic}>Subtraction Street</Text>
       <Image style={styles.bgImg} source={require("../../assets/bg.jpg")} />
+
       <View style={styles.overlay}>
         <View style={styles.numberBox}>
           <Text style={styles.numberText}>
@@ -193,16 +199,18 @@ const SubtractionAlleyScreen = ({ navigation }) => {
             onPress={generateRandomNumbers}
           >
             <Image
-              source={require("../../assets/arrows.png")}
+              source={require('../../assets/arrows.png')}
               style={styles.refreshIcon}
             />
           </TouchableOpacity>
         </View>
         <View style={styles.messageBox}>
           <Text style={styles.messageText}>
+
             Show the answer to your math problem using your fingers. Math Hands
             will then recognize your finger positions and confirm if your
             answer is correct!
+
           </Text>
         </View>
         <View style={styles.cameraContainer}>
@@ -213,7 +221,7 @@ const SubtractionAlleyScreen = ({ navigation }) => {
 
           <TouchableOpacity style={styles.button1} onPress={toggleCameraFacing}>
             <Image
-              source={require("../../assets/flip.png")}
+              source={require('../../assets/flip.png')}
               style={styles.refreshIcon}
             />
           </TouchableOpacity>
@@ -222,7 +230,7 @@ const SubtractionAlleyScreen = ({ navigation }) => {
             style={styles.button}
             onPress={handleCaptureButtonPress}
           >
-            <Text style={styles.text}>{isCapturing ? "Stop " : "Start"}</Text>
+            <Text style={styles.text}>{isCapturing ? 'Stop ' : 'Start'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -234,6 +242,7 @@ const SubtractionAlleyScreen = ({ navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+
             {showLottie && !showIncorrectLottie && (
               <LottieView
                 source={require("../../assets/welldone.json")}
@@ -245,6 +254,7 @@ const SubtractionAlleyScreen = ({ navigation }) => {
             {showIncorrectLottie && (
               <LottieView
                 source={require("../../assets/sad3.json")}
+
                 autoPlay
                 loop={true}
                 style={styles.lottie}
@@ -269,47 +279,47 @@ const SubtractionAlleyScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: "relative",
-    width: "auto",
-    height: "100%",
-    backgroundColor: "#4D86F7",
+    position: 'relative',
+    width: 'auto',
+    height: '100%',
+    backgroundColor: '#4D86F7',
   },
   bgImg: {
-    alignSelf: "center",
-    top: "10%",
-    width: "100%",
-    height: "80%",
+    alignSelf: 'center',
+    top: '10%',
+    width: '100%',
+    height: '80%',
     borderWidth: 1,
     borderRadius: 90,
   },
   textTopic: {
-    textAlign: "center",
-    fontWeight: "900",
+    textAlign: 'center',
+    fontWeight: '900',
     fontSize: 35,
-    color: "#FFD166",
-    top: "8%",
+    color: '#FFD166',
+    top: '8%',
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    top: "15%",
-    height: "80%",
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    top: '15%',
+    height: '80%',
     borderRadius: 85,
   },
   numberBox: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
-    top: "1%",
-    width: "50%",
-    height: "20%",
-    alignSelf: "center",
+    top: '1%',
+    width: '50%',
+    height: '20%',
+    alignSelf: 'center',
     padding: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   numberText: {
     fontSize: 43,
-    color: "red",
+    color: 'red',
   },
   refreshButton: {
     marginTop: 20,
@@ -319,84 +329,84 @@ const styles = StyleSheet.create({
     height: 30,
   },
   messageBox: {
-    backgroundColor: "#5D8BE4",
+    backgroundColor: '#5D8BE4',
     borderRadius: 30,
-    top: "2%",
-    width: "75%",
-    height: "15%",
-    alignSelf: "center",
+    top: '2%',
+    width: '75%',
+    height: '15%',
+    alignSelf: 'center',
     padding: 5,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   messageText: {
     marginLeft: 10,
     fontSize: 13,
-    color: "white",
+    color: 'white',
   },
   cameraContainer: {
-    width: "80%",
+    width: '80%',
     height: 300,
-    overflow: "hidden",
+    overflow: 'hidden',
     borderRadius: 10,
     marginTop: 20,
-    left: "10%",
+    left: '10%',
   },
   camera: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   uiContainer: {
     marginTop: 5,
-    alignItems: "center",
+    alignItems: 'center',
   },
   button: {
     padding: 10,
-    backgroundColor: "#14274e",
+    backgroundColor: '#14274e',
     borderRadius: 4,
   },
   button1: {
-    left: "35%",
+    left: '35%',
     marginTop: 10,
     padding: 10,
     borderRadius: 4,
   },
   text: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   resultText: {
     marginTop: 10,
     fontSize: 18,
-    color: "#333",
+    color: '#333',
   },
   feedbackText: {
     marginTop: 10,
     fontSize: 16,
-    color: "#666",
+    color: '#666',
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     width: 300,
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
   closeButton: {
-    backgroundColor: "#f00",
+    backgroundColor: '#f00',
     padding: 10,
     borderRadius: 10,
     marginTop: 10,
   },
   closeButtonText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
   },
   lottie: {

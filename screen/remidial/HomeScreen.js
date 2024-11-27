@@ -1,31 +1,32 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
+import { translations } from './translations';
 
-const DashboardHome = ({ navigation }) => {
+const DashboardHome = ({ navigation, route }) => {
+  const { language } = route.params;
+  const t = translations[language];
+
   const handleTest = () => {
-    navigation.navigate('ageEng');
+    navigation.navigate(language === 'en' ? 'ageEng' : 'ageTamil');
   };
 
   const handleActivities = () => {
-    navigation.navigate('activityEng');
+    navigation.navigate(language === 'en' ? 'activityEng' : 'activityTam');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.subtitle}>Let's Choose What{'\n'}To Do!</Text>
-      <Image
-        style={styles.bgImg}
-        source={require('../../assets/bg.jpg')}
-      ></Image>
-      <View style={styles.overlay}></View>
+      <Text style={styles.subtitle}>{t.chooseAction}</Text>
+      <Image style={styles.bgImg} source={require('../../assets/bg.jpg')} />
+      <View style={styles.overlay} />
 
       <View style={styles.rectangle1}>
         <Image
           style={styles.icon}
           source={require('../../assets/images/testHome.png')}
-        ></Image>
+        />
         <Text style={styles.text} onPress={handleTest}>
-          Take{'\n'}Screening{'\n'}Test
+          {t.screeningTest}
         </Text>
       </View>
 
@@ -33,9 +34,9 @@ const DashboardHome = ({ navigation }) => {
         <Image
           style={styles.icon}
           source={require('../../assets/images/activity.png')}
-        ></Image>
+        />
         <Text style={styles.text} onPress={handleActivities}>
-          Word and{'\n'}Sentence{'\n'}Building Fun
+          {t.wordBuildingFun}
         </Text>
       </View>
     </View>
