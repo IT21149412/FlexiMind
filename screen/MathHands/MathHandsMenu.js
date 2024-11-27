@@ -1,42 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Image,
-  ImageBackground,
 } from "react-native";
-import AdditionAlleyScreen from "./AdditionAlleyScreen";
-import SubtractionAlleyScreen from "./SubtractionStreet";
-import DivisionDriveScreen from "./DivisionDriveScreen";
 import LottieView from "lottie-react-native";
-import DemoMultiplication from "./DemoMultiplication";
-import { translations } from "./locales";
 
-const MathHandsMenu = ({route, navigation }) => {
-  const { language } = route.params;
-  const t = translations[language];
-
+const MathHandsMenu = ({ navigation }) => {
   const AdditionAlley = () => {
-    navigation.navigate("AdditionAlleyScreen",{ language: language });
+    navigation.navigate("AdditionAlleyScreen");
   };
 
   const SubtractionStreet = () => {
-    navigation.navigate("SubtractionAlleyScreen" ,{ language: language });
+    navigation.navigate("SubtractionAlleyScreen");
   };
 
   const demomulti = () => {
-    navigation.navigate("DemoMultiplication" ,{ language: language });
+    navigation.navigate("DemoMultiplication");
   };
 
   const DivisionDrive = () => {
-    navigation.navigate("DivisionDriveScreen"  ,{ language: language });
+    navigation.navigate("DivisionDriveScreen");
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textTopic}>{t.startLearning}</Text>
+      <Text style={styles.textTopic}>Let's get started</Text>
       <Image
         style={styles.bgImg}
         source={require("../../assets/bg.jpg")}
@@ -45,16 +36,16 @@ const MathHandsMenu = ({route, navigation }) => {
         <View style={styles.listContainer}>
           {/* List items with improved styling */}
           <TouchableOpacity style={styles.listItem} onPress={AdditionAlley}>
-            <Text style={styles.listItemText}>{t.additionAlley}</Text>
+            <Text style={styles.listItemText}>Addition Alley</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.listItem} onPress={SubtractionStreet}>
-            <Text style={styles.listItemText}>{t.subtractionStreet}</Text>
+            <Text style={styles.listItemText}>Subtraction Street</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.listItem} onPress={demomulti}>
-            <Text style={styles.listItemText}>{t.multiplicationMagic}</Text>
+            <Text style={styles.listItemText}>Multiplication Magic</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.listItem} onPress={DivisionDrive}>
-            <Text style={styles.listItemText}>{t.divisionDrive}</Text>
+            <Text style={styles.listItemText}>Division Drive</Text>
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
@@ -100,14 +91,11 @@ const styles = StyleSheet.create({
     borderRadius: 85,
   },
   listContainer: {
-    // Center the list horizontally
     alignItems: "center",
-    // Add some top and bottom padding
     paddingTop: 20,
     paddingBottom: 20,
   },
   listItem: {
-    // Style for each list item
     backgroundColor: "#FFF",
     padding: 15,
     borderRadius: 10,

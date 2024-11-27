@@ -24,7 +24,7 @@ const ActivityEng = ({ navigation }) => {
     <View style={styles.container}>
       <Image style={styles.bgImg} source={require('../../../assets/bg.jpg')} />
       <View style={styles.overlay}></View>
-      <View style={styles.levelInputContainer}>
+      {/* <View style={styles.levelInputContainer}>
         <View
           style={[
             styles.levelInput,
@@ -42,7 +42,7 @@ const ActivityEng = ({ navigation }) => {
             <Picker.Item label="Hard" value="Hard" />
           </Picker>
         </View>
-      </View>
+      </View> */}
 
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <View style={[styles.card, styles.shadow]}>
@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     // alignItems: 'center',
     width: '100%',
+    paddingTop: '20%',
   },
   card: {
     backgroundColor: '#FFFFFF',

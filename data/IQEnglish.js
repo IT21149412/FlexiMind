@@ -26,6 +26,7 @@ export default data = [
     options: ['DDBO', 'BODD', 'DBOD', 'ODDB'],
     correct_option: 'ODDB',
   },
+  
   {
     question:
       'Select the number that completes this sequence.  0 - 1 - 3 - 6 -?',

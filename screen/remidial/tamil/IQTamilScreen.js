@@ -15,13 +15,14 @@ import data from '../../../data/IQTamil';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function IQEnglishScreen({ navigation }) {
+export default function IQEnglishScreen({ route, navigation }) {
+  const { selectedAge } = route.params;
   const allQuestions = data;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentOptionSelected, setCurrentOptionSelected] = useState(null);
   const [correctOption, setCorrectOption] = useState(null);
   const [isOptionsDisabled, setIsOptionsDisabled] = useState(false);
-  const [score, setScore] = useState(0);
+  const [iqscore, setScore] = useState(0);
   const [showNextButton, setShowNextButton] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
 
@@ -55,7 +56,7 @@ export default function IQEnglishScreen({ navigation }) {
 
   const handleFinishQuiz = async () => {
     await saveQuizCompletion();
-    navigation.navigate('startTam');
+    navigation.navigate('startTam', { selectedAge, iqscore });
   };
 
   const validateAnswer = (selectedOption) => {
@@ -65,7 +66,7 @@ export default function IQEnglishScreen({ navigation }) {
     setIsOptionsDisabled(true);
     if (selectedOption === correct_option) {
       // Set Score
-      setScore(score + 1);
+      setScore(iqscore + 1);
     }
     // Show Next Button
     setShowNextButton(true);
@@ -406,7 +407,7 @@ export default function IQEnglishScreen({ navigation }) {
                 }}
               >
                 <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
-                  {score > allQuestions.length / 2
+                  {iqscore > allQuestions.length / 2
                     ? 'வாழ்த்துகள்!'
                     : 'நல்ல வேலை! விட்டுவிடாதே'}
                 </Text>
@@ -423,12 +424,12 @@ export default function IQEnglishScreen({ navigation }) {
                     style={{
                       fontSize: 30,
                       color:
-                        score > allQuestions.length / 2
+                        iqscore > allQuestions.length / 2
                           ? COLORS.success
                           : COLORS.error,
                     }}
                   >
-                    {score}
+                    {iqscore}
                   </Text>
                   <Text
                     style={{

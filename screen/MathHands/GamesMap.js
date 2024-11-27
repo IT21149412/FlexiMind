@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Animated, {
@@ -34,22 +33,22 @@ const GameMap = () => {
     translationY.value = withSpring(y);
   };
 
- 
-
   const navigateToTimesTable1to5 = () => {
-    navigation.navigate("DemoVideosScreen"); // Ensure this screen is defined in your navigation stack
+    navigation.navigate("DemoVideosScreen"); 
   };
 
   const navigateToTimesTable6 = () => {
-    navigation.navigate("SixTimesScreen"); // Ensure this screen is defined in your navigation stack
+    navigation.navigate("SixTimesScreen"); 
   };
 
-
+  const navigateToTimesTable9 = () => {
+    navigation.navigate("NineTimesScreen");  
+  };
 
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../assets/game.jpg")} // Use the path where your image is stored
+        source={require("../../assets/game.jpg")} 
         style={styles.backgroundImage}
       />
       <Animated.View style={[styles.lottieContainer, animatedStyle]}>
@@ -73,30 +72,32 @@ const GameMap = () => {
         <Text style={styles.tileText}>6</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.tile, styles.tile7]}
-        onPress={() => moveWizardTo(85, -100)}
+        style={[styles.tile, styles.tile7, styles.disabledTile]}
+        onPress={() => {}}
+        disabled={true}
       >
         <Text style={styles.tileText}>7</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.tile, styles.tile8]}
-        onPress={() => moveWizardTo(40, -250)}
+        style={[styles.tile, styles.tile8, styles.disabledTile]}
+        onPress={() => {}}
+        disabled={true}
       >
         <Text style={styles.tileText}>8</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.tile, styles.tile9]}
-        onPress={() => moveWizardTo(-120, -400)}
+        onPress={navigateToTimesTable9}
       >
         <Text style={styles.tileText}>9</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.tile, styles.tile10]}
-        onPress={() => moveWizardTo(-120, -500)}
+        style={[styles.tile, styles.tile10, styles.disabledTile]}
+        onPress={() => {}}
+        disabled={true}
       >
         <Text style={styles.tileText}>10</Text>
       </TouchableOpacity>
- 
     </View>
   );
 };
@@ -149,27 +150,8 @@ const styles = StyleSheet.create({
   tile8: { top: "25%", left: "71%" },
   tile9: { top: "20%", left: "30%" },
   tile10: { top: "2%", left: "38%" },
-  navigationButton: {
-    position: "absolute",
-    bottom: 20,
-    left: "50%",
-    transform: [{ translateX: -75 }],
-    backgroundColor: "#4D86F7",
-    padding: 10,
-    borderRadius: 10,
-    width: 150,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  buttonText: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#FFF",
+  disabledTile: {
+    backgroundColor: "gray", // Set a solid gray background for disabled tiles
   },
 });
 

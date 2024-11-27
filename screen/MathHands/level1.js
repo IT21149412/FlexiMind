@@ -1,44 +1,71 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity ,TextInput} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Vibration } from 'react-native';
+import { Audio } from 'expo-av';
 import { auth, db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
-const exercises = [
-  { id: 'ex1', story: "A farmer has 2 pens of sheep. Each pen has 2 sheep. How many sheep are there in total?", correctAnswer: 4, multiplication: '2x2' },
-  { id: 'ex2', story: "You help a gardener collect apples. There are 3 baskets, each with 1 apple. How many apples do you have?", correctAnswer: 3, multiplication: '1x3' },
-  { id: 'ex3', story: "You have 4 boxes of toy cars. Each box contains 1 car. How many cars do you have?", correctAnswer: 4, multiplication: '1x4' },
-  { id: 'ex4', story: "A gardener plants 2 rows of trees. Each row has 3 trees. How many trees are planted in total?", correctAnswer: 6, multiplication: '2x3' },
-  { id: 'ex5', story: "You bake cookies for your friends. You have 2 friends and give each 2 cookies. How many cookies did you give away?", correctAnswer: 4, multiplication: '2x2' },
-  { id: 'ex6', story: "Your bookshelf has 1 shelf. On that shelf, there are 5 books. How many books are on the shelf?", correctAnswer: 5, multiplication: '1x5' },
-  { id: 'ex7', story: "You pour juice into 2 cups. Each cup holds 2 glasses of juice. How many glasses of juice are there in total?", correctAnswer: 4, multiplication: '2x2' },
-  { id: 'ex8', story: "You have 3 pencil boxes, and each box contains 2 pencils. How many pencils do you have in total?", correctAnswer: 6, multiplication: '2x3' },
-  { id: 'ex9', story: "You walk 1 dog each day for 4 days. How many walks did you go on?", correctAnswer: 4, multiplication: '1x4' },
-  { id: 'ex10', story: "A woodcutter chops 2 logs each day for 2 days. How many logs are chopped in total?", correctAnswer: 4, multiplication: '2x2' },
+const gridQuestions = [
+  [{ id: 'ex1', question: '1x2', correctAnswer: 2 }, { id: 'ex2', question: '2x2', correctAnswer: 4 }, { id: 'ex3', question: '3x2', correctAnswer: 6 }],
+  [{ id: 'ex4', question: '2x3', correctAnswer: 6 }, { id: 'ex5', question: '1x4', correctAnswer: 4 }, { id: 'ex6', question: '2x4', correctAnswer: 8 }],
+  [{ id: 'ex7', question: '3x3', correctAnswer: 9 }, { id: 'ex8', question: '4x2', correctAnswer: 8 }, { id: 'ex9', question: '5x1', correctAnswer: 5 }],
 ];
 
 const LevelOneScreen = ({ navigation }) => {
-  const [currentExercise, setCurrentExercise] = useState(0);
-  const [userAnswer, setUserAnswer] = useState('');
   const [results, setResults] = useState([]);
+  const [highlightedPath, setHighlightedPath] = useState([]);
+  const [incorrectPath, setIncorrectPath] = useState([]);
+  const [currentPosition, setCurrentPosition] = useState({ row: 0, col: 0 });
+  const [currentAnswer, setCurrentAnswer] = useState('');
+  const [sound, setSound] = useState();
 
-  const handleAnswer = () => {
-    const correct = parseInt(userAnswer) === exercises[currentExercise].correctAnswer;
-    
-    const newResult = {
-      exerciseId: exercises[currentExercise].id,
-      correct,
-    };
-    
-    setResults([...results, newResult]);
-    
-    // Move to the next exercise
-    if (currentExercise < exercises.length - 1) {
-      setCurrentExercise(currentExercise + 1);
-      setUserAnswer('');
-    } else {
-      saveResults();
-    }
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(require('../../assets/correct.wav'));
+    setSound(sound);
+    await sound.playAsync();
   };
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+  const handleAnswer = (row, col) => {
+    const currentQuestion = gridQuestions[row][col];
+    const correct = parseInt(currentAnswer) === currentQuestion.correctAnswer;
+  
+    const newResult = {
+      exerciseId: currentQuestion.id,
+      question: currentQuestion.question,
+      correct,
+      correctAnswer: currentQuestion.correctAnswer,  
+    };
+  
+    setResults([...results, newResult]);
+  
+    if (correct) {
+      setHighlightedPath([...highlightedPath, { row, col }]);
+      playSound();
+    } else {
+      setIncorrectPath([...incorrectPath, { row, col }]);
+      Vibration.vibrate();
+    }
+  
+    if (row === 2 && col === 2) {
+      saveResults();
+    } else {
+      if (col < 2) {
+        setCurrentPosition({ row, col: col + 1 });
+      } else if (row < 2) {
+        setCurrentPosition({ row: row + 1, col: 0 });
+      }
+    }
+  
+    setCurrentAnswer('');
+  };
+  
 
   const saveResults = async () => {
     const user = auth.currentUser;
@@ -53,8 +80,7 @@ const LevelOneScreen = ({ navigation }) => {
           timestamp: serverTimestamp(),
         });
 
-        // Navigate to a summary or next level screen
-        navigation.navigate('SummaryScreen', { level: 'Level 1' });
+        navigation.navigate('RetryExercisesScreen', { results });
       } catch (error) {
         console.error('Error adding document: ', error);
       }
@@ -65,17 +91,36 @@ const LevelOneScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.storyText}>{exercises[currentExercise].story}</Text>
-      <Text style={styles.multiplicationText}>What is {exercises[currentExercise].multiplication}?</Text>
-      
+      {gridQuestions.map((row, rowIndex) => (
+        <View key={rowIndex} style={styles.row}>
+          {row.map((cell, colIndex) => {
+            const isHighlighted = highlightedPath.some(path => path.row === rowIndex && path.col === colIndex);
+            const isIncorrect = incorrectPath.some(path => path.row === rowIndex && path.col === colIndex);
+            return (
+              <TouchableOpacity
+                key={colIndex}
+                style={[styles.cell, isHighlighted ? styles.highlightedCell : null, isIncorrect ? styles.incorrectCell : null]}
+                onPress={() => setCurrentPosition({ row: rowIndex, col: colIndex })}
+                disabled={rowIndex !== currentPosition.row || colIndex !== currentPosition.col}
+              >
+                <Text style={styles.questionText}>{cell.question}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      ))}
+
+      <Text style={styles.instructionText}>Answer the question:</Text>
+      <Text style={styles.currentQuestion}>
+        {gridQuestions[currentPosition.row][currentPosition.col].question}
+      </Text>
       <TextInput
         style={styles.input}
         keyboardType="numeric"
-        value={userAnswer}
-        onChangeText={setUserAnswer}
+        value={currentAnswer}
+        onChangeText={setCurrentAnswer}
       />
-      
-      <TouchableOpacity style={styles.button} onPress={handleAnswer}>
+      <TouchableOpacity style={styles.button} onPress={() => handleAnswer(currentPosition.row, currentPosition.col)}>
         <Text style={styles.buttonText}>Submit Answer</Text>
       </TouchableOpacity>
     </View>
@@ -89,13 +134,37 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'center',
   },
-  storyText: {
-    fontSize: 18,
-    color: '#FFF',
-    textAlign: 'center',
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginBottom: 20,
   },
-  multiplicationText: {
+  cell: {
+    backgroundColor: '#FFF',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    margin: 5,
+  },
+  highlightedCell: {
+    backgroundColor: '#FFD700',
+  },
+  incorrectCell: {
+    backgroundColor: '#FF6347',
+  },
+  questionText: {
+    fontSize: 18,
+    color: '#4D86F7',
+  },
+  instructionText: {
+    fontSize: 20,
+    color: '#FFF',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  currentQuestion: {
     fontSize: 22,
     color: '#FFF',
     textAlign: 'center',

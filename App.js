@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import './i18n';
@@ -28,7 +28,6 @@ import DA_ResultsScreen from './screen/Dyslexia Assesment/ResultsScreen';
 import DA_BingoScreen from './screen/Dyslexia Assesment/BingoScreen';
 import DA_BingoDescriptionScreen from './screen/Dyslexia Assesment/BingoDescriptionScreen';
 
-
 // Remidial
 import HomeScreenRemidial from './screen/remidial/HomeScreen';
 import HomeScreenRemidialTamil from './screen/remidial/HomeScreenTam';
@@ -46,35 +45,18 @@ import QuizSummaryTam from './screen/remidial/tamil/QuizResultSumTam';
 
 import ActivityEng from './screen/remidial/english/ActivityEng';
 import UnitsScreenEng from './screen/remidial/english/UnitsScreenEng';
-import Unit1EngNew from './screen/remidial/english/Unit1EngNew';
+import UnitComponent from './screen/remidial/english/UnitComponent';
 import MatchEngHome from './screen/remidial/english/matchEngHome';
 import MatchEng from './screen/remidial/english/MatchEng';
 import WordSoundHome from './screen/remidial/english/WordSoundHome';
 import EngWordSounds from './screen/remidial/english/WordEng';
 import ActivityTam from './screen/remidial/tamil/ActivityTamil';
 import UnitsScreenTam from './screen/remidial/tamil/UnitsScreenTam';
-import Unit1Tamil from './screen/remidial/tamil/Unit1Tam';
+import UnitComponentTam from './screen/remidial/tamil/UnitComponentTam';
 import MatchTamHome from './screen/remidial/tamil/matchTamHome';
 import MatchTam from './screen/remidial/tamil/MatchTam';
-import WordSoundHomeTam from './screen/remidial/tamil/WordSoundHome';
+import WordSoundHomeTam from './screen/remidial/tamil/WordSoundHomeTam';
 import TamWordSounds from './screen/remidial/tamil/WordTam';
-
-//math hands
-import MathHandsMainScreen from "./screen/MathHands/MathHandsMainScreen";
-import MathHandsMenu from "./screen/MathHands/MathHandsMenu";
-import Allexercises from "./screen/MathHands/AllExercisesScreen";
-import DetectiveScreen from "./screen/MathHands/DetectiveScreen";
-import AdditionAlleyScreen from "./screen/MathHands/AdditionAlleyScreen";
-import SubtractionAlleyScreen from "./screen/MathHands/SubtractionStreet";
-import DemoMultiplication from "./screen/MathHands/DemoMultiplication";
-import DivisionDriveScreen from "./screen/MathHands/DivisionDriveScreen";
-import SpacedRepetitionScreen from "./screen/MathHands/SpacedRepetitionScreen";
-import FlashcardMatchingScreen from "./screen/MathHands/FlashcardMatchingScreen";
-import MultiplicationInro from "./screen/MathHands/MultiplicationInro";
-import GameMap from "./screen/MathHands/GamesMap";
-import DemoVideosScreen from "./screen/MathHands/DemoVideosScreen";
-import SixTimesScreen from "./screen/MathHands/SixTimesScreen";
-import LevelOneScreen from "./screen/MathHands/level1";
 
 //learn Tamil
 import LetterSoundScreen from './screen/Learn_Tamil_Letter/LetterSoundScreen';
@@ -87,6 +69,27 @@ import FirstLetterGame from './screen/Learn_Tamil_Letter/FirstLatterGame';
 import GameSelect from './screen/Learn_Tamil_Letter/GameSelect';
 import MatchingLettersGameScreen from './screen/Learn_Tamil_Letter/MatchingLettersGameScreen';
 import SelectWordGameScreen from './screen/Learn_Tamil_Letter/SelectWordGameScreen';
+
+import MathHandsMainScreen from './screen/MathHands/MathHandsMainScreen';
+import MathHandsMenu from './screen/MathHands/MathHandsMenu';
+import Allexercises from './screen/MathHands/AllExercisesScreen';
+import DetectiveScreen from './screen/MathHands/DetectiveScreen';
+import AdditionAlleyScreen from './screen/MathHands/AdditionAlleyScreen';
+import SubtractionAlleyScreen from './screen/MathHands/SubtractionStreet';
+import DemoMultiplication from './screen/MathHands/DemoMultiplication';
+import DivisionDriveScreen from './screen/MathHands/DivisionDriveScreen';
+import SpacedRepetitionScreen from './screen/MathHands/SpacedRepetitionScreen';
+import FlashcardMatchingScreen from './screen/MathHands/FlashcardMatchingScreen';
+import MultiplicationInro from './screen/MathHands/MultiplicationInro';
+import GameMap from './screen/MathHands/GamesMap';
+import DemoVideosScreen from './screen/MathHands/DemoVideosScreen';
+import SixTimesScreen from './screen/MathHands/SixTimesScreen';
+import LevelOneScreen from './screen/MathHands/level1';
+import LevelTwoScreen from './screen/MathHands/level2';
+import RetryExercisesScreen from './screen/MathHands/RetryExercisesScreen';
+import LevelCompletedScreen from './screen/MathHands/LevelCompletedScreen';
+import NineTimesScreen from './screen/MathHands/NineTimesScreen';
+import ReviewScreen from './screen/MathHands/ReviewScreen';
 
 const Stack = createStackNavigator();
 const MathHandsStack = createStackNavigator();
@@ -172,14 +175,38 @@ const MathHandsScreens = ({ language, changeLanguage }) => {
           component={LevelOneScreen}
           options={{ headerShown: false }}
         />
+        <MathHandsStack.Screen
+          name="LevelTwoScreen"
+          component={LevelTwoScreen}
+          options={{ headerShown: false }}
+        />
+        <MathHandsStack.Screen
+          name="RetryExercisesScreen"
+          component={RetryExercisesScreen}
+          options={{ headerShown: false }}
+        />
+        <MathHandsStack.Screen
+          name="LevelCompletedScreen"
+          component={LevelCompletedScreen}
+          options={{ headerShown: false }}
+        />
+        <MathHandsStack.Screen
+          name="NineTimesScreen"
+          component={NineTimesScreen}
+          options={{ headerShown: false }}
+        />
+        <MathHandsStack.Screen
+          name="ReviewScreen"
+          component={ReviewScreen}
+          options={{ headerShown: false }}
+        />
       </MathHandsStack.Navigator>
     </LanguageContext.Provider>
   );
 };
 
-
 const App = () => {
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState('en');
   const changeLanguage = (lang) => setLanguage(lang);
 
   return (
@@ -207,7 +234,7 @@ const App = () => {
             <Stack.Screen
               name="DA_SelectLanguage"
               component={DA_SelectLanguage}
-              options={{ 
+              options={{
                 headerShown: false,
                 gestureEnabled: false,
               }}
@@ -287,8 +314,6 @@ const App = () => {
               component={DA_BingoDescriptionScreen}
               options={{ headerShown: false }}
             />
-            
-            
 
             {/* Remidial */}
 
@@ -358,8 +383,8 @@ const App = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="unit1Eng"
-              component={Unit1EngNew}
+              name="unitComponent"
+              component={UnitComponent}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -393,8 +418,8 @@ const App = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="unit1Tam"
-              component={Unit1Tamil}
+              name="unitComponentTam"
+              component={UnitComponentTam}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -491,7 +516,6 @@ const App = () => {
         </NavigationContainer>
       </I18nextProvider>
     </Provider>
-  
   );
 };
 
