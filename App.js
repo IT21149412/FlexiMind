@@ -3,12 +3,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import './i18n';
 import { I18nextProvider } from 'react-i18next';
-import i18n from './i18n';
 import HomeScreen from './screen/HomeScreen';
 import LoginScreen from './screen/LoginScreen';
 import RegisterScreen from './screen/RegisterScreen';
-import { Provider } from 'react-redux';
-import { store } from './store/store';
+import i18n from './i18n';
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 //assessment
 import DA_SelectLanguage from './screen/Dyslexia Assesment/SelectLanguageScreen';
@@ -58,7 +58,17 @@ import MatchTam from './screen/remidial/tamil/MatchTam';
 import WordSoundHomeTam from './screen/remidial/tamil/WordSoundHomeTam';
 import TamWordSounds from './screen/remidial/tamil/WordTam';
 
-//math hands
+//learn Tamil
+import LetterSoundScreen from './screen/Learn_Tamil_Letter/LetterSoundScreen';
+import LearnTamilScreen from './screen/Learn_Tamil_Letter/LearnTamilScreen';
+import SoundVowelScreen from './screen/Learn_Tamil_Letter/SoundVowelScreen';
+import GameScreen from './screen/Learn_Tamil_Letter/GameScreen';
+import LetterWritingScreen from './screen/Learn_Tamil_Letter/LetterWritingScreen';
+import WriteLetterScreen from './screen/Learn_Tamil_Letter/WriteLetterScreen';
+import FirstLetterGame from './screen/Learn_Tamil_Letter/FirstLatterGame';
+import GameSelect from './screen/Learn_Tamil_Letter/GameSelect';
+import MatchingLettersGameScreen from './screen/Learn_Tamil_Letter/MatchingLettersGameScreen';
+import SelectWordGameScreen from './screen/Learn_Tamil_Letter/SelectWordGameScreen';
 
 import MathHandsMainScreen from './screen/MathHands/MathHandsMainScreen';
 import MathHandsMenu from './screen/MathHands/MathHandsMenu';
@@ -210,8 +220,7 @@ const App = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="Register"
-              component={RegisterScreen}
+              name="Register"              component={RegisterScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -450,6 +459,59 @@ const App = () => {
               component={MathHandsScreens}
               options={{ headerShown: false }}
             />
+
+            {/*Learn Tamil*/}
+            <Stack.Screen
+              name="Learn"
+              component={LearnTamilScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="GameSelect"
+              component={GameSelect}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Writing"
+              component={LetterWritingScreen}
+              options={{ title: 'Tamil Letter Writing', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="Sound1"
+              component={LetterSoundScreen}
+              options={{ title: 'Tamil Letter Sounds', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="WritingLetter"
+              component={WriteLetterScreen}
+              options={{ title: 'Write Letter', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="Vowel"
+              component={SoundVowelScreen}
+              options={{ title: 'LISTEN SOUND', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="Game"
+              component={GameScreen}
+              options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="FirstLetterGame"
+              component={FirstLetterGame}
+              options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="MatchingLettersGameScreen"
+              component={MatchingLettersGameScreen}
+              options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+            <Stack.Screen
+              name="SelectWordGameScreen"
+              component={SelectWordGameScreen}
+              options={{ title: 'PLAY GAME', headerTitleAlign: 'center', headerTintColor: '#FFD166', headerStyle: { backgroundColor: '#4D86F7' } }}
+            />
+
           </Stack.Navigator>
         </NavigationContainer>
       </I18nextProvider>
