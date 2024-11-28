@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     overlay: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        top: '28%',
+        top: '30%',
         height: '80%',
         borderRadius: 85,
     },
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'center',
         // marginTop: 50,
-        bottom: '75%'
+        bottom: '40%'
     },
     letterButton: {
         backgroundColor: '#FFD166',

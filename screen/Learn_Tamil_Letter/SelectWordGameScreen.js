@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     overlay: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        top: '28%',
+        top: '29%',
         height: '80%',
         borderRadius: 85,
     },

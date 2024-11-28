@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 0,
     },
     signatureContainer: {
-        marginTop: 20,
+        marginTop: 10,
         marginHorizontal: 20,
         borderWidth: 5,
         borderColor: '#000',
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     eraseButton: {
-        marginTop: 20,
+        marginTop: 10,
         marginHorizontal: 20,
         padding: 10,
         backgroundColor: '#FF5A5F',
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#4CAF50',
         borderRadius: 10,
         alignItems: 'center',
-        bottom: '13%',
+        bottom: '12%',
         width: '40%',
         left: '50%'
     },
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '40%',
         alignSelf: 'center',
-        bottom: '7%'
+        bottom: '10%'
     },
     skipButtonText: {
         color: '#fff',

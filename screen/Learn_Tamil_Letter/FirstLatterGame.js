@@ -40,7 +40,7 @@ const FirstLetterGameScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={styles.containerNew}>
             <Text style={styles.headerText}>Select the First{'\n'}Letter</Text>
             <Image style={styles.bgImg} source={require('../../assets/bg.jpg')}></Image>
             <View style={styles.overlay}></View>
@@ -89,7 +89,7 @@ const FirstLetterGameScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
+    containerNew: {
         flex: 1,
         backgroundColor: '#4D86F7',
         alignItems: 'center',
@@ -121,12 +121,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200,
         resizeMode: 'contain',
-        bottom: '45%',
+        bottom: '25%',
     },
     buttonsContainer: {
         flexDirection: 'row',
         marginTop: 20,
-        bottom: '75%',
+        bottom: '70%',
     },
     letterButton: {
         backgroundColor: '#FFD166',
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     overlay: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        top: '28%',
+        top: '32%',
         height: '80%',
         borderRadius: 85,
     },
