@@ -9,17 +9,18 @@ import {
   TouchableOpacity,
   Modal,
   Animated,
+  ImageBackground,
   StyleSheet,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS, SIZES } from '../../../constants/Theme';
 import data from '../../../data/QuizEnglish';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function EnglishQuizScreen() {
-  const allQuestions = data;
+export default function EnglishQuizScreen({ route }) {
+  const { selectedAge, iqscore } = route.params;
   const navigation = useNavigation();
 
+  const [allQuestions, setAllQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentOptionSelected, setCurrentOptionSelected] = useState(null);
   const [correctOption, setCorrectOption] = useState(null);
@@ -29,8 +30,31 @@ export default function EnglishQuizScreen() {
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [timer, setTimer] = useState(0); // Timer state
   const [timeTaken, setTimeTaken] = useState(0); // Time taken to complete the quiz
+  const [results, setResults] = useState([]); // Array to store the results
 
   useEffect(() => {
+    // Function to randomly select one question from each type
+    const getRandomQuestions = () => {
+      let selectedQuestions = [];
+
+      // Loop through each question type and select one random question
+      data.forEach((questionType) => {
+        const randomIndex = Math.floor(Math.random() * questionType.length);
+        selectedQuestions.push(questionType[randomIndex]);
+      });
+
+      return selectedQuestions;
+    };
+
+    // Set the selected random questions
+    const selectedQuestions = getRandomQuestions();
+
+    // Ensure the length is 5 (since you have 5 types, it will be)
+    if (selectedQuestions.length === 5) {
+      setAllQuestions(selectedQuestions);
+    }
+
+    // Timer setup
     let interval;
     if (!showScoreModal) {
       interval = setInterval(() => {
@@ -40,6 +64,7 @@ export default function EnglishQuizScreen() {
       clearInterval(interval);
       setTimeTaken(timer);
     }
+
     return () => clearInterval(interval);
   }, [showScoreModal]);
 
@@ -48,10 +73,20 @@ export default function EnglishQuizScreen() {
     setCurrentOptionSelected(selectedOption);
     setCorrectOption(correct_option);
     setIsOptionsDisabled(true);
+
     if (selectedOption == correct_option) {
       // Set Score
       setScore(score + 1);
+      setResults([...results, 1]); // Add 1 for correct answer
+    } else {
+      setResults([...results, 0]); // Add 0 for incorrect answer
     }
+
+    console.log('Results array: ', [
+      ...results,
+      selectedOption == correct_option ? 1 : 0,
+    ]); // Log results array
+
     // Show Next Button
     setShowNextButton(true);
   };
@@ -78,9 +113,12 @@ export default function EnglishQuizScreen() {
   const showResults = () => {
     // Navigate to QuizSummary screen
     navigation.navigate('quizSummary', {
+      selectedAge,
+      iqscore,
       score: score,
       totalQuestions: allQuestions.length,
       timeTaken: timeTaken,
+      questionResults: results, // Pass the results array to the QuizSummary screen
     });
   };
 
@@ -337,10 +375,15 @@ export default function EnglishQuizScreen() {
             transparent={true}
             visible={showScoreModal}
           >
+            {/* <ImageBackground
+    source={require('../../../assets/images/DottedBG.png')} // Replace with your background image path
+    style={{ flex: 1, top: '50%', position: 'absolute', justifyContent: 'center', alignItems: 'center'
+    }}
+  ></ImageBackground> */}
             <View
               style={{
                 flex: 1,
-                backgroundColor: COLORS.primary,
+                backgroundColor: COLORS.background,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
@@ -354,11 +397,29 @@ export default function EnglishQuizScreen() {
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
+                <Text
+                  style={{
+                    fontSize: 30,
+                    fontWeight: 'bold',
+                    color: COLORS.accent,
+                  }}
+                >
                   {score > allQuestions.length / 2
                     ? 'Good Job!'
                     : 'Dont give up!'}
                 </Text>
+                {/* GIF Animation */}
+                {score <= allQuestions.length / 2 ? (
+                  <Image
+                    source={require('../../../assets/better_luck_gif.gif')}
+                    style={{ width: 100, height: 100, marginTop: 5 }}
+                  />
+                ) : (
+                  <Image
+                    source={require('../../../assets/correct_gif.gif')}
+                    style={{ width: 100, height: 100, marginTop: 5 }}
+                  />
+                )}
                 <View
                   style={{
                     flexDirection: 'row',
@@ -384,18 +445,18 @@ export default function EnglishQuizScreen() {
                 </View>
                 <View
                   style={{
-                    marginVertical: 20,
+                    marginVertical: 5,
                   }}
                 >
-                  <Text
+                  {/* <Text
                     style={{
                       fontSize: 20,
                       fontWeight: 'bold',
-                      color: COLORS.black,
+                      color: COLORS.accent
                     }}
                   >
                     Time Taken: {formatTime(timeTaken)}
-                  </Text>
+                  </Text> */}
                 </View>
                 {/* Retry Quiz button */}
                 <TouchableOpacity

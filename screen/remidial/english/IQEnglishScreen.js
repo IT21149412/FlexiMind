@@ -15,13 +15,14 @@ import data from '../../../data/IQEnglish';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function IQEnglishScreen({ navigation }) {
+export default function IQEnglishScreen({route, navigation }) {
+  const { selectedAge } = route.params;
   const allQuestions = data;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentOptionSelected, setCurrentOptionSelected] = useState(null);
   const [correctOption, setCorrectOption] = useState(null);
   const [isOptionsDisabled, setIsOptionsDisabled] = useState(false);
-  const [score, setScore] = useState(0);
+  const [iqscore, setScore] = useState(0);
   const [showNextButton, setShowNextButton] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
 
@@ -55,7 +56,7 @@ export default function IQEnglishScreen({ navigation }) {
 
   const handleFinishQuiz = async () => {
     await saveQuizCompletion();
-    navigation.navigate('startEng');
+    navigation.navigate('startEng', {selectedAge,iqscore});
   };
 
   const validateAnswer = (selectedOption) => {
@@ -65,7 +66,7 @@ export default function IQEnglishScreen({ navigation }) {
     setIsOptionsDisabled(true);
     if (selectedOption === correct_option) {
       // Set Score
-      setScore(score + 1);
+      setScore(iqscore + 1);
     }
     // Show Next Button
     setShowNextButton(true);
@@ -98,7 +99,9 @@ export default function IQEnglishScreen({ navigation }) {
       <View
         style={
           {
-            //marginVertical: 40,
+            //marginVertical: 20, // Adjust margin as needed
+            //height: 350, 
+            
           }
         }
       >
@@ -111,7 +114,7 @@ export default function IQEnglishScreen({ navigation }) {
         >
           <Text
             style={{
-              color: COLORS.black,
+              color: COLORS.background,
               fontSize: 20,
               opacity: 0.6,
               marginRight: 2,
@@ -119,7 +122,7 @@ export default function IQEnglishScreen({ navigation }) {
           >
             {currentQuestionIndex + 1}
           </Text>
-          <Text style={{ color: COLORS.black, fontSize: 18, opacity: 0.6 }}>
+          <Text style={{ color: COLORS.background, fontSize: 18, opacity: 0.6 }}>
             / {allQuestions.length}
           </Text>
         </View>
@@ -127,7 +130,7 @@ export default function IQEnglishScreen({ navigation }) {
         {/* Question */}
         <Text
           style={{
-            color: COLORS.black,
+            color: COLORS.background,
             fontSize: 25,
             fontWeight: 700,
           }}
@@ -140,11 +143,15 @@ export default function IQEnglishScreen({ navigation }) {
           <Image
             source={currentQuestion.image}
             style={{
-              width: '83%',
-              height: '65%',
-              resizeMode: 'cover',
+              width: 250,
+              height: 250,
+              resizeMode: 'contain',
               marginVertical: 20,
               alignSelf: 'center',
+              borderWidth: 2,
+
+              borderColor: COLORS.background ,  
+
             }}
           />
         )}
@@ -157,38 +164,40 @@ export default function IQEnglishScreen({ navigation }) {
       option.text === currentOptionSelected || option === currentOptionSelected;
     const isCorrect = option.text === correctOption || option === correctOption;
     const isWrong = isSelected && !isCorrect;
-
+  
     return (
       <TouchableOpacity
         onPress={() => validateAnswer(option.text || option)}
         disabled={isOptionsDisabled}
         style={{
           flex: 1,
-          borderWidth: 1,
+          borderWidth: 2,
           borderColor: isCorrect
             ? COLORS.success
             : isSelected
             ? COLORS.error
             : COLORS.secondary,
           backgroundColor: isCorrect
-            ? COLORS.success + '20'
+            ? COLORS.success + '50'
             : isSelected
-            ? COLORS.error + '20'
+            ? COLORS.error + '50'
             : COLORS.secondary,
+          borderColor: COLORS.background ,  
           borderRadius: 20,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
           marginHorizontal: 5,
           paddingVertical: 10,
-          marginTop: 15,
+          marginTop: 30,
+          height: 90, // Fix the height of the option button
         }}
       >
         {/* Option Image */}
         {isImageOption && (
           <Image
             source={option.image}
-            style={{ width: 70, height: 70, marginLeft: 10 }}
+            style={{ width: 70, height: 70, marginLeft: 10 }} // Use resizeMode 'contain'
           />
         )}
         {/* Option Text */}
@@ -207,16 +216,17 @@ export default function IQEnglishScreen({ navigation }) {
               backgroundColor: COLORS.error,
               justifyContent: 'center',
               alignItems: 'center',
+              left: 10
             }}
           >
             <Image
               source={require('../../../assets/images/cross.png')}
-              style={{ width: 24, height: 24 }}
+              style={{ width: 24, height: 24, }}
             />
           </View>
         )}
         {/* Show Check Icon for correct answer */}
-        {isCorrect && isSelected && (
+        {isCorrect && (
           <View
             style={{
               width: 30,
@@ -225,6 +235,7 @@ export default function IQEnglishScreen({ navigation }) {
               backgroundColor: COLORS.success,
               justifyContent: 'center',
               alignItems: 'center',
+              left: 10
             }}
           >
             <Image
@@ -236,6 +247,7 @@ export default function IQEnglishScreen({ navigation }) {
       </TouchableOpacity>
     );
   };
+  
 
   const renderOptions = () => {
     const options = allQuestions[currentQuestionIndex]?.options;
@@ -384,51 +396,61 @@ export default function IQEnglishScreen({ navigation }) {
 
           {/* Score Modal */}
           <Modal
-            animationType="slide"
+            animationType="fade"
             transparent={true}
             visible={showScoreModal}
           >
             <View
               style={{
                 flex: 1,
-                backgroundColor: COLORS.primary,
+                backgroundColor: COLORS.background,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
               <View
                 style={{
-                  backgroundColor: COLORS.white,
+                  backgroundColor: COLORS.secondary,
                   width: '90%',
                   borderRadius: 20,
                   padding: 20,
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
-                  {score > allQuestions.length / 2
-                    ? 'Congratulations!'
-                    : 'Good Job! Dont give up'}
-                </Text>
+               <Text style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center' , color: COLORS.accent}}>
+    {iqscore > allQuestions.length / 2
+      ? 'Congratulations!'
+      : 'Good Job! Don’t give up'}
+  </Text>
 
+  {/* GIF Animation */}
+  {iqscore <= allQuestions.length / 2 ? (
+    <Image
+      source={require('../../../assets/better_luck_gif.gif')}
+      style={{ width: 100, height: 100, marginTop: 5 }}
+    />
+  ) : ( <Image
+    source={require('../../../assets/correct_gif.gif')}
+    style={{ width: 100, height: 100, marginTop: 5 }}
+  />)}
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    marginVertical: 20,
+                    marginVertical: 10,
                   }}
                 >
                   <Text
                     style={{
                       fontSize: 30,
                       color:
-                        score > allQuestions.length / 2
+                      iqscore > allQuestions.length / 2
                           ? COLORS.success
                           : COLORS.error,
                     }}
                   >
-                    {score}
+                    {iqscore}
                   </Text>
                   <Text
                     style={{

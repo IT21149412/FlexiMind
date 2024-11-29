@@ -6,49 +6,52 @@ import {
   Modal,
   StyleSheet,
   Image,
+  Vibration,
 } from 'react-native';
-import { COLORS, SIZES } from '../../../constants/Theme';
-
-const words = [
-  { left: 'cake', right: 'time' },
-  { left: 'bake', right: 'lime' },
-  { left: 'time', right: 'hat' },
-  { left: 'lime', right: 'bake' },
-  { left: 'hat', right: 'cake' },
-];
+import { Audio } from 'expo-av'; // Import the Audio module
+import { COLORS } from '../../../constants/Theme';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 const CustomAlert = ({ visible, message, type, onClose }) => {
   return (
-    <Modal visible={visible} animationType="slide" transparent={true}>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Modal visible={visible} animationType="fade" transparent={true}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <View
           style={{
-            backgroundColor: type === 'success' ? 'white' : 'white',
+            backgroundColor: COLORS.white,
+            width: '90%',
+            borderRadius: 20,
             padding: 20,
-            borderRadius: 10,
-            height: '15%',
-            width: '80%',
-            borderColor: '#FFC5C5',
-            borderWidth: 4,
+            alignItems: 'center',
           }}
         >
           <Text
             style={{
-              fontSize: 18,
+              fontSize: 26,
+              fontWeight: 'bold',
               color: type === 'success' ? '#2E865F' : '#FF0000',
             }}
           >
             {message}
           </Text>
+          <Image
+            source={require('../../../assets/wrong_gif.gif')}
+            style={{ width: 100, height: 100, marginTop: 5 }}
+          />
           <TouchableOpacity onPress={onClose}>
             <Text
               style={{
-                fontSize: 18,
-                color: '#007AFF',
-                // justifyContent: 'right',
+                fontSize: 26,
+                color: '#f55656',
               }}
             >
-              OK!
+              OKAY!
             </Text>
           </TouchableOpacity>
         </View>
@@ -57,7 +60,8 @@ const CustomAlert = ({ visible, message, type, onClose }) => {
   );
 };
 
-const WordMatchingActivity = ({ navigation }) => {
+const WordMatchingActivity = ({ navigation, route }) => {
+  const { words } = route.params;
   const [selectedWord, setSelectedWord] = useState(null);
   const [disabledWords, setDisabledWords] = useState({});
   const [alertVisible, setAlertVisible] = useState(false);
@@ -65,6 +69,41 @@ const WordMatchingActivity = ({ navigation }) => {
   const [alertType, setAlertType] = useState('');
   const [isFinishButtonEnabled, setIsFinishButtonEnabled] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [shootConfetti, setShootConfetti] = useState(false);
+  const [sound, setSound] = useState();
+  const [timer, setTimer] = useState(30); // Timer state
+  const [isTimeUp, setIsTimeUp] = useState(false); // State for "time up" alert
+  const [timerInterval, setTimerInterval] = useState(null); // Store interval ID
+
+  // Load and play sound function
+  const playSound = async (soundFile) => {
+    const { sound } = await Audio.Sound.createAsync(soundFile);
+    setSound(sound);
+    await sound.playAsync();
+  };
+
+  // Cleanup the sound when component unmounts
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+  // Timer countdown effect
+  useEffect(() => {
+    if (timer > 0 && !isTimeUp) {
+      const interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+      setTimerInterval(interval); // Store interval ID
+      return () => clearInterval(interval);
+    } else if (timer === 0) {
+      setIsTimeUp(true);
+      setAlertVisible(false); // Ensure no other alerts are visible
+    }
+  }, [timer, isTimeUp]);
 
   const handleContinue = () => {
     navigation.navigate('matchEngHome');
@@ -74,17 +113,27 @@ const WordMatchingActivity = ({ navigation }) => {
     setSelectedWord(word);
   };
 
-  const handleMatchPress = (word) => {
+  const handleMatchPress = async (word) => {
+    if (isTimeUp) return; // Prevent interaction if time is up
+
     if (selectedWord && word === selectedWord) {
+      // Play success sound
+      await playSound(require('../../../assets/sounds/success.mp3'));
+
       setDisabledWords((prevDisabledWords) => ({
         ...prevDisabledWords,
         [selectedWord]: true,
       }));
       setSelectedWord(null);
     } else {
-      setAlertMessage('The words do not match. Try again.');
-      setAlertType('error');
-      setAlertVisible(true);
+      // Play error sound and trigger vibration only if time is not up
+      if (!isTimeUp) {
+        await playSound(require('../../../assets/sounds/error.mp3'));
+        Vibration.vibrate(500);
+        setAlertMessage('The words do not match. Try again!');
+        setAlertType('error');
+        setAlertVisible(true);
+      }
     }
   };
 
@@ -93,13 +142,23 @@ const WordMatchingActivity = ({ navigation }) => {
   };
 
   const handleFinish = () => {
-    setIsModalVisible(true);
+    clearInterval(timerInterval); // Clear the timer interval to stop it
+    setIsModalVisible(true); // Show the finish modal
+  };
+
+  const handleRestart = () => {
+    setIsTimeUp(false);
+    setTimer(20);
+    setDisabledWords({});
+    setSelectedWord(null);
+    setAlertVisible(false);
   };
 
   useEffect(() => {
     const allWordsMatched = Object.keys(disabledWords).length === words.length;
     if (allWordsMatched) {
       setIsFinishButtonEnabled(true);
+      setShootConfetti(true);
     } else {
       setIsFinishButtonEnabled(false);
     }
@@ -112,26 +171,34 @@ const WordMatchingActivity = ({ navigation }) => {
       <View
         style={{
           flexDirection: 'row',
-          // alignItems: 'center',
           position: 'absolute',
         }}
       >
         <TouchableOpacity
-          onPress={() => navigation.navigate('matchEngHome')} // Navigate to the home screen
+          onPress={() => navigation.navigate('matchEngHome')}
           style={{
             position: 'absolute',
-            left: 5,
+            left: 2,
             zIndex: 1,
-            top: 15,
+            top: 35,
           }}
         >
           <Image
             source={require('../../../assets/images/cross3.png')}
-            style={{ width: 50, height: 50 }}
+            style={{ width: 55, height: 55 }}
           />
         </TouchableOpacity>
       </View>
       <Text style={styles.title}>Tap On Matching Words</Text>
+
+      {/* Timer Section */}
+      <View style={styles.timerContainer}>
+        <Image
+          source={require('../../../assets/images/timer.png')} // Replace with your timer icon image
+          style={styles.timerIcon}
+        />
+        <Text style={styles.timerText}>00:{timer}s</Text>
+      </View>
 
       <View style={styles.layout}>
         <View style={{ flex: 1, alignItems: 'center' }}>
@@ -145,8 +212,6 @@ const WordMatchingActivity = ({ navigation }) => {
                 marginVertical: 20,
                 backgroundColor: disabledWords[word.left] ? '#ccc' : '#6ECB63',
                 borderRadius: 15,
-                // borderWidth: 4,
-                // borderColor: disabledWords[word.left] ? '#ccc' : '#FFD166',
                 alignItems: 'center',
                 elevation: 3,
               }}
@@ -176,9 +241,6 @@ const WordMatchingActivity = ({ navigation }) => {
                 marginVertical: 20,
                 backgroundColor: disabledWords[word.right] ? '#ccc' : '#6ECB63',
                 borderRadius: 15,
-                borderWidth: 0,
-                // borderWidth: 4,
-                // borderColor: disabledWords[word.left] ? '#ccc' : '#6ECB63',
                 alignItems: 'center',
                 elevation: 3,
               }}
@@ -204,12 +266,11 @@ const WordMatchingActivity = ({ navigation }) => {
           flex: 1,
           position: 'absolute',
           alignSelf: 'center',
-          top: '80%',
+          top: '88%',
           width: '85%',
           backgroundColor: isFinishButtonEnabled ? COLORS.success : '#d8ded7',
           padding: 13,
           borderRadius: 20,
-          //opacity: isFinishButtonEnabled ? 1 : 0.5,
         }}
         disabled={!isFinishButtonEnabled}
       >
@@ -224,6 +285,7 @@ const WordMatchingActivity = ({ navigation }) => {
           FINISH
         </Text>
       </TouchableOpacity>
+
       <CustomAlert
         visible={alertVisible}
         message={alertMessage}
@@ -231,7 +293,23 @@ const WordMatchingActivity = ({ navigation }) => {
         onClose={handleCloseAlert}
       />
 
-      {/* </View> */}
+      {/* Time's Up Modal */}
+      {isTimeUp && (
+        <Modal transparent={true} animationType="slide">
+          <View style={styles.modalBackground}>
+            <View style={styles.timeUpModal}>
+              <Text style={styles.timeUpText}>Time's Up!</Text>
+              <TouchableOpacity
+                onPress={handleRestart}
+                style={styles.restartButton}
+              >
+                <Text style={styles.restartText}>Restart Activity</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      )}
+
       {isModalVisible ? (
         <Modal animationType="slide" transparent={true}>
           <View
@@ -252,12 +330,31 @@ const WordMatchingActivity = ({ navigation }) => {
               }}
             >
               <Text
-                style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 50 }}
+                style={{
+                  fontSize: 24,
+                  fontWeight: 'bold',
+                  marginBottom: 50,
+                  color: COLORS.accent,
+                }}
               >
                 Wow You Are A Pro!
               </Text>
+              <Image
+                source={require('../../../assets/correct_gif.gif')}
+                style={{ width: 100, height: 100, marginTop: 2 }}
+              />
 
-              {/* Next lesson button */}
+              {/* Confetti Cannon */}
+              {shootConfetti && (
+                <ConfettiCannon
+                  count={400}
+                  origin={{ x: -50, y: -50 }}
+                  fallSpeed={5000}
+                  fadeOut={true}
+                  explosionSpeed={350}
+                  autoStart={true}
+                />
+              )}
               <TouchableOpacity
                 onPress={handleContinue}
                 style={{
@@ -265,6 +362,7 @@ const WordMatchingActivity = ({ navigation }) => {
                   padding: 20,
                   width: '100%',
                   borderRadius: 20,
+                  marginTop: 10,
                 }}
               >
                 <Text
@@ -284,6 +382,7 @@ const WordMatchingActivity = ({ navigation }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
@@ -301,7 +400,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   title: {
-    top: '5%',
+    top: '3%',
     flex: 1,
     position: 'absolute',
     fontSize: 26,
@@ -309,7 +408,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 20,
     color: 'white',
-    marginLeft: -5,
+    marginLeft: 40,
   },
   layout: {
     top: '18%',
@@ -319,12 +418,58 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 20,
   },
+  timerContainer: {
+    flexDirection: 'row',
+    position: 'absolute',
+    top: '13%',
+    left: '35%',
+    backgroundColor: '#bbc0c7',
+    borderRadius: 10,
+    padding: 10,
+  },
+  timerIcon: {
+    width: 30,
+    height: 30,
+  },
+  timerText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
     top: '15%',
     height: '100%',
     borderRadius: 85,
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dim background
+  },
+  timeUpModal: {
+    backgroundColor: COLORS.white,
+    width: '80%',
+    padding: 20,
+    borderRadius: 20,
+    alignItems: 'center',
+  },
+  timeUpText: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: COLORS.error,
+    marginBottom: 20,
+  },
+  restartButton: {
+    backgroundColor: COLORS.accent,
+    padding: 15,
+    borderRadius: 10,
+  },
+  restartText: {
+    color: COLORS.white,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 

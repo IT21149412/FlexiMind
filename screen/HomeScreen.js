@@ -8,7 +8,7 @@ const DashboardHome = ({navigation}) => {
     }
 
     const handleLearn = () => {
-        //Navigate your screens
+        navigation.navigate('Learn');
     }
 
     const handleMaths = () => {

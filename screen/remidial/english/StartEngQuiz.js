@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-const StartEngQuiz = ({ navigation }) => {
+const StartEngQuiz = ({route, navigation }) => {
+  const { selectedAge,iqscore } = route.params;
+
   const handleEnglish = () => {
-    navigation.navigate('EnglishQuiz');
+    navigation.navigate('EnglishQuiz', {selectedAge,iqscore});
   };
 
   return (

@@ -24,7 +24,7 @@ const ActivityTamil = ({ navigation }) => {
     <View style={styles.container}>
       <Image style={styles.bgImg} source={require('../../../assets/bg.jpg')} />
       <View style={styles.overlay}></View>
-      <View style={styles.levelInputContainer}>
+      {/* <View style={styles.levelInputContainer}>
         <View
           style={[
             styles.levelInput,
@@ -42,7 +42,7 @@ const ActivityTamil = ({ navigation }) => {
             <Picker.Item label="கடினம்" value="கடினம்" />
           </Picker>
         </View>
-      </View>
+      </View> */}
 
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <View style={[styles.card, styles.shadow]}>

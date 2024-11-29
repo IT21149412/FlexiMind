@@ -1,23 +1,79 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 
+const wordsUnit1 = [
+  { left: 'CAKE', right: 'TIME' },
+  { left: 'BAKE', right: 'LIME' },
+  { left: 'TIME', right: 'CAKE' },
+  { left: 'LIME', right: 'BAKE' },
+  { left: 'MASK', right: 'TASK' },
+  { left: 'TASK', right: 'MASK' },
+];
+
+const wordsUnit2 = [
+  { left: 'MET', right: 'DAD' },
+  { left: 'WET', right: 'BAD' },
+  { left: 'BAD', right: 'MET' },
+  { left: 'DAD', right: 'WET' },
+  { left: 'HAT', right: 'YET' },
+  { left: 'YET', right: 'HAT' },
+];
+
+const wordsUnit3 = [
+  { left: 'TIP', right: 'SAW' },
+  { left: 'PIT', right: 'WAS' },
+  { left: 'SAW', right: 'TIP' },
+  { left: 'WAS', right: 'PIT' },
+  { left: 'NAP', right: 'PAN' },
+  { left: 'PAN', right: 'NAP' },
+];
+
+const wordsUnit4 = [
+  { left: 'THEIR', right: 'PANE' },
+  { left: 'THERE', right: 'PAIN' },
+  { left: 'PANE', right: 'HERE' },
+  { left: 'PAIN', right: 'HEAR' },
+  { left: 'HEAR', right: 'THERE' },
+  { left: 'HERE', right: 'THEIR' },
+];
+
+const wordsUnit5 = [
+  { left: 'PACIFIC', right: 'FIND' },
+  { left: 'SPECIFIC', right: 'FUND' },
+  { left: 'FIND', right: 'HAND' },
+  { left: 'FUND', right: 'HARD' },
+  { left: 'HARD', right: 'PACIFIC' },
+  { left: 'HAND', right: 'SPECIFIC' },
+];
+
+const wordsUnit6 = [
+  { left: 'DOES', right: 'DOSE' },
+  { left: 'DOSE', right: 'DOES' },
+  { left: 'WRAP', right: 'GIVE' },
+  { left: 'WARP', right: 'GIEV' },
+  { left: 'GIVE', right: 'WRAP' },
+  { left: 'GIEV', right: 'WARP' },
+];
+
 const MatchEngHome = ({ navigation }) => {
   const handle1 = () => {
-    navigation.navigate('matchEng');
+    navigation.navigate('matchEng', { words: wordsUnit1 });
   };
-
-  const handleLearn = () => {
-    //Navigate your screens
+  const handle2 = () => {
+    navigation.navigate('matchEng', { words: wordsUnit2 });
   };
-
-  const handleMaths = () => {
-    //Navigate your screens
+  const handle3 = () => {
+    navigation.navigate('matchEng', { words: wordsUnit3 });
   };
-
-  const handleRemedial = () => {
-    navigation.navigate('HomeRemidial');
+  const handle4 = () => {
+    navigation.navigate('matchEng', { words: wordsUnit4 });
   };
-
+  const handle5 = () => {
+    navigation.navigate('matchEng', { words: wordsUnit5 });
+  };
+  const handle6 = () => {
+    navigation.navigate('matchEng', { words: wordsUnit6 });
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.textTopic}>Let's Match Simillar{'\n'}Words!</Text>
@@ -44,7 +100,7 @@ const MatchEngHome = ({ navigation }) => {
         <View style={styles.orangeCircle2}>
           <View style={styles.whiteCircle2}></View>
         </View>
-        <Text style={styles.learn} onPress={handleLearn}>
+        <Text style={styles.learn} onPress={handle2}>
           Mirror Writing
         </Text>
         <Text style={styles.unitDescription2}>Unit 2</Text>
@@ -54,7 +110,7 @@ const MatchEngHome = ({ navigation }) => {
         <View style={styles.orangeCircle1}>
           <View style={styles.whiteCircle1}></View>
         </View>
-        <Text style={styles.dyslexia} onPress={handleMaths}>
+        <Text style={styles.dyslexia} onPress={handle3}>
           Reversing Letters
         </Text>
         <Text style={styles.unitDescription1}>Unit 3</Text>
@@ -64,7 +120,7 @@ const MatchEngHome = ({ navigation }) => {
         <View style={styles.orangeCircle2}>
           <View style={styles.whiteCircle2}></View>
         </View>
-        <Text style={styles.learn} onPress={handleRemedial}>
+        <Text style={styles.learn} onPress={handle4}>
           Spell Homophones
         </Text>
         <Text style={styles.unitDescription2}>Unit 4</Text>
@@ -74,7 +130,7 @@ const MatchEngHome = ({ navigation }) => {
         <View style={styles.orangeCircle1}>
           <View style={styles.whiteCircle1}></View>
         </View>
-        <Text style={styles.dyslexia} onPress={handle1}>
+        <Text style={styles.dyslexia} onPress={handle5}>
           Similar Looking Words
         </Text>
         <Text style={styles.unitDescription1}>Unit 5</Text>
@@ -84,7 +140,7 @@ const MatchEngHome = ({ navigation }) => {
         <View style={styles.orangeCircle2}>
           <View style={styles.whiteCircle2}></View>
         </View>
-        <Text style={styles.learn} onPress={handleRemedial}>
+        <Text style={styles.learn} onPress={handle6}>
           Mixed Up Letters
         </Text>
         <Text style={styles.unitDescription2}>Unit 6</Text>

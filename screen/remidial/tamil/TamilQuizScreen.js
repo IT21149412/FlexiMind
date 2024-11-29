@@ -15,7 +15,9 @@ import { COLORS, SIZES } from '../../../constants/Theme';
 import data from '../../../data/QuizTamil';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function TamilQuizScreen() {
+export default function TamilQuizScreen({ route }) {
+  const { selectedAge, iqscore } = route.params;
+
   const allQuestions = data;
   const navigation = useNavigation();
 
@@ -28,6 +30,7 @@ export default function TamilQuizScreen() {
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [timer, setTimer] = useState(0); // Timer state
   const [timeTaken, setTimeTaken] = useState(0); // Time taken to complete the quiz
+  const [results, setResults] = useState([]); // Array to store the results
 
   useEffect(() => {
     let interval;
@@ -50,7 +53,16 @@ export default function TamilQuizScreen() {
     if (selectedOption == correct_option) {
       // Set Score
       setScore(score + 1);
+      setResults([...results, 1]); // Add 1 for correct answer
+    } else {
+      setResults([...results, 0]); // Add 0 for incorrect answer
     }
+
+    console.log('Results array: ', [
+      ...results,
+      selectedOption == correct_option ? 1 : 0,
+    ]); // Log results array
+
     // Show Next Button
     setShowNextButton(true);
   };
@@ -77,9 +89,12 @@ export default function TamilQuizScreen() {
   const showResults = () => {
     // Navigate to QuizSummary screen
     navigation.navigate('quizSummarytam', {
+      selectedAge,
+      iqscore,
       score: score,
       totalQuestions: allQuestions.length,
       timeTaken: timeTaken,
+      questionResults: results,
     });
   };
 
