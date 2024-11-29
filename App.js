@@ -58,6 +58,32 @@ import MatchTam from './screen/remidial/tamil/MatchTam';
 import WordSoundHomeTam from './screen/remidial/tamil/WordSoundHomeTam';
 import TamWordSounds from './screen/remidial/tamil/WordTam';
 
+
+//math hands
+import MathHandsMainScreen from "./screen/MathHands/MathHandsMainScreen";
+import MathHandsMenu from "./screen/MathHands/MathHandsMenu";
+import Allexercises from "./screen/MathHands/AllExercisesScreen";
+import DetectiveScreen from "./screen/MathHands/DetectiveScreen";
+import AdditionAlleyScreen from "./screen/MathHands/AdditionAlleyScreen";
+import SubtractionAlleyScreen from "./screen/MathHands/SubtractionStreet";
+import DemoMultiplication from "./screen/MathHands/DemoMultiplication";
+import DivisionDriveScreen from "./screen/MathHands/DivisionDriveScreen";
+import SpacedRepetitionScreen from "./screen/MathHands/SpacedRepetitionScreen";
+import FlashcardMatchingScreen from "./screen/MathHands/FlashcardMatchingScreen";
+import MultiplicationInro from "./screen/MathHands/MultiplicationInro";
+import GameMap from "./screen/MathHands/GamesMap";
+import DemoVideosScreen from "./screen/MathHands/DemoVideosScreen";
+import SixTimesScreen from "./screen/MathHands/SixTimesScreen";
+import LevelOneScreen from "./screen/MathHands/level1";
+import LevelTwoScreen from "./screen/MathHands/level2";
+import RetryExercisesScreen from "./screen/MathHands/RetryExercisesScreen";
+import LevelCompletedScreen from "./screen/MathHands/LevelCompletedScreen";
+import NineTimesScreen from "./screen/MathHands/NineTimesScreen";
+import ReviewScreen from "./screen/MathHands/ReviewScreen";
+import SevenTimesScreen from "./screen/MathHands/SevenTimesScreen";
+import TenTimesTableScreen from "./screen/MathHands/TenTimesTableScreen";
+import EightTimesScreen from "./screen/MathHands/EightTimesScreen";
+
 //learn Tamil
 import LetterSoundScreen from './screen/Learn_Tamil_Letter/LetterSoundScreen';
 import LearnTamilScreen from './screen/Learn_Tamil_Letter/LearnTamilScreen';
@@ -70,26 +96,7 @@ import GameSelect from './screen/Learn_Tamil_Letter/GameSelect';
 import MatchingLettersGameScreen from './screen/Learn_Tamil_Letter/MatchingLettersGameScreen';
 import SelectWordGameScreen from './screen/Learn_Tamil_Letter/SelectWordGameScreen';
 
-import MathHandsMainScreen from './screen/MathHands/MathHandsMainScreen';
-import MathHandsMenu from './screen/MathHands/MathHandsMenu';
-import Allexercises from './screen/MathHands/AllExercisesScreen';
-import DetectiveScreen from './screen/MathHands/DetectiveScreen';
-import AdditionAlleyScreen from './screen/MathHands/AdditionAlleyScreen';
-import SubtractionAlleyScreen from './screen/MathHands/SubtractionStreet';
-import DemoMultiplication from './screen/MathHands/DemoMultiplication';
-import DivisionDriveScreen from './screen/MathHands/DivisionDriveScreen';
-import SpacedRepetitionScreen from './screen/MathHands/SpacedRepetitionScreen';
-import FlashcardMatchingScreen from './screen/MathHands/FlashcardMatchingScreen';
-import MultiplicationInro from './screen/MathHands/MultiplicationInro';
-import GameMap from './screen/MathHands/GamesMap';
-import DemoVideosScreen from './screen/MathHands/DemoVideosScreen';
-import SixTimesScreen from './screen/MathHands/SixTimesScreen';
-import LevelOneScreen from './screen/MathHands/level1';
-import LevelTwoScreen from './screen/MathHands/level2';
-import RetryExercisesScreen from './screen/MathHands/RetryExercisesScreen';
-import LevelCompletedScreen from './screen/MathHands/LevelCompletedScreen';
-import NineTimesScreen from './screen/MathHands/NineTimesScreen';
-import ReviewScreen from './screen/MathHands/ReviewScreen';
+
 
 const Stack = createStackNavigator();
 const MathHandsStack = createStackNavigator();
@@ -181,23 +188,40 @@ const MathHandsScreens = ({ language, changeLanguage }) => {
           options={{ headerShown: false }}
         />
         <MathHandsStack.Screen
-          name="RetryExercisesScreen"
-          component={RetryExercisesScreen}
+
+            name="RetryExercisesScreen"
+            component={RetryExercisesScreen}
+            options={{ headerShown: false }}
+          />
+          <MathHandsStack.Screen
+            name="LevelCompletedScreen"
+            component={LevelCompletedScreen}
+            options={{ headerShown: false }}
+          />
+          <MathHandsStack.Screen
+            name="NineTimesScreen"
+            component={NineTimesScreen}
+            options={{ headerShown: false }}
+          />
+          <MathHandsStack.Screen
+            name="ReviewScreen"
+            component={ReviewScreen}
+            options={{ headerShown: false }}
+          />
+          <MathHandsStack.Screen
+          name="SevenTimesScreen"
+          component={SevenTimesScreen}
+          options={{ headerShown: false }}
+        />
+          <MathHandsStack.Screen
+          name="EightTimesScreen"
+          component={EightTimesScreen}
           options={{ headerShown: false }}
         />
         <MathHandsStack.Screen
-          name="LevelCompletedScreen"
-          component={LevelCompletedScreen}
-          options={{ headerShown: false }}
-        />
-        <MathHandsStack.Screen
-          name="NineTimesScreen"
-          component={NineTimesScreen}
-          options={{ headerShown: false }}
-        />
-        <MathHandsStack.Screen
-          name="ReviewScreen"
-          component={ReviewScreen}
+          name="TenTimesTableScreen"
+          component={TenTimesTableScreen}
+
           options={{ headerShown: false }}
         />
       </MathHandsStack.Navigator>

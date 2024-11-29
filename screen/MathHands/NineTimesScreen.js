@@ -12,7 +12,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import axios from "axios";
 import * as ImageManipulator from "expo-image-manipulator";
 import Svg, { Circle, Text as SvgText } from "react-native-svg";
-import { BASE_URL3 } from "./MathHandsConfig";
+import { BASE_URL} from "./MathHandsConfig";
 import AwesomeAlert from "react-native-awesome-alerts";
 import PagerView from "react-native-pager-view";
 import { Video } from "expo-av";
@@ -90,7 +90,7 @@ const NineTimesScreen = ({ route, navigation }) => {
         });
 
         const response = await axios.post(
-          `${BASE_URL3}/process-nine-times-table`,
+          `${BASE_URL}/process-nine-times-table`,
           formData,
           {
             headers: {
@@ -327,6 +327,10 @@ const NineTimesScreen = ({ route, navigation }) => {
         </Text>
         <View style={styles.cameraContainer}>
           <CameraView ref={cameraRef} style={styles.camera} facing={facing} />
+        </View>
+        <View>            
+          <Text   style={{ textAlign: "center", fontSize: 15, fontWeight: "bold",color: "#4169e1"  }}>{"\n"}{"\n"}To find the 9 times table,{"\n"}
+             hold out both hands, fold the finger of the number you're multiplying by 9 😊</Text>
         </View>
         <View style={styles.uiContainer}>
           {isCapturing && renderCircularTimer()}
