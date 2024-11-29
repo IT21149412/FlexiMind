@@ -60,7 +60,7 @@ const GameMap = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../assets/game.jpg")} 
+        source={require("../../assets/gameC.jpg")} 
         style={styles.backgroundImage}
       />
       <Animated.View style={[styles.lottieContainer, animatedStyle]}>

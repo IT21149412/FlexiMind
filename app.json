@@ -23,6 +23,7 @@
       }
     },
     "android": {
+      "versionCode": 1,
       "permissions": [
         "RECORD_AUDIO",
         "READ_EXTERNAL_STORAGE",
@@ -33,7 +34,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.FlexiMind",
+      "package": "com.FlexiMind",
       "usesCleartextTraffic": true
     },
     "web": {
@@ -42,6 +43,11 @@
     "plugins": [
       "expo-secure-store",
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "cff2f4ad-f0ae-4839-ad80-a2c5acac1aa3"
+      }
+    }
   }
 }

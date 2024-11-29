@@ -144,15 +144,15 @@ const SixTimesScreen = ({ route, navigation }) => {
   const getHandImage = (fingerCount) => {
     switch (fingerCount) {
       case 1:
-        return require('../../assets/1.gif');
+        return require('../../assets/111.gif');
       case 2:
         return require('../../assets/22.gif');
       case 3:
-        return require('../../assets/3.gif');
+        return require('../../assets/333.gif');
       case 4:
-        return require('../../assets/4.gif');
+        return require('../../assets/444.gif');
       case 5:
-        return require('../../assets/5.gif');
+        return require('../../assets/555.gif');
       case 6:
         return require('../../assets/6.gif');
       case 7:

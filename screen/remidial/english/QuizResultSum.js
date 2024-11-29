@@ -184,7 +184,7 @@ const QuizSummary = ({ route, navigation }) => {
           {prediction === 1 ? (
             <View>
               <Image
-                source={require('../../../assets/images/activity.gif')}
+                source={require('../../../assets/images/activityC.gif')}
                 style={styles.Gif}
               />
               <Text style={styles.predictionText}>
