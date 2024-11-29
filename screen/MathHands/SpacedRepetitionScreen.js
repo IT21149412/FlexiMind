@@ -8,6 +8,7 @@ import axios from "axios";
 import * as ImageManipulator from "expo-image-manipulator";
 import Svg, { Circle, Text as SvgText } from "react-native-svg";
 import LottieView from "lottie-react-native";
+import { BASE_URL } from "./MathHandsConfig";
 
 const questionsData = [
   { text: "What is 2 + 2?", answer: 4 },
@@ -139,8 +140,7 @@ const SpacedRepetitionScreen = () => {
       });
 
       try {
-        const response = await axios.post(
-          "http://192.168.8.107:5000/process",
+        const response = await axios.post(`${BASE_URL}/process`,
           formData,
           {
             headers: {

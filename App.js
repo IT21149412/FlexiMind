@@ -80,6 +80,9 @@ import RetryExercisesScreen from "./screen/MathHands/RetryExercisesScreen";
 import LevelCompletedScreen from "./screen/MathHands/LevelCompletedScreen";
 import NineTimesScreen from "./screen/MathHands/NineTimesScreen";
 import ReviewScreen from "./screen/MathHands/ReviewScreen";
+import SevenTimesScreen from "./screen/MathHands/SevenTimesScreen";
+import TenTimesTableScreen from "./screen/MathHands/TenTimesTableScreen";
+import EightTimesScreen from "./screen/MathHands/EightTimesScreen";
  
 
 const Stack = createStackNavigator();
@@ -191,6 +194,21 @@ const MathHandsScreens = ({ language, changeLanguage }) => {
             component={ReviewScreen}
             options={{ headerShown: false }}
           />
+          <MathHandsStack.Screen
+          name="SevenTimesScreen"
+          component={SevenTimesScreen}
+          options={{ headerShown: false }}
+        />
+          <MathHandsStack.Screen
+          name="EightTimesScreen"
+          component={EightTimesScreen}
+          options={{ headerShown: false }}
+        />
+        <MathHandsStack.Screen
+          name="TenTimesTableScreen"
+          component={TenTimesTableScreen}
+          options={{ headerShown: false }}
+        />
       </MathHandsStack.Navigator>
     </LanguageContext.Provider>
   );

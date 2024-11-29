@@ -45,6 +45,18 @@ const GameMap = () => {
     navigation.navigate("NineTimesScreen");  
   };
 
+  const navigateToTimesTable7 = () => {
+    navigation.navigate("SevenTimesScreen");  
+  };
+
+  const navigateToTimesTable8 = () => {
+    navigation.navigate("EightTimesScreen");  
+  };
+
+  const navigateToTimesTable10 = () => {
+    navigation.navigate("TenTimesTableScreen");  
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -72,16 +84,20 @@ const GameMap = () => {
         <Text style={styles.tileText}>6</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.tile, styles.tile7, styles.disabledTile]}
-        onPress={() => {}}
-        disabled={true}
+        style={[styles.tile, styles.tile7]}
+        onPress={navigateToTimesTable7}//navigateToTimesTable10
+      >
+        <Text style={styles.tileText}>8</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.tile, styles.tile8]}
+        onPress={navigateToTimesTable8}//navigateToTimesTable10
       >
         <Text style={styles.tileText}>7</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.tile, styles.tile8, styles.disabledTile]}
-        onPress={() => {}}
-        disabled={true}
+        style={[styles.tile, styles.tile8]}
+        onPress={navigateToTimesTable8}
       >
         <Text style={styles.tileText}>8</Text>
       </TouchableOpacity>
@@ -92,9 +108,8 @@ const GameMap = () => {
         <Text style={styles.tileText}>9</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.tile, styles.tile10, styles.disabledTile]}
-        onPress={() => {}}
-        disabled={true}
+        style={[styles.tile, styles.tile10]}
+        onPress={navigateToTimesTable10}
       >
         <Text style={styles.tileText}>10</Text>
       </TouchableOpacity>

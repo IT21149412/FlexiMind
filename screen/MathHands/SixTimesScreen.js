@@ -13,7 +13,7 @@ import axios from "axios";
 import * as ImageManipulator from "expo-image-manipulator";
 import Svg, { Circle, Text as SvgText } from "react-native-svg";
 import LottieView from "lottie-react-native";
-import { BASE_URL2 } from "./MathHandsConfig";
+import { BASE_URL} from "./MathHandsConfig";
 
 const SixTimesScreen = ({ route, navigation }) => {
   const [facing, setFacing] = useState("front");
@@ -86,7 +86,7 @@ const SixTimesScreen = ({ route, navigation }) => {
         });
 
         const response = await axios.post(
-          `${BASE_URL2}/process-six-times-table`,
+          `${BASE_URL}/process-six-times-table`,
           formData,
           {
             headers: {
