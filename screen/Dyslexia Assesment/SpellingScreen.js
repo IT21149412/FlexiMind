@@ -409,7 +409,7 @@ const DA_SpellingScreen = ({ navigation, route }) => {
       setTimeout(() => {
         setModalVisible(false);
         if (language === 'ta') {
-          navigation.navigate('DA_ReadOutLoudDescriptionScreen', { language });
+          navigation.navigate('DA_GoodJobScreenSpell', { language });
         } else if (language === 'en') {
           navigation.navigate('DA_GoodJobScreenSpell', { language });
         }
